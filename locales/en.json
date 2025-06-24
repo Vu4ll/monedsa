@@ -1,0 +1,54 @@
+{
+    "body": {
+        "empty": "Request body is cannot be empty."
+    },
+
+    "register": {
+        "success": {
+            "message": "User registered successfully."
+        },
+
+        "fail": {
+            "emailField": "email field are required.",
+            "passwordField": "password field are required.",
+            "usernameField": "username field are required.",
+            "nameField": "name field are required.",
+
+            "invalidEmail": "Invalid email address format.",
+            "invalidUsername": "Username must be 2-16 characters long and can only contain lowercase letters, numbers, underscores, and periods.",
+            "invalidPassword": "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
+
+            "existsEmail": "This email is already registered.",
+            "existsUsername": "This username is already taken.",
+
+            "errorMessage": "An unknown error occurred during registration."
+        }
+    },
+
+    "login": {
+        "success": {
+            "message": "User logged in successfully."
+        },
+
+        "fail": {
+            "userFiled": "Email or username (user field) are required.",
+            "passwordField": "password field are required.",
+            "userNotFound": "User not found.",
+
+            "invalidPassword": "Invalid password.",
+
+            "errorMessage": "An unknown error occurred during login."
+        }
+    },
+
+    "logout": {
+        "success": {
+            "message": "User logged out successfully."
+        },
+
+        "fail": {
+            "noToken": "Token required for logout.",
+            "invalidToken": "Token not found or expired."
+        }
+    }
+}
