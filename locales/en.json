@@ -1,6 +1,6 @@
 {
     "body": {
-        "empty": "Request body is cannot be empty."
+        "empty": "The request body cannot be empty."
     },
 
     "register": {
@@ -9,19 +9,19 @@
         },
 
         "fail": {
-            "emailField": "email field are required.",
-            "passwordField": "password field are required.",
-            "usernameField": "username field are required.",
-            "nameField": "name field are required.",
+            "emailField": "The email field is required.",
+            "passwordField": "The password field is required.",
+            "usernameField": "The username field is required.",
+            "nameField": "The name field is required.",
 
             "invalidEmail": "Invalid email address format.",
-            "invalidUsername": "Username must be 2-16 characters long and can only contain lowercase letters, numbers, underscores, and periods.",
-            "invalidPassword": "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
+            "invalidUsername": "Username must be 2-16 characters long and contain only lowercase letters, numbers, underscores, and periods.",
+            "invalidPassword": "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
 
             "existsEmail": "This email is already registered.",
             "existsUsername": "This username is already taken.",
 
-            "errorMessage": "An unknown error occurred during registration."
+            "serverError": "An unknown error occurred during registration."
         }
     },
 
@@ -31,13 +31,15 @@
         },
 
         "fail": {
-            "userFiled": "Email or username (user field) are required.",
-            "passwordField": "password field are required.",
+            "alreadyLoggedIn": "User is already logged in. Please log out first before logging in again.",
+
+            "userFiled": "Email or username (user field) is required.",
+            "passwordField": "The password field is required.",
             "userNotFound": "User not found.",
 
             "invalidPassword": "Invalid password.",
 
-            "errorMessage": "An unknown error occurred during login."
+            "serverError": "An unknown error occurred during login."
         }
     },
 
@@ -47,8 +49,47 @@
         },
 
         "fail": {
-            "noToken": "Token required for logout.",
-            "invalidToken": "Token not found or expired."
+            "noToken": "Token is required to log out.",
+            "invalidToken": "The token was not found or has expired."
+        }
+    },
+
+    "verifyToken": {
+        "accessDenied": "Access denied. Token not provided.",
+        "tokenNotFound": "The token was not found or has expired.",
+        "invalidToken": "Invalid token."
+    },
+
+    "expense": {
+        "fail": {
+            "add": {
+                "amountField": "The amount field is required.",
+                "amountInvalid": "The amount field must be a positive number.",
+                "serverError": "An unknown error occurred while adding the expense data."
+            },
+            
+            "list": {
+                "noData": "No expenses found for this user."
+            },
+            
+            "delete": {
+                "idRequired": "Expense ID is required for deletion.",
+                "noData": "The expense data was not found or was deleted."
+            }
+        },
+
+        "success": {
+            "add": {
+                "added": "Expense data added successfully."
+            },
+
+            "list": {
+                "dataRetrieved": "Expense data was received successfully."
+            },
+
+            "delete": {
+                "deleted": "The expense data was deleted successfully."
+            }
         }
     }
 }

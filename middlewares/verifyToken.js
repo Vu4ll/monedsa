@@ -1,39 +1,41 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const Token = require("../models/token");
+const locale = require("../locales/en.json");
 
 module.exports = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
+                status: res.statusCode,
                 success: false,
-                message: "Access denied. No token provided."
+                message: locale.verifyToken.accessDenied,
             });
         }
 
         const token = authHeader.substring(7);
-
         const tokenDoc = await Token.findOne({ token });
         if (!tokenDoc) {
             return res.status(401).json({
+                status: res.statusCode,
                 success: false,
-                message: "Token not found or expired"
+                message: locale.verifyToken.tokenNotFound,
             });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
         req.user = decoded;
+        req.user.id = decoded.userId;
         req.tokenId = tokenDoc._id;
         next();
-
     } catch (error) {
         console.error(`Token verification error: ${error.message}`);
         res.status(401).json({
+            status: res.statusCode,
             success: false,
-            message: "Invalid token"
+            message: locale.verifyToken.invalidToken,
         });
     }
 }

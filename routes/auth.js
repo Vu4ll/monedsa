@@ -9,7 +9,6 @@ const { emailRegex, usernameRegex, passwordRegex } = config;
 const { badRequest, serverError } = require("../util/functions");
 const User = require("../models/user");
 const Token = require("../models/token");
-const verifyToken = require("../middlewares/verifyToken");
 const locale = require("../locales/en.json");
 
 router.post("/register", async (req, res) => {
@@ -54,22 +53,37 @@ router.post("/register", async (req, res) => {
 
     try {
         res.status(201).json({
+            status: res.statusCode,
             success: true,
             message: locale.register.success.message,
             data: {
                 id: newUser._id,
                 email: newUser.email,
-                username: newUser.username.toLowerCase(),
+                username: newUser.username,
                 name: newUser.name,
             }
         });
     } catch (error) {
         console.error(`Register error: \n${error.message}`);
-        return serverError(res, locale.register.fail.errorMessage);
+        return serverError(res, locale.register.fail.serverError);
     }
 });
 
 router.post("/login", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+        const token = authHeader.substring(7);
+        const tokenDoc = await Token.findOne({ token });
+
+        if (tokenDoc) {
+            return res.status(403).json({
+                status: res.statusCode,
+                success: false,
+                message: locale.login.fail.alreadyLoggedIn,
+            });
+        }
+    }
+
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { user, password } = req.body;
@@ -79,7 +93,7 @@ router.post("/login", async (req, res) => {
     if (!password) return badRequest(res, locale.login.fail.passwordField);
 
     const isMail = emailRegex.test(user);
-    const query = isMail ? { email: user } : { username: user.toLowerCase() };
+    const query = isMail ? { email: user } : { username: user };
     const userData = await User.findOne(query);
 
     if (!userData) return badRequest(res, locale.login.fail.userNotFound);
@@ -89,16 +103,21 @@ router.post("/login", async (req, res) => {
 
         if (!isValidPassword) return badRequest(res, locale.login.fail.invalidPassword);
 
+        const hasToken = await Token.findOne({ userId: userData._id });
+        if (hasToken) await Token.deleteOne({ userId: userData._id });
+
         const token = jwt.sign({
             userId: userData._id,
             email: userData.email,
-            username: userData.username.toLowerCase(),
+            username: userData.username,
         }, process.env.JWT_SECRET, { expiresIn: config.env.JWT_EXPIRATION });
 
+
         const expiresAt = new Date().setDate(new Date().getDate() + 7);
-        await Token.create({ token, userId: userData._id, expiresAt });
+        await Token.create({ token, userId: userData._id, createdAt: new Date(), expiresAt });
 
         res.status(200).json({
+            status: res.statusCode,
             success: true,
             message: locale.login.success.message,
             data: {
@@ -106,14 +125,14 @@ router.post("/login", async (req, res) => {
                 user: {
                     id: userData._id,
                     email: userData.email,
-                    username: userData.username.toLowerCase(),
+                    username: userData.username,
                     name: userData.name,
                 }
             }
         });
     } catch (error) {
         console.error(`Login error: \n${error.message}`);
-        return serverError(res, locale.login.fail.errorMessage);
+        return serverError(res, locale.login.fail.serverError);
     }
 });
 
@@ -121,8 +140,9 @@ router.post("/logout", async (req, res) => {
     try {
         const authHeader = req.headers.authorization;
 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
+                status: res.statusCode,
                 success: false,
                 message: locale.logout.fail.noToken,
             });
@@ -132,6 +152,7 @@ router.post("/logout", async (req, res) => {
         const tokenDoc = await Token.findOne({ token });
         if (!tokenDoc) {
             return res.status(401).json({
+                status: res.statusCode,
                 success: false,
                 message: locale.logout.fail.invalidToken,
             });
@@ -140,6 +161,7 @@ router.post("/logout", async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!decoded) {
             return res.status(401).json({
+                status: res.statusCode,
                 success: false,
                 message: locale.logout.fail.invalidToken,
             });
@@ -148,32 +170,17 @@ router.post("/logout", async (req, res) => {
         await Token.deleteOne({ token });
 
         res.status(200).json({
+            status: res.statusCode,
             success: true,
             message: locale.logout.success.message,
         });
     } catch (error) {
         res.status(401).json({
+            status: res.statusCode,
             success: false,
             message: locale.logout.fail.invalidToken,
         });
     }
-});
-
-router.get("/check", verifyToken, async (req, res) => {
-    res.status(200).json({ success: true, message: "Token is valid", user: req.user });
-});
-
-const Test = require("../models/test");
-router.post("/data", verifyToken, async (req, res) => {
-    if (!req.body) return badRequest(res, locale.body.empty);
-    const { name } = req.body;
-    const result = await Test.create({ userId: req.user.userId, name });
-    res.status(201).json({ success: true, message: "Test created successfully", result });
-});
-
-router.get("/data", verifyToken, async (req, res) => {
-    const data = await Test.find({ userId: req.user.userId });
-    res.status(200).json({ success: true, message: "Data retrieved successfully", data });
 });
 
 module.exports = router;
