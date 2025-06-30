@@ -64,7 +64,8 @@
         "fail": {
             "add": {
                 "amountField": "The amount field is required.",
-                "amountInvalid": "The amount field must be a positive number.",
+                "invalidAmount": "The amount field must be a positive number.",
+                "categoryNotFound": "The specified category was not found.",
                 "serverError": "An unknown error occurred while adding the expense data."
             },
             
@@ -74,7 +75,15 @@
             
             "delete": {
                 "idRequired": "Expense ID is required for deletion.",
+                "invalidId": "The provided ID is not a valid ID.",
                 "noData": "The expense data was not found or was deleted."
+            },
+
+            "edit": {
+                "idRequired": "Expense ID is required for editing.",
+                "invalidId": "The provided ID is not a valid ID.",
+                "invalidAmonut": "The amount field must be a positive number.",
+                "serverError": "An unknown error occurred while editing the expense data."
             }
         },
 
@@ -89,6 +98,10 @@
 
             "delete": {
                 "deleted": "The expense data was deleted successfully."
+            },
+
+            "edit": {
+                "edited": "The expense data was edited successfully."
             }
         }
     }

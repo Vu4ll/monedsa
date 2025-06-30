@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const Token = require("../models/token");
 const locale = require("../locales/en.json");
 
 module.exports = async (req, res, next) => {
@@ -16,19 +15,8 @@ module.exports = async (req, res, next) => {
         }
 
         const token = authHeader.substring(7);
-        const tokenDoc = await Token.findOne({ token });
-        if (!tokenDoc) {
-            return res.status(401).json({
-                status: res.statusCode,
-                success: false,
-                message: locale.verifyToken.tokenNotFound,
-            });
-        }
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
-        req.user.id = decoded.userId;
-        req.tokenId = tokenDoc._id;
         next();
     } catch (error) {
         console.error(`Token verification error: ${error.message}`);

@@ -8,7 +8,6 @@ const config = require("../config");
 const { emailRegex, usernameRegex, passwordRegex } = config;
 const { badRequest, serverError } = require("../util/functions");
 const User = require("../models/user");
-const Token = require("../models/token");
 const locale = require("../locales/en.json");
 
 router.post("/register", async (req, res) => {
@@ -70,20 +69,6 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-        const token = authHeader.substring(7);
-        const tokenDoc = await Token.findOne({ token });
-
-        if (tokenDoc) {
-            return res.status(403).json({
-                status: res.statusCode,
-                success: false,
-                message: locale.login.fail.alreadyLoggedIn,
-            });
-        }
-    }
-
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { user, password } = req.body;
@@ -103,18 +88,11 @@ router.post("/login", async (req, res) => {
 
         if (!isValidPassword) return badRequest(res, locale.login.fail.invalidPassword);
 
-        const hasToken = await Token.findOne({ userId: userData._id });
-        if (hasToken) await Token.deleteOne({ userId: userData._id });
-
         const token = jwt.sign({
             userId: userData._id,
             email: userData.email,
             username: userData.username,
         }, process.env.JWT_SECRET, { expiresIn: config.env.JWT_EXPIRATION });
-
-
-        const expiresAt = new Date().setDate(new Date().getDate() + 7);
-        await Token.create({ token, userId: userData._id, createdAt: new Date(), expiresAt });
 
         res.status(200).json({
             status: res.statusCode,
@@ -138,26 +116,6 @@ router.post("/login", async (req, res) => {
 
 router.post("/logout", async (req, res) => {
     try {
-        const authHeader = req.headers.authorization;
-
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({
-                status: res.statusCode,
-                success: false,
-                message: locale.logout.fail.noToken,
-            });
-        }
-
-        const token = authHeader.substring(7);
-        const tokenDoc = await Token.findOne({ token });
-        if (!tokenDoc) {
-            return res.status(401).json({
-                status: res.statusCode,
-                success: false,
-                message: locale.logout.fail.invalidToken,
-            });
-        }
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!decoded) {
             return res.status(401).json({
@@ -166,8 +124,6 @@ router.post("/logout", async (req, res) => {
                 message: locale.logout.fail.invalidToken,
             });
         }
-
-        await Token.deleteOne({ token });
 
         res.status(200).json({
             status: res.statusCode,

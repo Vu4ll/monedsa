@@ -32,7 +32,7 @@ router.delete("/data/:id", verifyToken, async (req, res) => {
     const { id } = req.params;
     if (!id) return res.status(400).json({
         status: res.statusCode,
-        success: false, 
+        success: false,
         message: "ID is required"
     });
 
