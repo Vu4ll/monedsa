@@ -16,10 +16,19 @@ module.exports = async (req, res, next) => {
 
         const token = authHeader.substring(7);
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!token || !decoded || !decoded.id) {
+            res.status(401).json({
+                status: res.statusCode,
+                success: false,
+                message: "locale.verifyToken.invalidToken",
+            });
+        }
+
         req.user = decoded;
         next();
     } catch (error) {
-        console.error(`Token verification error: ${error.message}`);
+        console.error(`Token verification error: ${error}`);
         res.status(401).json({
             status: res.statusCode,
             success: false,

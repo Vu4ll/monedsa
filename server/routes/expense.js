@@ -26,7 +26,7 @@ router.post("/add", verifyToken, async (req, res) => {
 
     try {
         const newExpense = await Expense.create({
-            userId: req.user.userId,
+            userId: req.user.id,
             amount,
             category: getCategory._id,
             description: description || null,
@@ -42,7 +42,8 @@ router.post("/add", verifyToken, async (req, res) => {
                 amount: newExpense.amount,
                 category: {
                     _id: getCategory._id,
-                    name: getCategory.name
+                    name: getCategory.name,
+                    color: getCategory.color,
                 },
                 description: newExpense.description,
                 createdAt: newExpense.createdAt
@@ -55,20 +56,55 @@ router.post("/add", verifyToken, async (req, res) => {
 });
 
 router.get("/list", verifyToken, async (req, res) => {
-    const data = await Expense.find({ userId: req.user.userId })
-        .sort({ createdAt: -1 })
-        .select("-__v")
-        .populate("category", "name");
+    const { category, minAmount, maxAmount, startDate, endDate, sortBy, sortOrder } = req.query;
 
-    if (!data || data.length === 0)
-        return notFound(res, locale.expense.fail.list.noData);
+    let filter = { userId: req.user.id };
 
-    res.status(200).json({
-        status: res.statusCode,
-        success: true,
-        message: locale.expense.success.list.dataRetrieved,
-        data
-    });
+    if (category) {
+        const categoryDoc = await Category.findOne({ name: category });
+        if (categoryDoc) filter.category = categoryDoc._id;
+    }
+
+    if (minAmount || maxAmount) {
+        filter.amount = {};
+        if (minAmount) filter.amount.$gte = parseFloat(minAmount);
+        if (maxAmount) filter.amount.$lte = parseFloat(maxAmount);
+    }
+
+    if (startDate || endDate) {
+        filter.createdAt = {};
+        if (startDate) filter.createdAt.$gte = new Date(startDate);
+        if (endDate) filter.createdAt.$lte = new Date(endDate);
+    }
+
+    let sortOptions = { createdAt: -1 };
+    if (sortBy) {
+        const order = sortOrder === "asc" ? 1 : -1;
+        if (sortBy === "amount") sortOptions = { amount: order };
+        else if (sortBy === "date") sortOptions = { createdAt: order };
+    }
+
+    try {
+        const data = await Expense.find(filter)
+            .sort(sortOptions)
+            .select("-__v")
+            .populate("category", ["name", "color"]);
+
+        if (!data || data.length === 0)
+            return notFound(res, locale.expense.fail.list.noData);
+
+        res.status(200).json({
+            status: res.statusCode,
+            success: true,
+            message: locale.expense.success.list.dataRetrieved,
+            count: data.length,
+            filters: { category, minAmount, maxAmount, startDate, endDate, sortBy, sortOrder },
+            data
+        });
+    } catch (error) {
+        console.error(`Error listing expenses: \n${error.message}`);
+        serverError(res, locale.expense.fail.list.serverError);
+    }
 });
 
 router.delete("/delete", verifyToken, (req, res) => {
@@ -82,7 +118,7 @@ router.delete("/delete/:id", verifyToken, async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id))
         return badRequest(res, locale.expense.fail.delete.invalidId);
 
-    const deletedExpense = await Expense.findOneAndDelete({ _id: id, userId: req.user.userId });
+    const deletedExpense = await Expense.findOneAndDelete({ _id: id, userId: req.user.id });
     if (!deletedExpense) return notFound(res, locale.expense.fail.delete.noData);
 
     res.status(200).json({
@@ -115,11 +151,11 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
 
     try {
         const editedExpense = await Expense.findOneAndUpdate(
-            { _id: id, userId: req.user.userId },
+            { _id: id, userId: req.user.id },
             { amount, description, category: getCategory._id },
             { new: true }
         );
-        const populatedExpense = await Expense.findById(editedExpense._id).populate("category", "name");
+        const populatedExpense = await Expense.findById(editedExpense._id).populate("category", ["name", "color"]);
 
         res.status(200).json({
             status: res.statusCode,

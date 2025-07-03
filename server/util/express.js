@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
 const { PORT } = require("../config").env;
+const cors = require('cors');
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", require("../routes"));
 

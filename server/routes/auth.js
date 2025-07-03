@@ -9,6 +9,7 @@ const { emailRegex, usernameRegex, passwordRegex } = config;
 const { badRequest, serverError } = require("../util/functions");
 const User = require("../models/user");
 const locale = require("../locales/en.json");
+const ms = require("ms");
 
 router.post("/register", async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
@@ -89,23 +90,25 @@ router.post("/login", async (req, res) => {
         if (!isValidPassword) return badRequest(res, locale.login.fail.invalidPassword);
 
         const token = jwt.sign({
-            userId: userData._id,
+            id: userData._id,
             email: userData.email,
             username: userData.username,
         }, process.env.JWT_SECRET, { expiresIn: config.env.JWT_EXPIRATION });
+
+        // res.cookie("token", token, {
+        //     httpOnly: true, sameSite: "Strict", maxAge: ms(config.env.JWT_EXPIRATION)
+        // });
 
         res.status(200).json({
             status: res.statusCode,
             success: true,
             message: locale.login.success.message,
-            data: {
-                token,
-                user: {
-                    id: userData._id,
-                    email: userData.email,
-                    username: userData.username,
-                    name: userData.name,
-                }
+            token,
+            user: {
+                id: userData._id,
+                email: userData.email,
+                username: userData.username,
+                name: userData.name,
             }
         });
     } catch (error) {
@@ -116,15 +119,7 @@ router.post("/login", async (req, res) => {
 
 router.post("/logout", async (req, res) => {
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if (!decoded) {
-            return res.status(401).json({
-                status: res.statusCode,
-                success: false,
-                message: locale.logout.fail.invalidToken,
-            });
-        }
-
+        // res.clearCookie("token", { httpOnly: true, sameSite: "Strict" });
         res.status(200).json({
             status: res.statusCode,
             success: true,
