@@ -11,24 +11,4 @@ const CategorySchema = new mongoose.Schema({
 
 CategorySchema.index({ name: 1, userId: 1, type: 1 }, { unique: true });
 
-CategorySchema.pre("findOneAndDelete", async () => {
-    const Transaction = mongoose.model("Transaction");
-    const categoryId = this.getQuery()._id;
-    
-    const relatedTransactions = await Transaction.findOne({ category: categoryId });
-    if (relatedTransactions) {
-        throw new Error("Bu kategori silinemez çünkü ilişkili işlemler bulunmaktadır.");
-    }
-});
-
-CategorySchema.pre("deleteOne", async () => {
-    const Transaction = mongoose.model("Transaction");
-    const categoryId = this.getQuery()._id;
-    
-    const relatedTransactions = await Transaction.findOne({ category: categoryId });
-    if (relatedTransactions) {
-        throw new Error("Bu kategori silinemez çünkü ilişkili işlemler bulunmaktadır.");
-    }
-});
-
 module.exports = mongoose.model("Category", CategorySchema);

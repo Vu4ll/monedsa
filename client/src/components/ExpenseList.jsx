@@ -12,10 +12,6 @@ export const ExpenseList = ({ expenses, loading, colors }) => {
 
   return (
     <View style={styles.expenseList}>
-      <Text style={[styles.summaryText, { color: colors.text }]}>
-        Toplam {expenses.count} gider bulundu
-      </Text>
-
       {expenses.data.map((expense) => (
         <ExpenseCard
           key={expense.id}
@@ -23,6 +19,9 @@ export const ExpenseList = ({ expenses, loading, colors }) => {
           colors={colors}
         />
       ))}
+      <Text style={[styles.summaryText, { color: colors.text }]}>
+        Toplam {expenses.count} gider bulundu
+      </Text>
     </View>
   );
 };

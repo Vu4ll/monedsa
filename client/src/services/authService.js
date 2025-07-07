@@ -4,13 +4,17 @@ import { API_CONFIG } from '../constants';
 class AuthService {
   constructor() {
     this.token = null;
+    this.refreshToken = null;
   }
 
-  // Token'ı belleğe kaydet
-  setToken(token) {
+  // Token'ları belleğe kaydet
+  setToken(token, refreshToken) {
     this.token = token;
-    // Ayrıca kalıcı depolama için AsyncStorage'a da kaydet
+    this.refreshToken = refreshToken;
     AsyncStorage.setItem('authToken', token);
+    if (refreshToken) {
+      AsyncStorage.setItem('refreshToken', refreshToken);
+    }
   }
 
   // Belleğden token'ı al
@@ -18,13 +22,18 @@ class AuthService {
     return this.token;
   }
 
-  // Uygulama başlatıldığında AsyncStorage'dan token'ı yükle
+  // Refresh token'ı al
+  getRefreshToken() {
+    return this.refreshToken;
+  }
+
+  // Uygulama başlatıldığında token ve refresh token'ı yükle
   async loadToken() {
     try {
       const storedToken = await AsyncStorage.getItem('authToken');
-      if (storedToken) {
-        this.token = storedToken;
-      }
+      const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
+      if (storedToken) this.token = storedToken;
+      if (storedRefreshToken) this.refreshToken = storedRefreshToken;
       return this.token;
     } catch (error) {
       console.error('Token yükleme hatası:', error);
@@ -32,11 +41,13 @@ class AuthService {
     }
   }
 
-  // Token'ı temizle (logout)
+  // Token'ları temizle (logout)
   async clearToken() {
     this.token = null;
+    this.refreshToken = null;
     try {
       await AsyncStorage.removeItem('authToken');
+      await AsyncStorage.removeItem('refreshToken');
     } catch (error) {
       console.error('Token temizleme hatası:', error);
     }
@@ -59,10 +70,33 @@ class AuthService {
     }
   }
 
+  // Token yenileme
+  async refreshAccessToken() {
+    if (!this.refreshToken) return null;
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken: this.refreshToken }),
+      });
+      const data = await response.json();
+      if (response.ok && data.token) {
+        this.setToken(data.token, data.refreshToken || this.refreshToken);
+        console.log("Token refreshed");
+        return data.token;
+      } else {
+        await this.clearToken();
+        return null;
+      }
+    } catch (error) {
+      await this.clearToken();
+      return null;
+    }
+  }
+
   // Login işlemi (örnek)
   async login(user, password) {
     try {
-      // Bu kısım gerçek API çağrısı olacak
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH_LOGIN}`, {
         method: 'POST',
         headers: {
@@ -70,11 +104,9 @@ class AuthService {
         },
         body: JSON.stringify({ user, password }),
       });
-
       const data = await response.json();
-      
       if (response.ok && data.token) {
-        this.setToken(data.token);
+        this.setToken(data.token, data.refreshToken);
         return { success: true, user: data.user };
       } else {
         return { success: false, error: data.message || 'Giriş başarısız' };

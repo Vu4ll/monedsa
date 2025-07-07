@@ -152,13 +152,15 @@
                 "invalidColor": "Invalid hex color format.",
                 "invalidType": "Category type must be either 'expense' or 'income'.",
                 "nameExists": "Category with this name already exists.",
-                "serverError": "Server error occurred while editing category."
+                "serverError": "Server error occurred while editing category.",
+                "noFieldsToUpdate": "At least one field (name, color, or type) must be provided for update."
             },
             "delete": {
                 "idRequired": "Category ID is required.",
                 "invalidId": "Invalid category ID.",
                 "notFound": "Category not found or access denied.",
-                "serverError": "Server error occurred while deleting category."
+                "serverError": "Server error occurred while deleting category.",
+                "isRelated": "This category cannot be deleted because there are related transactions."
             },
             "admin": {
                 "listError": "Server error occurred while listing default categories.",

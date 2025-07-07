@@ -5,6 +5,7 @@ import {
   ScrollView,
   RefreshControl,
   SafeAreaView,
+  Text
 } from "react-native";
 import { getColors } from "../constants";
 import { useExpenses } from "../hooks";
@@ -23,6 +24,7 @@ export const HomeScreen = () => {
         translucent={false}
         animated={true}
       />
+      <Header colors={colors} />
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         refreshControl={
@@ -34,9 +36,11 @@ export const HomeScreen = () => {
           />
         }
       >
-        <Header colors={colors} />
         <ExpenseList expenses={expenses} loading={loading} colors={colors} />
       </ScrollView>
+      <Text style={{ height: 50, color: "white" }}>
+        Toplam 14 gider bulundu
+      </Text>
     </SafeAreaView>
   );
 };
@@ -47,7 +51,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    padding: 20,
-    paddingTop: 0,
+    padding: 20
   },
 });

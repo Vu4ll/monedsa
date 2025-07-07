@@ -27,7 +27,7 @@ export const ExpenseCard = ({ expense, colors }) => {
       </View>
 
       <Text style={[styles.expenseDescription, { color: colors.text }]}>
-        {expense.description || "Açıklama bulunmuyor."} {expense.type}
+        {expense.description || "Açıklama bulunmuyor."}
       </Text>
 
       <Text style={[styles.expenseDate, { color: colors.textSecondary }]}>
