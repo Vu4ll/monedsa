@@ -15,7 +15,16 @@ export const useExpenses = () => {
       console.log("Expenses fetched:", data);
     } catch (error) {
       console.error("Error fetching expenses:", error);
-      Alert.alert("Hata", "Veri çekilirken bir hata oluştu. Sunucunun çalıştığından emin olun.");
+
+      if (error.response && error.response.status === 404) {
+        Alert.alert("Bilgi", "Henüz gider kaydınız bulunmuyor.");
+      } else if (error.message && (error.message.includes('Token') || error.message.includes('token'))) {
+        // Token ile ilgili hatalar için özel mesaj
+        Alert.alert("Oturum Süresi Doldu", "Lütfen tekrar giriş yapın.");
+      } else {
+        // Diğer hatalar için genel mesaj
+        Alert.alert("Hata", "Veri çekilirken bir hata oluştu. Sunucunun çalıştığından emin olun.");
+      }
     } finally {
       setLoading(false);
     }
@@ -29,7 +38,17 @@ export const useExpenses = () => {
       console.log("Expenses refreshed:", data);
     } catch (error) {
       console.error("Error refreshing expenses:", error);
-      Alert.alert("Hata", "Veri yenilenirken bir hata oluştu. Sunucunun çalıştığından emin olun.");
+
+      // 404 hatası kontrolü
+      if (error.response && error.response.status === 404) {
+        Alert.alert("Bilgi", "Henüz gider kaydınız bulunmuyor.");
+      } else if (error.message && (error.message.includes('Token') || error.message.includes('token'))) {
+        // Token ile ilgili hatalar için özel mesaj
+        Alert.alert("Oturum Süresi Doldu", "Lütfen tekrar giriş yapın.");
+      } else {
+        // Diğer hatalar için genel mesaj
+        Alert.alert("Hata", "Veri yenilenirken bir hata oluştu. Sunucunun çalıştığından emin olun.");
+      }
     } finally {
       setRefreshing(false);
     }

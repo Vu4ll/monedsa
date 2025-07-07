@@ -18,7 +18,7 @@ export const ExpenseList = ({ expenses, loading, colors }) => {
 
       {expenses.data.map((expense) => (
         <ExpenseCard
-          key={expense._id}
+          key={expense.id}
           expense={expense}
           colors={colors}
         />

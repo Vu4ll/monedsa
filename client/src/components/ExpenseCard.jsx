@@ -8,7 +8,10 @@ export const ExpenseCard = ({ expense, colors }) => {
       { backgroundColor: colors.cardBackground, borderColor: colors.border }
     ]}>
       <View style={styles.expenseHeader}>
-        <Text style={[styles.expenseAmount, { color: colors.success }]}>
+        <Text style={[
+          styles.expenseAmount, 
+          { color: expense.type === 'income' ? colors.success : colors.error }
+        ]}>
           {formatCurrency(expense.amount)}
         </Text>
         <View
@@ -24,7 +27,7 @@ export const ExpenseCard = ({ expense, colors }) => {
       </View>
 
       <Text style={[styles.expenseDescription, { color: colors.text }]}>
-        {expense.description || "Açıklama bulunmuyor."}
+        {expense.description || "Açıklama bulunmuyor."} {expense.type}
       </Text>
 
       <Text style={[styles.expenseDate, { color: colors.textSecondary }]}>

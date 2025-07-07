@@ -16,7 +16,7 @@ export const HomeScreen = () => {
   const { expenses, loading, refreshing, onRefresh } = useExpenses();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar
         barStyle={isDarkMode ? "light-content" : "dark-content"}
         backgroundColor={colors.background}

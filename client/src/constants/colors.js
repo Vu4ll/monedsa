@@ -7,4 +7,12 @@ export const getColors = (isDarkMode) => ({
   button: isDarkMode ? "#007AFF" : "#007AFF",
   buttonText: "#FFFFFF",
   success: isDarkMode ? "#4CAF50" : "#2E7D32",
+  error: isDarkMode ? "#F44336" : "#D32F2F",
+  primary: isDarkMode ? "#BB86FC" : "#6200EE",
+  white: "#FFFFFF",
+  inputBackground: isDarkMode ? "#2A2A2A" : "#FFFFFF",
+  inputText: isDarkMode ? "#FFFFFF" : "#000000",
+  inputBorder: isDarkMode ? "#444444" : "#E0E0E0",
+  inputBorderFocused: isDarkMode ? "#BB86FC" : "#6200EE",
+  placeholder: isDarkMode ? "#888888" : "#999999",
 });

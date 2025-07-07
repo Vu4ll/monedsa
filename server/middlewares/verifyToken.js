@@ -18,10 +18,10 @@ module.exports = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         if (!token || !decoded || !decoded.id) {
-            res.status(401).json({
+            return res.status(401).json({
                 status: res.statusCode,
                 success: false,
-                message: "locale.verifyToken.invalidToken",
+                message: locale.verifyToken.invalidToken,
             });
         }
 
@@ -29,7 +29,7 @@ module.exports = async (req, res, next) => {
         next();
     } catch (error) {
         console.error(`Token verification error: ${error}`);
-        res.status(401).json({
+        return res.status(401).json({
             status: res.statusCode,
             success: false,
             message: locale.verifyToken.invalidToken,
