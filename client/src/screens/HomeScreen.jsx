@@ -5,13 +5,12 @@ import {
   ScrollView,
   RefreshControl,
   SafeAreaView,
-  Text
 } from "react-native";
 import { getColors } from "../constants";
 import { useExpenses } from "../hooks";
 import { Header, ExpenseList } from "../components";
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ onLogout }) => {
   const isDarkMode = useColorScheme() === "dark";
   const colors = getColors(isDarkMode);
   const { expenses, loading, refreshing, onRefresh } = useExpenses();
@@ -24,7 +23,7 @@ export const HomeScreen = () => {
         translucent={false}
         animated={true}
       />
-      <Header colors={colors} />
+      <Header colors={colors} onLogout={onLogout} />
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         refreshControl={
@@ -38,9 +37,6 @@ export const HomeScreen = () => {
       >
         <ExpenseList expenses={expenses} loading={loading} colors={colors} />
       </ScrollView>
-      <Text style={{ height: 50, color: "white" }}>
-        Toplam 14 gider bulundu
-      </Text>
     </SafeAreaView>
   );
 };
