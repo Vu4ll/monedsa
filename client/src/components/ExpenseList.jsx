@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { ExpenseCard } from "./ExpenseCard";
+import { formatCurrency } from "../utils";
 
 export const ExpenseList = ({ expenses, loading, colors }) => {
   if (!expenses) {
@@ -12,6 +13,27 @@ export const ExpenseList = ({ expenses, loading, colors }) => {
 
   return (
     <View style={styles.expenseList}>
+      {expenses.summary && (
+        <View style={[styles.summaryBox, { backgroundColor: colors.cardBackground }]}>
+          <Text
+            style={[styles.summaryLine, { color: colors.error }]}
+          >{`Toplam Gider: ${formatCurrency(expenses.summary.totalExpense)}`}</Text>
+          <Text
+            style={[styles.summaryLine, { color: colors.success }]}
+          >{`Toplam Gelir: ${formatCurrency(expenses.summary.totalIncome)}`}</Text>
+          <Text
+            style={[
+              styles.summaryLine,
+              {
+                color:
+                  expenses.summary.balance < 0
+                    ? colors.error
+                    : colors.success,
+              },
+            ]}
+          >{`Bakiye: ${formatCurrency(expenses.summary.balance)}`}</Text>
+        </View>
+      )}
       {expenses.data.map((expense) => (
         <ExpenseCard
           key={expense.id}
@@ -19,9 +41,6 @@ export const ExpenseList = ({ expenses, loading, colors }) => {
           colors={colors}
         />
       ))}
-      <Text style={[styles.summaryText, { color: colors.text }]}>
-        Toplam {expenses.count} gider bulundu
-      </Text>
     </View>
   );
 };
@@ -39,5 +58,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginTop: 50,
+  },
+  summaryBox: {
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 15,
+    alignItems: "center",
+  },
+  summaryLine: {
+    fontSize: 15,
+    fontWeight: "600",
+    marginBottom: 2,
   },
 });

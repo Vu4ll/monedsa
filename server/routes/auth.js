@@ -143,20 +143,4 @@ router.post("/refresh", async (req, res) => {
     }
 });
 
-router.post("/logout", async (req, res) => {
-    try {
-        res.status(200).json({
-            status: res.statusCode,
-            success: true,
-            message: locale.logout.success.message,
-        });
-    } catch (error) {
-        res.status(401).json({
-            status: res.statusCode,
-            success: false,
-            message: locale.logout.fail.invalidToken,
-        });
-    }
-});
-
 module.exports = router;

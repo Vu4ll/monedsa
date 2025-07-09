@@ -2,10 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { authService } from "../services";
 
 export const Header = ({ colors, onLogout }) => {
-  const handleLogout = () => {
+  const handleLogout = async () => {
     Alert.alert(
       'Çıkış',
-      'Hesabınızdan çıkış yapmak istediğinize emin misiniz?',
+      'Hesabınızdan çıkış yapmak istediğimize emin misiniz?',
       [
         { text: 'İptal', style: 'cancel' },
         { 
@@ -13,7 +13,7 @@ export const Header = ({ colors, onLogout }) => {
           style: 'destructive',
           onPress: async () => {
             await authService.logout();
-            onLogout && onLogout();
+            if (onLogout) await onLogout();
           }
         }
       ]

@@ -30,7 +30,6 @@ api.interceptors.response.use(
         return api(originalRequest);
       } else {
         await authService.clearToken();
-        // Burada logout veya yönlendirme işlemi yapılabilir
       }
     }
     return Promise.reject(error);

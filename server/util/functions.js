@@ -91,6 +91,13 @@ const getTransactionList = async (req, res, forceType = null) => {
         if (!data || data.length === 0)
             return notFound(res, locale.transaction.fail.list.noData);
 
+        const summary = data.reduce((acc, curr) => {
+            if (curr.type === "expense") acc.totalExpense += curr.amount;
+            else if (curr.type === "income") acc.totalIncome += curr.amount;
+            return acc;
+        }, { totalExpense: 0, totalIncome: 0 });
+        summary.balance = summary.totalIncome - summary.totalExpense;
+
         const transformedData = data.map(item => ({
             id: item._id,
             userId: item.userId,
@@ -111,6 +118,11 @@ const getTransactionList = async (req, res, forceType = null) => {
             message: locale.transaction.success.list.dataRetrieved,
             count: transformedData.length,
             filters: { category, type: transactionType, minAmount, maxAmount, startDate, endDate, sortBy, sortOrder },
+            summary: {
+                totalExpense: summary.totalExpense,
+                totalIncome: summary.totalIncome,
+                balance: summary.balance
+            },
             data: transformedData
         });
     } catch (error) {
