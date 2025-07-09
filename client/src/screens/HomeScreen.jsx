@@ -5,7 +5,6 @@ import {
   ScrollView,
   RefreshControl,
   SafeAreaView,
-  Text
 } from "react-native";
 import { getColors } from "../constants";
 import { useExpenses } from "../hooks";
@@ -38,12 +37,9 @@ export const HomeScreen = ({ onLogout }) => {
       >
         <ExpenseList expenses={expenses} loading={loading} colors={colors} />
       </ScrollView>
-
-      {expenses?.count && (
-        <Text style={{ height: 50, color: colors.text, justifyContent: "center", marginHorizontal: 20 }}>
-          Toplam {expenses.count} gider bulundu
-        </Text>
-      )}
+      <Text style={{ height: 50, color: "white" }}>
+        Toplam 14 gider bulundu
+      </Text>
     </SafeAreaView>
   );
 };

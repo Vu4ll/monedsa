@@ -1,5 +1,73 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+# Gider Takip - Expense Tracker
+
+Bu proje, kişisel gider ve gelir takibi için geliştirilmiş bir React Native uygulamasıdır.
+
+## Özellikler
+
+- 🔐 Kullanıcı girişi ve kimlik doğrulama
+- 💰 Gider ve gelir takibi
+- 📊 Kategori bazlı işlem yönetimi
+- 🌙 Karanlık/Açık tema desteği
+- 📱 Android ve iOS uyumluluğu
+- 🔄 Otomatik token yenileme
+- 📈 İşlem özeti ve raporlama
+
+## Kurulum
+
+### Gereksinimler
+
+- Node.js (v18 veya üzeri)
+- React Native CLI
+- Android Studio (Android geliştirme için)
+- Xcode (iOS geliştirme için)
+
+### Backend Kurulumu
+
+1. Server klasörüne gidin:
+```bash
+cd server
+```
+
+2. Bağımlılıkları yükleyin:
+```bash
+npm install
+```
+
+3. `.env` dosyası oluşturun:
+```env
+PORT=3000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
+```
+
+4. Sunucuyu başlatın:
+```bash
+npm run dev
+```
+
+### Client Kurulumu
+
+1. Client klasörüne gidin:
+```bash
+cd client
+```
+
+2. Bağımlılıkları yükleyin:
+```bash
+npm install
+```
+
+3. API yapılandırmasını güncelleyin (`src/constants/api.js`):
+```javascript
+export const API_CONFIG = {
+  BASE_URL: "http://YOUR_SERVER_IP:3000", // Sunucu IP adresinizi buraya yazın
+  // ...
+};
+```
+
 # Getting Started
 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
@@ -61,6 +129,50 @@ yarn ios
 If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
 
 This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - Kullanıcı girişi
+- `POST /api/auth/register` - Kullanıcı kaydı
+- `POST /api/auth/refresh` - Token yenileme
+- `POST /api/auth/logout` - Çıkış
+
+### Transactions
+- `GET /api/transaction/list` - İşlem listesi
+- `POST /api/transaction/add` - Yeni işlem ekleme
+- `PUT /api/transaction/edit/:id` - İşlem düzenleme
+- `DELETE /api/transaction/delete/:id` - İşlem silme
+- `GET /api/transaction/summary` - İşlem özeti
+
+### Categories
+- `GET /api/category/list` - Kategori listesi
+- `POST /api/category/add` - Yeni kategori ekleme
+- `PUT /api/category/edit/:id` - Kategori düzenleme
+- `DELETE /api/category/delete/:id` - Kategori silme
+
+## Kullanım
+
+1. Uygulamayı başlattıktan sonra giriş ekranında email/kullanıcı adı ve şifrenizi girin
+2. Ana ekranda gider ve gelirlerinizi görüntüleyebilirsiniz
+3. Yeni işlem eklemek için ilgili butonları kullanın
+4. Kategoriler ile işlemlerinizi organize edin
+5. Karanlık/açık tema arasında geçiş yapabilirsiniz
+
+## Teknolojiler
+
+### Frontend
+- React Native 0.80.1
+- React Navigation 7.x
+- Axios (HTTP istekleri)
+- AsyncStorage (yerel depolama)
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB & Mongoose
+- JWT (JSON Web Tokens)
+- Argon2 (şifre hashleme)
 
 ## Step 3: Modify your app
 
