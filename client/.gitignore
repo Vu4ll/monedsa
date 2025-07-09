@@ -35,15 +35,6 @@ local.properties
 !debug.keystore
 .kotlin/
 
-# Android
-android/
-!android/app/src/main/res/
-!android/app/src/main/AndroidManifest.xml
-!android/app/build.gradle
-!android/build.gradle
-!android/gradle.properties
-!android/settings.gradle
-
 # Build artifacts
 *.apk
 *.ipa
