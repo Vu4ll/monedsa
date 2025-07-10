@@ -17,12 +17,17 @@ router.post("/add", verifyToken, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { amount, description, category, type } = req.body;
-    const getCategory = await Category.findOne({ name: category, type });
+    const getCategory = await Category.findOne({
+        name: category, type,
+        $or: [{ isDefault: true }, { userId: req.user.id }]
+    });
 
     if (!type) return badRequest(res, locale.transaction.fail.add.typeField);
     if (!["expense", "income"].includes(type))
         return badRequest(res, locale.transaction.fail.add.invalidType);
-    if (!getCategory) return badRequest(res, locale.transaction.fail.add.categoryNotFound);
+    if (getCategory?.type !== type)
+        return badRequest(res, locale.transaction.fail.add.categoryTypeMismatch);
+    if (!category || !getCategory) return badRequest(res, locale.transaction.fail.add.categoryNotFound);
     if (!amount) return badRequest(res, locale.transaction.fail.add.amountField);
     if (typeof amount !== "number" || amount <= 0)
         return badRequest(res, locale.transaction.fail.add.invalidAmount);
@@ -118,7 +123,10 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
 
     let getCategory = null;
     if (category) {
-        getCategory = await Category.findOne({ name: category });
+        getCategory = await Category.findOne({
+            name: category,
+            $or: [{ isDefault: true }, { userId: req.user.id }]
+        });
         if (!getCategory)
             return badRequest(res, locale.transaction.fail.add.categoryNotFound);
     }
@@ -166,33 +174,6 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
     } catch (error) {
         console.error(`Error editing expense: \n${error.message}`);
         serverError(res, locale.transaction.fail.edit.serverError);
-    }
-});
-
-router.get("/summary", verifyToken, async (req, res) => {
-    try {
-        const transactions = await Transaction.find({ userId: req.user.id });
-
-        const summary = transactions.reduce((acc, curr) => {
-            if (curr.type === "expense") {
-                acc.totalExpense += curr.amount;
-            } else if (curr.type === "income") {
-                acc.totalIncome += curr.amount;
-            }
-            return acc;
-        }, { totalExpense: 0, totalIncome: 0 });
-
-        summary.balance = summary.totalIncome - summary.totalExpense;
-
-        res.status(200).json({
-            status: res.statusCode,
-            success: true,
-            message: locale.transaction.success.summary.retrieved,
-            data: summary
-        });
-    } catch (error) {
-        console.error(`Error getting summary: \n${error.message}`);
-        serverError(res, locale.expense.fail.summary.serverError);
     }
 });
 

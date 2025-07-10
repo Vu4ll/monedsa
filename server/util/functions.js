@@ -54,7 +54,7 @@ const getTransactionList = async (req, res, forceType = null) => {
     let filter = { userId: req.user.id };
 
     if (category) {
-        const categoryDoc = await Category.findOne({ name: category, userId: req.user.id });
+        const categoryDoc = await Category.findOne({ name: category });
         if (categoryDoc) filter.category = categoryDoc._id;
     }
 

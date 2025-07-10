@@ -71,6 +71,7 @@
                 "invalidAmount": "The amount field must be a number.",
                 "invalidType": "The type field must be either 'expense' or 'income'.",
                 "categoryNotFound": "The specified category was not found.",
+                "categoryTypeMismatch": "The specified category cannot be used for this transaction type.",
                 "serverError": "An unknown error occurred while adding the transaction data."
             },
             "list": {
@@ -168,6 +169,30 @@
                 "editError": "Server error occurred while editing default category.",
                 "deleteError": "Server error occurred while deleting default category."
             }
+        }
+    },
+    "profile": {
+        "success": {
+            "infoRetrieved": "Profile information retrieved successfully.",
+            "updated": "Profile updated successfully.",
+            "passwordChanged": "Password changed successfully.",
+            "statsRetrieved": "Profile statistics retrieved successfully."
+        },
+        "fail": {
+            "userNotFound": "User not found.",
+            "noFieldsToUpdate": "At least one field (username, email, or name) must be provided for update.",
+            "invalidUsername": "Username must be between 3-50 characters.",
+            "invalidEmail": "Invalid email format.",
+            "invalidName": "Name must be between 2-100 characters.",
+            "usernameExists": "Username already exists.",
+            "emailExists": "Email already exists.",
+            "noChanges": "No changes detected.",
+            "currentPasswordRequired": "Current password is required.",
+            "newPasswordRequired": "New password is required.",
+            "weakPassword": "Password must be at least 8 characters long.",
+            "incorrectCurrentPassword": "Current password is incorrect.",
+            "samePassword": "New password cannot be the same as current password.",
+            "serverError": "Server error occurred."
         }
     }
 }
