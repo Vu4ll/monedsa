@@ -14,7 +14,7 @@ import { getColors } from "../constants";
 import { useTransactions } from "../hooks";
 import { Header, TransactionList } from "../components";
 
-export const HomeScreen = ({ onLogout }) => {
+export const HomeScreen = ({ onLogout, navigation, route }) => {
   const isDarkMode = useColorScheme() === "dark";
   const colors = getColors(isDarkMode);
   const { transactions, loading, refreshing, onRefresh } = useTransactions();
@@ -47,6 +47,24 @@ export const HomeScreen = ({ onLogout }) => {
     return () => unsubscribe();
   }, []);
 
+  // Navigation params değişikliklerini dinle ve ilk yükleme
+  useEffect(() => {
+    if (route?.params?.refresh) {
+      onRefresh();
+      // Params'ı temizle
+      navigation.setParams({ refresh: undefined });
+    }
+  }, [route?.params?.refresh]);
+
+  // Sadece ilk yükleme için
+  useEffect(() => {
+    onRefresh();
+  }, []);
+
+  const handleTransactionUpdate = () => {
+    onRefresh();
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar
@@ -55,7 +73,7 @@ export const HomeScreen = ({ onLogout }) => {
         translucent={false}
         animated={true}
       />
-      <Header colors={colors} onLogout={onLogout} />
+      <Header colors={colors} onLogout={onLogout} navigation={navigation} />
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         refreshControl={
@@ -67,12 +85,18 @@ export const HomeScreen = ({ onLogout }) => {
           />
         }
       >
-        <TransactionList transactions={transactions} loading={loading} colors={colors} />
+        <TransactionList 
+          transactions={transactions} 
+          loading={loading} 
+          colors={colors} 
+          navigation={navigation}
+          onTransactionUpdate={handleTransactionUpdate}
+        />
       </ScrollView>
 
       {transactions?.count && (
         <Text style={{ height: 50, color: colors.text, justifyContent: "center", marginHorizontal: 20 }}>
-          Toplam {transactions.count} gider bulundu
+          Toplam {transactions.count} işlem bulundu
         </Text>
       )}
 

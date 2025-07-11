@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HomeScreen, LoginScreen } from "./src/screens";
+import { HomeScreen, LoginScreen, RegisterScreen, CategoryScreen, AddTransactionScreen } from "./src/screens";
 import { authService } from './src/services';
 import { getColors } from './src/constants';
 
@@ -51,16 +51,23 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
-          <Stack.Screen name="Home">
-            {(props) => <HomeScreen {...props} onLogout={() => setIsAuthenticated(false)} />}
-          </Stack.Screen>
+          <>
+            <Stack.Screen name="Home">
+              {(props) => <HomeScreen {...props} onLogout={() => setIsAuthenticated(false)} />}
+            </Stack.Screen>
+            <Stack.Screen name="AddTransaction" component={AddTransactionScreen} />
+            <Stack.Screen name="Category" component={CategoryScreen} />
+          </>
         ) : (
-          <Stack.Screen
-            name="Login"
-            options={{ gestureEnabled: false }}
-          >
-            {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
-          </Stack.Screen>
+          <>
+            <Stack.Screen
+              name="Login"
+              options={{ gestureEnabled: false }}
+            >
+              {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
+            </Stack.Screen>
+            <Stack.Screen name="Register" component={RegisterScreen} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

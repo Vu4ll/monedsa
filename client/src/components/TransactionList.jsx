@@ -2,7 +2,16 @@ import { View, Text, StyleSheet } from "react-native";
 import { TransactionCard } from "./TransactionCard";
 import { formatCurrency } from "../utils";
 
-export const TransactionList = ({ transactions, loading, colors }) => {
+export const TransactionList = ({ transactions, loading, colors, navigation, onTransactionUpdate }) => {
+  
+  const handleEdit = (transaction) => {
+    navigation.navigate('AddTransaction', { transaction });
+  };
+
+  const handleDelete = (transactionId) => {
+    onTransactionUpdate && onTransactionUpdate();
+  };
+
   if (!transactions) {
     return (
       <Text style={[styles.noDataText, { color: colors.textSecondary }]}>
@@ -39,6 +48,8 @@ export const TransactionList = ({ transactions, loading, colors }) => {
           key={transaction.id}
           transaction={transaction}
           colors={colors}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
         />
       ))}
     </View>

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { 
-    View, 
-    Text, 
-    TextInput, 
-    TouchableOpacity, 
-    StyleSheet, 
-    Alert, 
+import React, { useState, useRef } from 'react';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Alert,
     useColorScheme,
     KeyboardAvoidingView,
     ScrollView,
@@ -14,6 +14,7 @@ import {
     Keyboard,
     SafeAreaView
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getColors } from '../constants';
 import { authService } from '../services';
 
@@ -21,7 +22,10 @@ const LoginScreen = ({ navigation, onLogin }) => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [loading, setLoading] = useState(false);
-    
+    const [showPassword, setShowPassword] = useState(false);
+
+    const passwordRef = useRef(null);
+
     const isDarkMode = useColorScheme() === "dark";
     const colors = getColors(isDarkMode);
 
@@ -91,6 +95,30 @@ const LoginScreen = ({ navigation, onLogin }) => {
             borderColor: colors.inputBorder,
             color: colors.inputText,
         },
+        passwordContainer: {
+            position: 'relative',
+        },
+        passwordInput: {
+            backgroundColor: colors.inputBackground,
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 14,
+            paddingRight: 50,
+            fontSize: 16,
+            borderWidth: 1,
+            borderColor: colors.inputBorder,
+            color: colors.inputText,
+        },
+        passwordToggle: {
+            position: 'absolute',
+            right: 6,
+            top: 0,
+            bottom: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 40,
+            height: '100%',
+        },
         loginButton: {
             backgroundColor: colors.primary,
             borderRadius: 12,
@@ -106,17 +134,30 @@ const LoginScreen = ({ navigation, onLogin }) => {
             fontSize: 16,
             fontWeight: '600',
         },
+        registerLink: {
+            marginTop: 20,
+            alignItems: 'center',
+        },
+        registerText: {
+            fontSize: 16,
+            color: colors.textSecondary,
+            textAlign: 'center',
+        },
+        registerHighlight: {
+            color: colors.primary,
+            fontWeight: '600',
+        },
     });
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-            <KeyboardAvoidingView 
+            <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView 
+                    <ScrollView
                         contentContainerStyle={styles.scrollContainer}
                         showsVerticalScrollIndicator={false}
                         keyboardShouldPersistTaps="handled"
@@ -133,24 +174,43 @@ const LoginScreen = ({ navigation, onLogin }) => {
                                     placeholderTextColor={colors.placeholder}
                                     value={email}
                                     onChangeText={setEmail}
-                                    keyboardType="default"
+                                    keyboardType="email-address"
                                     autoCapitalize="none"
                                     autoCorrect={false}
                                     returnKeyType="next"
+                                    onSubmitEditing={() => passwordRef.current?.focus()}
+                                    blurOnSubmit={false}
                                 />
 
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Şifre"
-                                    placeholderTextColor={colors.placeholder}
-                                    value={password}
-                                    onChangeText={setPassword}
-                                    secureTextEntry
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    returnKeyType="done"
-                                    onSubmitEditing={handleLogin}
-                                />
+                                <View style={styles.passwordContainer}>
+                                    <TextInput
+                                        ref={passwordRef}
+                                        style={styles.passwordInput}
+                                        placeholder="Parola"
+                                        placeholderTextColor={colors.placeholder}
+                                        value={password}
+                                        onChangeText={setPassword}
+                                        secureTextEntry={!showPassword}
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                        returnKeyType="done"
+                                        onSubmitEditing={handleLogin}
+                                        blurOnSubmit={false}
+                                        textContentType="password"
+                                        passwordRules="required: lower; required: upper; required: digit; max-consecutive: 2; minlength: 8;"
+                                    />
+                                    <TouchableOpacity
+                                        style={styles.passwordToggle}
+                                        onPress={() => setShowPassword(!showPassword)}
+                                        activeOpacity={0.7}
+                                    >
+                                        <Icon
+                                            name={showPassword ? "visibility-off" : "visibility"}
+                                            size={20}
+                                            color={colors.textSecondary}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
 
                                 <TouchableOpacity
                                     style={[styles.loginButton, loading && styles.buttonDisabled]}
@@ -159,6 +219,15 @@ const LoginScreen = ({ navigation, onLogin }) => {
                                 >
                                     <Text style={styles.loginButtonText}>
                                         {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+                                    </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.registerLink}
+                                    onPress={() => navigation.navigate('Register')}
+                                >
+                                    <Text style={styles.registerText}>
+                                        Hesabınız yok mu? <Text style={styles.registerHighlight}>Kayıt olun</Text>
                                     </Text>
                                 </TouchableOpacity>
                             </View>

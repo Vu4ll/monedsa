@@ -94,6 +94,50 @@ class AuthService {
     }
   }
 
+  // Register işlemi
+  async register(userData) {
+    try {
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        return { success: true, data: data.data };
+      } else {
+        // Sunucudan gelen detaylı hata mesajını yakala
+        let errorMessage = data.message || 'Kayıt başarısız';
+        
+        // HTTP status code'larına göre mesajları özelleştir
+        if (response.status === 400) {
+          errorMessage = data.message || 'Geçersiz veri girişi';
+        } else if (response.status === 409) {
+          errorMessage = data.message || 'Bu bilgiler zaten kayıtlı';
+        } else if (response.status === 422) {
+          errorMessage = data.message || 'Veri doğrulama hatası';
+        } else if (response.status >= 500) {
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+        }
+        
+        return { success: false, error: errorMessage };
+      }
+    } catch (error) {
+      console.error('Register hatası:', error);
+      
+      // Network hataları için özel mesaj
+      if (error.name === 'TypeError' && error.message.includes('Network')) {
+        return { success: false, error: 'İnternet bağlantısı hatası' };
+      }
+      
+      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+    }
+  }
+
   // Login işlemi (örnek)
   async login(user, password) {
     try {

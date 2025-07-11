@@ -58,7 +58,7 @@ router.post("/add", verifyToken, async (req, res) => {
     if (!name) return badRequest(res, locale.category.fail.add.nameRequired);
     if (!type) return badRequest(res, locale.category.fail.add.typeRequired);
     if (color && !hexValidator(color))
-        return badRequest(res, locale.category.fail.add.invalidHexColor);
+        return badRequest(res, locale.category.fail.add.invalidColor);
     if (!["expense", "income"].includes(type))
         return badRequest(res, locale.category.fail.add.invalidType);
 

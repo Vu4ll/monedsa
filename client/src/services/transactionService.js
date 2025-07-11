@@ -42,4 +42,61 @@ export const transactionService = {
     );
     return response.data ? response.data : "Veri yok";
   },
+
+  async addTransaction(transactionData) {
+    try {
+      const response = await api.post(
+        `${API_CONFIG.BASE_URL}/api/transaction/add`,
+        transactionData
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Transaction eklenirken bir hata oluştu');
+    }
+  },
+
+  async updateTransaction(transactionId, transactionData) {
+    try {
+      const response = await api.put(
+        `${API_CONFIG.BASE_URL}/api/transaction/edit/${transactionId}`,
+        transactionData
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Transaction güncellenirken bir hata oluştu');
+    }
+  },
+
+  async deleteTransaction(transactionId) {
+    try {
+      const response = await api.delete(
+        `${API_CONFIG.BASE_URL}/api/transaction/delete/${transactionId}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Transaction silinirken bir hata oluştu');
+    }
+  },
+
+  async getExpenses() {
+    try {
+      const response = await api.get(
+        `${API_CONFIG.BASE_URL}/api/transaction/expenses`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Giderler yüklenirken bir hata oluştu');
+    }
+  },
+
+  async getIncomes() {
+    try {
+      const response = await api.get(
+        `${API_CONFIG.BASE_URL}/api/transaction/incomes`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || 'Gelirler yüklenirken bir hata oluştu');
+    }
+  },
 };

@@ -137,7 +137,7 @@ const getTransactionList = async (req, res, forceType = null) => {
  * @returns { Boolean }
  */
 const hexValidator = (hex) => {
-    return /^([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex);
+    return /^#?([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex);
 }
 
 module.exports = {

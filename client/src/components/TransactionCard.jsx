@@ -1,7 +1,31 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { formatDate, formatCurrency } from "../utils";
+import { transactionService } from "../services";
 
-export const TransactionCard = ({ transaction, colors }) => {
+export const TransactionCard = ({ transaction, colors, onEdit, onDelete }) => {
+  
+  const handleDelete = () => {
+    Alert.alert(
+      'Transaction Sil',
+      'Bu transaction\'ı silmek istediğinizden emin misiniz?',
+      [
+        { text: 'İptal', style: 'cancel' },
+        {
+          text: 'Sil',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await transactionService.deleteTransaction(transaction.id);
+              onDelete && onDelete(transaction.id);
+            } catch (error) {
+              Alert.alert('Hata', error.message || 'Transaction silinirken bir hata oluştu');
+            }
+          }
+        }
+      ]
+    );
+  };
+
   return (
     <View style={[
       styles.transactionItem,
@@ -17,7 +41,7 @@ export const TransactionCard = ({ transaction, colors }) => {
         <View
           style={[
             styles.categoryBadge,
-            { backgroundColor: `#${transaction.category.color}` }
+            { backgroundColor: `${transaction.category.color}` }
           ]}
         >
           <Text style={styles.categoryText}>
@@ -30,9 +54,27 @@ export const TransactionCard = ({ transaction, colors }) => {
         {transaction.description || "Açıklama bulunmuyor."}
       </Text>
 
-      <Text style={[styles.transactionDate, { color: colors.textSecondary }]}>
-        {formatDate(transaction.createdAt)}
-      </Text>
+      <View style={styles.transactionFooter}>
+        <Text style={[styles.transactionDate, { color: colors.textSecondary }]}>
+          {formatDate(transaction.createdAt)}
+        </Text>
+        
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={[styles.actionButton, styles.editButton]}
+            onPress={() => onEdit && onEdit(transaction)}
+          >
+            <Text style={styles.editButtonText}>Düzenle</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            style={[styles.actionButton, styles.deleteButton]}
+            onPress={handleDelete}
+          >
+            <Text style={styles.deleteButtonText}>Sil</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -70,5 +112,36 @@ const styles = StyleSheet.create({
   },
   transactionDate: {
     fontSize: 12,
+  },
+  transactionFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  actionButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  editButton: {
+    backgroundColor: '#007AFF',
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+  },
+  editButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });

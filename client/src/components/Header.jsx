@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { authService } from "../services";
 
-export const Header = ({ colors, onLogout }) => {
+export const Header = ({ colors, onLogout, navigation }) => {
   const handleLogout = async () => {
     Alert.alert(
       'Çıkış',
@@ -21,15 +21,32 @@ export const Header = ({ colors, onLogout }) => {
   };
 
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, { backgroundColor: colors.headerBackgroud }]}>
       <Text style={[styles.title, { color: colors.text }]}>
-        Expense Tracker
+        Gider Takip
       </Text>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={[styles.logoutText, { color: colors.error }]}>
-          Çıkış Yap
-        </Text>
-      </TouchableOpacity>
+      
+      <View style={styles.actionButtons}>
+        <TouchableOpacity 
+          style={[styles.actionButton, { backgroundColor: colors.primary }]}
+          onPress={() => navigation.navigate('AddTransaction')}
+        >
+          <Text style={styles.actionButtonText}>+ Ekle</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={[styles.actionButton, { backgroundColor: colors.secondary }]}
+          onPress={() => navigation.navigate('Category')}
+        >
+          <Text style={styles.actionButtonText}>Kategoriler</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={[styles.logoutText, { color: colors.error }]}>
+            Çıkış
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -39,16 +56,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 36,
     position: 'relative',
+    paddingBottom: 20,
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     marginBottom: 20,
   },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
+  actionButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  actionButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
   logoutButton: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
