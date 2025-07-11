@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
-import { ExpenseCard } from "./ExpenseCard";
+import { TransactionCard } from "./TransactionCard";
 import { formatCurrency } from "../utils";
 
-export const ExpenseList = ({ expenses, loading, colors }) => {
-  if (!expenses) {
+export const TransactionList = ({ transactions, loading, colors }) => {
+  if (!transactions) {
     return (
       <Text style={[styles.noDataText, { color: colors.textSecondary }]}>
         {loading ? "Veriler yükleniyor..." : "Henüz veri yok."}
@@ -12,32 +12,32 @@ export const ExpenseList = ({ expenses, loading, colors }) => {
   }
 
   return (
-    <View style={styles.expenseList}>
-      {expenses.summary && (
+    <View style={styles.transactionList}>
+      {transactions.summary && (
         <View style={[styles.summaryBox, { backgroundColor: colors.cardBackground }]}>
           <Text
             style={[styles.summaryLine, { color: colors.error }]}
-          >{`Toplam Gider: ${formatCurrency(expenses.summary.totalExpense)}`}</Text>
+          >{`Toplam Gider: ${formatCurrency(transactions.summary.totalExpense)}`}</Text>
           <Text
             style={[styles.summaryLine, { color: colors.success }]}
-          >{`Toplam Gelir: ${formatCurrency(expenses.summary.totalIncome)}`}</Text>
+          >{`Toplam Gelir: ${formatCurrency(transactions.summary.totalIncome)}`}</Text>
           <Text
             style={[
               styles.summaryLine,
               {
                 color:
-                  expenses.summary.balance < 0
+                  transactions.summary.balance < 0
                     ? colors.error
                     : colors.success,
               },
             ]}
-          >{`Bakiye: ${formatCurrency(expenses.summary.balance)}`}</Text>
+          >{`Bakiye: ${formatCurrency(transactions.summary.balance)}`}</Text>
         </View>
       )}
-      {expenses.data.map((expense) => (
-        <ExpenseCard
-          key={expense.id}
-          expense={expense}
+      {transactions.data.map((transaction) => (
+        <TransactionCard
+          key={transaction.id}
+          transaction={transaction}
           colors={colors}
         />
       ))}
@@ -46,7 +46,7 @@ export const ExpenseList = ({ expenses, loading, colors }) => {
 };
 
 const styles = StyleSheet.create({
-  expenseList: {
+  transactionList: {
     flex: 1,
   },
   summaryText: {

@@ -2,7 +2,6 @@ import axios from "axios";
 import { API_CONFIG } from "../constants";
 import { authService } from "./authService";
 
-// Axios interceptor ile otomatik token yenileme
 const api = axios.create();
 
 api.interceptors.request.use(async (config) => {
@@ -36,10 +35,10 @@ api.interceptors.response.use(
   }
 );
 
-export const expenseService = {
-  async getExpenses() {
+export const transactionService = {
+  async getTransaction() {
     const response = await api.get(
-      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.EXPENSE_LIST}`
+      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION_LIST}`
     );
     return response.data ? response.data : "Veri yok";
   },

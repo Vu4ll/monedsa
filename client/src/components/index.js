@@ -1,3 +1,3 @@
-export * from "./ExpenseCard";
-export * from "./ExpenseList";
+export * from "./TransactionCard";
+export * from "./TransactionList";
 export * from "./Header";

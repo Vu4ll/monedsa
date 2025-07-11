@@ -1,1 +1,1 @@
-export * from "./useExpenses";
+export * from "./useTransactions";

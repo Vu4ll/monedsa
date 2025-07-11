@@ -5,16 +5,47 @@ import {
   ScrollView,
   RefreshControl,
   SafeAreaView,
-  Text
+  Text,
+  Alert
 } from "react-native";
+import React, { useEffect, useState } from "react";
+import NetInfo from "@react-native-community/netinfo";
 import { getColors } from "../constants";
-import { useExpenses } from "../hooks";
-import { Header, ExpenseList } from "../components";
+import { useTransactions } from "../hooks";
+import { Header, TransactionList } from "../components";
 
 export const HomeScreen = ({ onLogout }) => {
   const isDarkMode = useColorScheme() === "dark";
   const colors = getColors(isDarkMode);
-  const { expenses, loading, refreshing, onRefresh } = useExpenses();
+  const { transactions, loading, refreshing, onRefresh } = useTransactions();
+  const [isConnected, setIsConnected] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsConnected(state.isConnected);
+
+      if (!state.isConnected) {
+        Alert.alert(
+          'İnternet Bağlantısı Yok',
+          'Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.',
+          [{ text: 'Tamam', style: 'default' }]
+        );
+      }
+    });
+
+    NetInfo.fetch().then(state => {
+      setIsConnected(state.isConnected);
+      if (!state.isConnected) {
+        Alert.alert(
+          'İnternet Bağlantısı Yok',
+          'Lütfen internet bağlantınızı kontrol edin.',
+          [{ text: 'Tamam', style: 'default' }]
+        );
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -36,12 +67,12 @@ export const HomeScreen = ({ onLogout }) => {
           />
         }
       >
-        <ExpenseList expenses={expenses} loading={loading} colors={colors} />
+        <TransactionList transactions={transactions} loading={loading} colors={colors} />
       </ScrollView>
 
-      {expenses?.count && (
+      {transactions?.count && (
         <Text style={{ height: 50, color: colors.text, justifyContent: "center", marginHorizontal: 20 }}>
-          Toplam {expenses.count} gider bulundu
+          Toplam {transactions.count} gider bulundu
         </Text>
       )}
 

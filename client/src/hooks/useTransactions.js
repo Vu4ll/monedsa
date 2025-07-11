@@ -1,28 +1,26 @@
 import { useState, useEffect } from "react";
 import { Alert } from "react-native";
-import { expenseService } from "../services";
+import { transactionService } from "../services";
 
-export const useExpenses = () => {
-  const [expenses, setExpenses] = useState(null);
+export const useTransactions = () => {
+  const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchExpenses = async () => {
+  const fetchTransactions = async () => {
     setLoading(true);
     try {
-      const data = await expenseService.getExpenses();
-      setExpenses(data);
-      console.log("Expenses fetched:", data);
+      const data = await transactionService.getTransaction();
+      setTransactions(data);
+      console.log("Transactions fetched:", data);
     } catch (error) {
-      console.error("Error fetching expenses:", error);
+      console.error("Error fetching transactions:", error);
 
       if (error.response && error.response.status === 404) {
-        Alert.alert("Bilgi", "Henüz gider kaydınız bulunmuyor.");
+        Alert.alert("Bilgi", "Henüz işlem kaydınız bulunmuyor.");
       } else if (error.message && (error.message.includes('Token') || error.message.includes('token'))) {
-        // Token ile ilgili hatalar için özel mesaj
         Alert.alert("Oturum Süresi Doldu", "Lütfen tekrar giriş yapın.");
       } else {
-        // Diğer hatalar için genel mesaj
         Alert.alert("Hata", "Veri çekilirken bir hata oluştu. Sunucunun çalıştığından emin olun.");
       }
     } finally {
@@ -33,20 +31,17 @@ export const useExpenses = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      const data = await expenseService.getExpenses();
-      setExpenses(data);
-      console.log("Expenses refreshed:", data);
+      const data = await transactionService.getTransaction();
+      setTransactions(data);
+      console.log("Transactions refreshed:", data);
     } catch (error) {
-      console.error("Error refreshing expenses:", error);
+      console.error("Error refreshing transactions:", error);
 
-      // 404 hatası kontrolü
       if (error.response && error.response.status === 404) {
-        Alert.alert("Bilgi", "Henüz gider kaydınız bulunmuyor.");
+        Alert.alert("Bilgi", "Henüz işlem kaydınız bulunmuyor.");
       } else if (error.message && (error.message.includes('Token') || error.message.includes('token'))) {
-        // Token ile ilgili hatalar için özel mesaj
         Alert.alert("Oturum Süresi Doldu", "Lütfen tekrar giriş yapın.");
       } else {
-        // Diğer hatalar için genel mesaj
         Alert.alert("Hata", "Veri yenilenirken bir hata oluştu. Sunucunun çalıştığından emin olun.");
       }
     } finally {
@@ -55,14 +50,14 @@ export const useExpenses = () => {
   };
 
   useEffect(() => {
-    fetchExpenses();
+    fetchTransactions();
   }, []);
 
   return {
-    expenses,
+    transactions,
     loading,
     refreshing,
     onRefresh,
-    fetchExpenses,
+    fetchTransactions,
   };
 };
