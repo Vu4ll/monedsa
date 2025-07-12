@@ -14,6 +14,7 @@ import {
     ScrollView,
     useColorScheme
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getColors } from '../constants';
 import { categoryService } from '../services';
 
@@ -103,7 +104,7 @@ const CategoryScreen = ({ navigation }) => {
     const handleDeleteCategory = async (category) => {
         Alert.alert(
             'Kategori Sil',
-            `"${category.name}" kategorisini silmek istediğinizden emin misiniz?`,
+            `${category.name} kategorisini silmek istediğinizden emin misiniz?`,
             [
                 { text: 'İptal', style: 'cancel' },
                 {
@@ -402,7 +403,7 @@ const CategoryScreen = ({ navigation }) => {
                     <Text style={styles.categoryName}>{item.name}</Text>
                     <Text style={styles.categoryType}>
                         {item.type === 'expense' ? 'Gider' : 'Gelir'}
-                        {item.isDefault && ' • Varsayılan'}
+                        {item.isDefault ? ' • Varsayılan' : ' • Kullanıcı'}
                     </Text>
                 </View>
             </View>

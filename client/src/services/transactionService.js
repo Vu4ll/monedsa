@@ -38,7 +38,7 @@ api.interceptors.response.use(
 export const transactionService = {
   async getTransaction() {
     const response = await api.get(
-      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION_LIST}`
+      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.LIST}`
     );
     return response.data ? response.data : "Veri yok";
   },
@@ -46,7 +46,7 @@ export const transactionService = {
   async addTransaction(transactionData) {
     try {
       const response = await api.post(
-        `${API_CONFIG.BASE_URL}/api/transaction/add`,
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.ADD}`,
         transactionData
       );
       return response.data;
@@ -58,7 +58,7 @@ export const transactionService = {
   async updateTransaction(transactionId, transactionData) {
     try {
       const response = await api.put(
-        `${API_CONFIG.BASE_URL}/api/transaction/edit/${transactionId}`,
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.EDIT}${transactionId}`,
         transactionData
       );
       return response.data;
@@ -70,7 +70,7 @@ export const transactionService = {
   async deleteTransaction(transactionId) {
     try {
       const response = await api.delete(
-        `${API_CONFIG.BASE_URL}/api/transaction/delete/${transactionId}`
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.DELETE}${transactionId}`
       );
       return response.data;
     } catch (error) {
@@ -81,7 +81,7 @@ export const transactionService = {
   async getExpenses() {
     try {
       const response = await api.get(
-        `${API_CONFIG.BASE_URL}/api/transaction/expenses`
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.EXPENSES}`
       );
       return response.data;
     } catch (error) {
@@ -92,7 +92,7 @@ export const transactionService = {
   async getIncomes() {
     try {
       const response = await api.get(
-        `${API_CONFIG.BASE_URL}/api/transaction/incomes`
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.INCOMES}`
       );
       return response.data;
     } catch (error) {

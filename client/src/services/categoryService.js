@@ -36,8 +36,6 @@ api.interceptors.response.use(
 );
 
 class CategoryService {
-  
-  // Kategorileri listele
   async getCategories(type = null, showOnlyDefault = null) {
     try {
       const queryParams = new URLSearchParams();
