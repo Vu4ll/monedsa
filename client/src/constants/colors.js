@@ -10,6 +10,8 @@ export const getColors = (isDarkMode) => ({
   buttonText: "#FFFFFF",
   success: isDarkMode ? "#4CAF50" : "#2E7D32",
   error: isDarkMode ? "#F44336" : "#D32F2F",
+  softGreen: isDarkMode ? "#66BB6A" : "#81C784",
+  softRed: isDarkMode ? "#EF5350" : "#E57373",
   danger: isDarkMode ? "#F44336" : "#D32F2F",
   primary: isDarkMode ? "#BB86FC" : "#6200EE",
   secondary: isDarkMode ? "#03DAC6" : "#018786",

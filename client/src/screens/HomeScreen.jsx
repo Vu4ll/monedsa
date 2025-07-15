@@ -9,6 +9,7 @@ import {
   Alert
 } from "react-native";
 import React, { useEffect, useState } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import NetInfo from "@react-native-community/netinfo";
 import { getColors } from "../constants";
 import { useTransactions } from "../hooks";
@@ -56,10 +57,12 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
     }
   }, [route?.params?.refresh]);
 
-  // Sadece ilk yükleme için
-  useEffect(() => {
-    onRefresh();
-  }, []);
+  // Sayfa odaklandığında yenile (kategori değişikliklerini yakalamak için)
+  useFocusEffect(
+    React.useCallback(() => {
+      onRefresh();
+    }, [])
+  );
 
   const handleTransactionUpdate = () => {
     onRefresh();
@@ -73,7 +76,7 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
         translucent={false}
         animated={true}
       />
-      <Header colors={colors} onLogout={onLogout} navigation={navigation} />
+      <Header colors={colors} />
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         refreshControl={
@@ -93,13 +96,6 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
           onTransactionUpdate={handleTransactionUpdate}
         />
       </ScrollView>
-
-      {transactions?.count && (
-        <Text style={{ height: 50, color: colors.text, justifyContent: "center", marginHorizontal: 20 }}>
-          Toplam {transactions.count} işlem bulundu
-        </Text>
-      )}
-
     </SafeAreaView>
   );
 };

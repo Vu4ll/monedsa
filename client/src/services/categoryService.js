@@ -41,11 +41,11 @@ class CategoryService {
       const queryParams = new URLSearchParams();
       if (type) queryParams.append('type', type);
       if (showOnlyDefault !== null) queryParams.append('default', showOnlyDefault);
-      
+
       const response = await api.get(
         `${API_CONFIG.BASE_URL}/api/category/list?${queryParams.toString()}`
       );
-      
+
       const data = response.data;
       if (data.success) {
         return { success: true, data: data.data };
@@ -62,7 +62,7 @@ class CategoryService {
   async addCategory(categoryData) {
     try {
       const response = await api.post(`${API_CONFIG.BASE_URL}/api/category/add`, categoryData);
-      
+
       const data = response.data;
       if (data.success) {
         return { success: true, data: data.data };
@@ -79,7 +79,7 @@ class CategoryService {
   async updateCategory(categoryId, categoryData) {
     try {
       const response = await api.put(`${API_CONFIG.BASE_URL}/api/category/edit/${categoryId}`, categoryData);
-      
+
       const data = response.data;
       if (data.success) {
         return { success: true, data: data.data };
@@ -96,7 +96,7 @@ class CategoryService {
   async deleteCategory(categoryId) {
     try {
       const response = await api.delete(`${API_CONFIG.BASE_URL}/api/category/delete/${categoryId}`);
-      
+
       const data = response.data;
       if (data.success) {
         return { success: true, data: data.data };
@@ -104,6 +104,22 @@ class CategoryService {
         return { success: false, error: data.message || 'Kategori silinemedi' };
       }
     } catch (error) {
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+
+        if (errorData.status === 400 && errorData.data && errorData.data.relatedTransactionsCount > 0) {
+          const { categoryInfo, relatedTransactionsCount } = errorData.data;
+          return {
+            success: false,
+            error: `${categoryInfo.name} kategorisi silinemez. Bu kategoriyle ilişkili ${relatedTransactionsCount} adet işlem bulunmaktadır.`,
+            relatedTransactionsCount: relatedTransactionsCount,
+            categoryInfo: categoryInfo
+          };
+        }
+
+        return { success: false, error: errorData.message || 'Kategori silinemedi' };
+      }
+
       console.error('Kategori silme hatası:', error);
       return { success: false, error: 'Bağlantı hatası' };
     }

@@ -136,6 +136,15 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
 
         const updatedCategory = await Category.findByIdAndUpdate(id, updateData, { new: true });
 
+        if (type && type !== category.type) {
+            const updateResult = await Transaction.updateMany(
+                { category: id, userId: req.user.id },
+                { type: type }
+            );
+
+            console.log(`Category type changed from ${category.type} to ${type}. Updated ${updateResult.modifiedCount} transactions.`);
+        }
+
         res.status(200).json({
             status: res.statusCode,
             success: true,
@@ -146,7 +155,18 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
                 color: updatedCategory.color,
                 type: updatedCategory.type,
                 isDefault: updatedCategory.isDefault,
-                userId: updatedCategory.userId
+                userId: updatedCategory.userId,
+
+                ...(type && type !== category.type && {
+                    transactionUpdateInfo: {
+                        previousType: category.type,
+                        newType: type,
+                        updatedTransactionCount: await Transaction.countDocuments({
+                            category: id,
+                            userId: req.user.id
+                        })
+                    }
+                })
             }
         });
     } catch (error) {

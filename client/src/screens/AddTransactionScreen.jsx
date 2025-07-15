@@ -5,16 +5,16 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    Alert,
-    SafeAreaView,
     StatusBar,
     ScrollView,
     Modal,
     FlatList,
     KeyboardAvoidingView,
     Platform,
-    useColorScheme
+    useColorScheme,
+    ToastAndroid
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { getColors } from '../constants';
 import { transactionService, categoryService } from '../services';
 
@@ -27,7 +27,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         amount: '',
         description: '',
         category: '',
-        type: 'expense'
+        type: 'income'
     });
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -35,21 +35,55 @@ const AddTransactionScreen = ({ navigation, route }) => {
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
-    // Refs for input navigation
     const descriptionRef = useRef(null);
 
+    const resetForm = () => {
+        setFormData({
+            amount: '',
+            description: '',
+            category: '',
+            type: 'income'
+        });
+        setSelectedCategory(null);
+        setFormErrors({});
+    };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const editingTransaction = route?.params?.transaction || null;
+
+            if (editingTransaction) {
+                setFormData({
+                    amount: editingTransaction.amount.toString(),
+                    description: editingTransaction.description || '',
+                    category: editingTransaction.category?.name || '',
+                    type: editingTransaction.type
+                });
+                setSelectedCategory(editingTransaction.category);
+            } else {
+                resetForm();
+            }
+
+            loadCategories();
+        }, [route?.params?.transaction])
+    );
+
     useEffect(() => {
-        loadCategories();
-        if (editingTransaction) {
-            setFormData({
-                amount: editingTransaction.amount.toString(),
-                description: editingTransaction.description || '',
-                category: editingTransaction.category?.name || '',
-                type: editingTransaction.type
-            });
-            setSelectedCategory(editingTransaction.category);
-        }
-    }, [editingTransaction]);
+        const unsubscribeBlur = navigation.addListener('blur', () => {
+            navigation.setParams({ transaction: undefined });
+        });
+
+        const unsubscribeTabPress = navigation.addListener('tabPress', (e) => {
+            if (route?.params?.transaction) {
+                navigation.setParams({ transaction: undefined });
+            }
+        });
+
+        return () => {
+            unsubscribeBlur();
+            unsubscribeTabPress();
+        };
+    }, [navigation, route?.params?.transaction]);
 
     const loadCategories = async () => {
         try {
@@ -103,22 +137,15 @@ const AddTransactionScreen = ({ navigation, route }) => {
             }
 
             if (result.success) {
-                Alert.alert(
-                    'Başarılı',
-                    editingTransaction ? 'Transaction güncellendi' : 'Transaction eklendi',
-                    [{
-                        text: 'Tamam',
-                        onPress: () => {
-                            // Navigation params ile callback gönder
-                            navigation.navigate('Home', { refresh: true });
-                        }
-                    }]
-                );
+                ToastAndroid.show(`İşlem başarıyla ${editingTransaction ? 'güncellendi' : 'eklendi'}`, ToastAndroid.LONG);
+                navigation.navigate('Home', { refresh: true });
+                navigation.setParams({ transaction: undefined });
+                resetForm();
             } else {
-                Alert.alert('Hata', result.message || 'İşlem başarısız');
+                ToastAndroid.show(`Hata: ${result.message || "İşlem başarısız"}`, ToastAndroid.LONG);
             }
         } catch (error) {
-            Alert.alert('Hata', error.message || 'İşlem sırasında bir hata oluştu');
+            ToastAndroid.show(`Hata: ${result.message || "İşlem sırasında bir hata oluştu"}`, ToastAndroid.LONG);
         } finally {
             setLoading(false);
         }
@@ -128,7 +155,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
         setSelectedCategory(category);
         setFormData(prev => ({ ...prev, category: category.name }));
         setShowCategoryModal(false);
-        // Kategori tipine göre transaction tipini otomatik ayarla
         if (category.type !== formData.type) {
             setFormData(prev => ({ ...prev, type: category.type }));
         }
@@ -140,30 +166,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
         container: {
             flex: 1,
             backgroundColor: colors.background,
-        },
-        header: {
-            paddingTop: 36,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 20,
-            paddingVertical: 15,
-            backgroundColor: colors.primary,
-        },
-        backButton: {
-            paddingVertical: 5,
-        },
-        backButtonText: {
-            color: colors.white,
-            fontSize: 16,
-        },
-        title: {
-            fontSize: 18,
-            fontWeight: 'bold',
-            color: colors.white,
-        },
-        placeholder: {
-            width: 50,
         },
         keyboardAvoidingView: {
             flex: 1,
@@ -219,10 +221,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
             borderColor: colors.border,
             alignItems: 'center',
             backgroundColor: colors.cardBackground,
-        },
-        selectedType: {
-            backgroundColor: colors.primary,
-            borderColor: colors.primary,
         },
         typeOptionText: {
             fontSize: 16,
@@ -335,6 +333,13 @@ const AddTransactionScreen = ({ navigation, route }) => {
             paddingVertical: 4,
             borderRadius: 12,
         },
+        sectionHeader: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: colors.textPrimary,
+            marginBottom: 20,
+            marginTop: 20,
+        },
     });
 
     const renderCategoryItem = ({ item }) => (
@@ -351,27 +356,15 @@ const AddTransactionScreen = ({ navigation, route }) => {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
 
-            <View style={styles.header}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => navigation.goBack()}
-                >
-                    <Text style={styles.backButtonText}>← Geri</Text>
-                </TouchableOpacity>
-                <Text style={styles.title}>
-                    {editingTransaction ? 'Transaction Düzenle' : 'Yeni Transaction'}
-                </Text>
-                <View style={styles.placeholder} />
-            </View>
-
             <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                behavior={'height'}
                 style={styles.keyboardAvoidingView}
             >
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <Text style={styles.sectionHeader}>{editingTransaction ? 'İşlemi Düzenle' : 'Yeni İşlem Ekle'}</Text>
                     <View style={styles.formContainer}>
 
                         {/* Tür Seçimi */}
@@ -380,26 +373,8 @@ const AddTransactionScreen = ({ navigation, route }) => {
                             <View style={styles.typeSelector}>
                                 <TouchableOpacity
                                     style={[
-                                        styles.typeOption,
-                                        formData.type === 'expense' && styles.selectedType
-                                    ]}
-                                    onPress={() => {
-                                        setFormData(prev => ({ ...prev, type: 'expense' }));
-                                        setSelectedCategory(null);
-                                        setFormData(prev => ({ ...prev, category: '' }));
-                                    }}
-                                >
-                                    <Text style={[
-                                        styles.typeOptionText,
-                                        formData.type === 'expense' && styles.selectedTypeText
-                                    ]}>
-                                        Gider
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[
-                                        styles.typeOption,
-                                        formData.type === 'income' && styles.selectedType
+                                        styles.typeOption, { borderColor: colors.softGreen, borderWidth: 1.5 },
+                                        formData.type === 'income' && { borderColor: colors.border, backgroundColor: colors.success }
                                     ]}
                                     onPress={() => {
                                         setFormData(prev => ({ ...prev, type: 'income' }));
@@ -412,6 +387,24 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                         formData.type === 'income' && styles.selectedTypeText
                                     ]}>
                                         Gelir
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[
+                                        styles.typeOption, { borderColor: colors.softRed, borderWidth: 1.5 },
+                                        formData.type === 'expense' && { borderColor: colors.border, backgroundColor: colors.error }
+                                    ]}
+                                    onPress={() => {
+                                        setFormData(prev => ({ ...prev, type: 'expense' }));
+                                        setSelectedCategory(null);
+                                        setFormData(prev => ({ ...prev, category: '' }));
+                                    }}
+                                >
+                                    <Text style={[
+                                        styles.typeOptionText,
+                                        formData.type === 'expense' && styles.selectedTypeText
+                                    ]}>
+                                        Gider
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -516,7 +509,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                     </View>
                 </View>
             </Modal>
-        </SafeAreaView>
+        </View>
     );
 };
 

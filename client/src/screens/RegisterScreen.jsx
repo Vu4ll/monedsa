@@ -46,8 +46,8 @@ const RegisterScreen = ({ navigation }) => {
         // Username validation
         if (!formData.username.trim()) {
             newErrors.username = 'Kullanıcı adı gerekli';
-        } else if (formData.username.length < 3) {
-            newErrors.username = 'Kullanıcı adı en az 3 karakter olmalı';
+        } else if (formData.username.length < 2) {
+            newErrors.username = 'Kullanıcı adı en az 2 karakter olmalı';
         } else if (formData.username.length > 20) {
             newErrors.username = 'Kullanıcı adı en fazla 20 karakter olmalı';
         } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {

@@ -3,7 +3,7 @@ import { TransactionCard } from "./TransactionCard";
 import { formatCurrency } from "../utils";
 
 export const TransactionList = ({ transactions, loading, colors, navigation, onTransactionUpdate }) => {
-  
+
   const handleEdit = (transaction) => {
     navigation.navigate('AddTransaction', { transaction });
   };
@@ -25,11 +25,11 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onT
       {transactions.summary && (
         <View style={[styles.summaryBox, { backgroundColor: colors.cardBackground }]}>
           <Text
-            style={[styles.summaryLine, { color: colors.error }]}
-          >{`Toplam Gider: ${formatCurrency(transactions.summary.totalExpense)}`}</Text>
-          <Text
             style={[styles.summaryLine, { color: colors.success }]}
           >{`Toplam Gelir: ${formatCurrency(transactions.summary.totalIncome)}`}</Text>
+          <Text
+            style={[styles.summaryLine, { color: colors.error }]}
+          >{`Toplam Gider: ${formatCurrency(transactions.summary.totalExpense)}`}</Text>
           <Text
             style={[
               styles.summaryLine,

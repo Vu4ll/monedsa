@@ -19,37 +19,83 @@ import { getColors } from '../constants';
 import { authService } from '../services';
 
 const LoginScreen = ({ navigation, onLogin }) => {
-    const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const passwordRef = useRef(null);
 
     const isDarkMode = useColorScheme() === "dark";
     const colors = getColors(isDarkMode);
 
-    const handleLogin = async () => {
-        if (!email || !password) {
-            Alert.alert('Hata', 'Email ve şifre alanları zorunludur.');
-            return;
+    const validateForm = () => {
+        const newErrors = {};
+        
+        // Email/Username validation
+        if (!email || !email.trim()) {
+            newErrors.email = 'E-posta veya kullanıcı adı gerekli';
+        } else if (email.trim().length < 2) {
+            newErrors.email = 'En az 2 karakter olmalıdır';
         }
+
+        // Password validation
+        if (!password || !password.trim()) {
+            newErrors.password = 'Parola gerekli';
+        } else if (password.length < 8) {
+            newErrors.password = 'Parola en az 8 karakter olmalıdır';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleLogin = async () => {
+        if (!validateForm()) return;
 
         setLoading(true);
         try {
-            const result = await authService.login(email, password);
+            const result = await authService.login(email.trim(), password);
 
             if (result.success) {
                 // Ana ekrana yönlendir
                 onLogin && onLogin();
             } else {
-                Alert.alert('Giriş Hatası', result.error);
+                // Sunucudan gelen hata mesajlarını kontrol et
+                const errorMessage = result.error || 'Giriş başarısız';
+                
+                // Spesifik hata mesajlarını form alanlarına yansıt
+                if (errorMessage.includes('User not found') || errorMessage.includes('Invalid credentials')) {
+                    setErrors({ email: 'Kullanıcı bulunamadı veya hatalı bilgiler' });
+                } else if (errorMessage.includes('Invalid password')) {
+                    setErrors({ password: 'Hatalı parola' });
+                } else if (errorMessage.includes('Network') || errorMessage.includes('connection')) {
+                    Alert.alert('Bağlantı Hatası', 'İnternet bağlantınızı kontrol edin');
+                } else {
+                    // Genel hata mesajı
+                    setErrors({ email: errorMessage });
+                }
             }
         } catch (error) {
             Alert.alert('Hata', 'Beklenmedik bir hata oluştu.');
             console.error('Login error:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const updateEmail = (value) => {
+        setEmail(value);
+        if (errors.email) {
+            setErrors(prev => ({ ...prev, email: null }));
+        }
+    };
+
+    const updatePassword = (value) => {
+        setPassword(value);
+        if (errors.password) {
+            setErrors(prev => ({ ...prev, password: null }));
         }
     };
 
@@ -85,6 +131,9 @@ const LoginScreen = ({ navigation, onLogin }) => {
         inputContainer: {
             gap: 16,
         },
+        inputField: {
+            marginBottom: 4,
+        },
         input: {
             backgroundColor: colors.inputBackground,
             borderRadius: 12,
@@ -94,6 +143,16 @@ const LoginScreen = ({ navigation, onLogin }) => {
             borderWidth: 1,
             borderColor: colors.inputBorder,
             color: colors.inputText,
+        },
+        inputError: {
+            borderColor: colors.danger,
+            borderWidth: 2,
+        },
+        errorText: {
+            color: colors.danger,
+            fontSize: 14,
+            marginTop: 4,
+            marginLeft: 4,
         },
         passwordContainer: {
             position: 'relative',
@@ -108,6 +167,10 @@ const LoginScreen = ({ navigation, onLogin }) => {
             borderWidth: 1,
             borderColor: colors.inputBorder,
             color: colors.inputText,
+        },
+        passwordInputError: {
+            borderColor: colors.danger,
+            borderWidth: 2,
         },
         passwordToggle: {
             position: 'absolute',
@@ -168,48 +231,53 @@ const LoginScreen = ({ navigation, onLogin }) => {
                             <Text style={styles.subtitle}>Hesabınıza giriş yapın</Text>
 
                             <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="E-posta veya kullanıcı adı"
-                                    placeholderTextColor={colors.placeholder}
-                                    value={email}
-                                    onChangeText={setEmail}
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => passwordRef.current?.focus()}
-                                    blurOnSubmit={false}
-                                />
-
-                                <View style={styles.passwordContainer}>
+                                <View style={styles.inputField}>
                                     <TextInput
-                                        ref={passwordRef}
-                                        style={styles.passwordInput}
-                                        placeholder="Parola"
+                                        style={[styles.input, errors.email && styles.inputError]}
+                                        placeholder="E-posta veya kullanıcı adı"
                                         placeholderTextColor={colors.placeholder}
-                                        value={password}
-                                        onChangeText={setPassword}
-                                        secureTextEntry={!showPassword}
+                                        value={email}
+                                        onChangeText={updateEmail}
+                                        keyboardType="email-address"
                                         autoCapitalize="none"
                                         autoCorrect={false}
-                                        returnKeyType="done"
-                                        onSubmitEditing={handleLogin}
+                                        returnKeyType="next"
+                                        onSubmitEditing={() => passwordRef.current?.focus()}
                                         blurOnSubmit={false}
-                                        textContentType="password"
-                                        passwordRules="required: lower; required: upper; required: digit; max-consecutive: 2; minlength: 8;"
                                     />
-                                    <TouchableOpacity
-                                        style={styles.passwordToggle}
-                                        onPress={() => setShowPassword(!showPassword)}
-                                        activeOpacity={0.7}
-                                    >
-                                        <Icon
-                                            name={showPassword ? "visibility-off" : "visibility"}
-                                            size={20}
-                                            color={colors.textSecondary}
+                                    {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+                                </View>
+
+                                <View style={styles.inputField}>
+                                    <View style={styles.passwordContainer}>
+                                        <TextInput
+                                            ref={passwordRef}
+                                            style={[styles.passwordInput, errors.password && styles.passwordInputError]}
+                                            placeholder="Parola"
+                                            placeholderTextColor={colors.placeholder}
+                                            value={password}
+                                            onChangeText={updatePassword}
+                                            secureTextEntry={!showPassword}
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            returnKeyType="done"
+                                            onSubmitEditing={handleLogin}
+                                            blurOnSubmit={false}
+                                            textContentType="password"
                                         />
-                                    </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={styles.passwordToggle}
+                                            onPress={() => setShowPassword(!showPassword)}
+                                            activeOpacity={0.7}
+                                        >
+                                            <Icon
+                                                name={showPassword ? "visibility-off" : "visibility"}
+                                                size={20}
+                                                color={colors.textSecondary}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                    {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
                                 </View>
 
                                 <TouchableOpacity

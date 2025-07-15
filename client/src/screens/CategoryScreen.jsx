@@ -12,7 +12,8 @@ import {
     Modal,
     TextInput,
     ScrollView,
-    useColorScheme
+    useColorScheme,
+    ToastAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getColors } from '../constants';
@@ -27,14 +28,14 @@ const CategoryScreen = ({ navigation }) => {
     const [editingCategory, setEditingCategory] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
-        color: '#FF6B6B',
-        type: 'expense'
+        color: '#39BE56',
+        type: 'income'
     });
     const [formErrors, setFormErrors] = useState({});
 
     // Renkler
     const colorOptions = [
-        '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+        '#39BE56', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
         '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
     ];
 
@@ -92,12 +93,15 @@ const CategoryScreen = ({ navigation }) => {
                 setModalVisible(false);
                 resetForm();
                 loadCategories();
-                Alert.alert('Başarılı', editingCategory ? 'Kategori güncellendi' : 'Kategori eklendi');
+                // Alert.alert('Başarılı', editingCategory ? 'Kategori güncellendi' : 'Kategori eklendi');
+                ToastAndroid.show(editingCategory ? "Kategori başarılıyla güncellendi" : "Yeni kategori başarılıyla eklendi", ToastAndroid.LONG);
             } else {
-                Alert.alert('Hata', result.error);
+                // Alert.alert('Hata', result.error);
+                ToastAndroid.show(`Kategori ${editingCategory ? "güncellenemedi" : "eklenemedi"}`, ToastAndroid.LONG);
             }
         } catch (error) {
-            Alert.alert('Hata', 'Kategori kaydedilirken bir hata oluştu');
+            // Alert.alert('Hata', 'Kategori kaydedilirken bir hata oluştu');
+            ToastAndroid.show(`Kategori kaydedilirken bir hata oluştu`, ToastAndroid.LONG);
         }
     };
 
@@ -115,12 +119,15 @@ const CategoryScreen = ({ navigation }) => {
                             const result = await categoryService.deleteCategory(category.id);
                             if (result.success) {
                                 loadCategories();
-                                Alert.alert('Başarılı', 'Kategori silindi');
+                                // Alert.alert('Başarılı', 'Kategori silindi');
+                                ToastAndroid.show("Kategori başarıyla silindi", ToastAndroid.LONG);
                             } else {
                                 Alert.alert('Hata', result.error);
+                                // ToastAndroid.show(`Hata: ${result.error}`, ToastAndroid.LONG);
                             }
                         } catch (error) {
-                            Alert.alert('Hata', 'Kategori silinirken bir hata oluştu');
+                            // Alert.alert('Hata', 'Kategori silinirken bir hata oluştu');
+                            ToastAndroid.show(`Kategori silinirken bir hata oluştu`, ToastAndroid.LONG);
                         }
                     }
                 }
@@ -141,8 +148,8 @@ const CategoryScreen = ({ navigation }) => {
     const resetForm = () => {
         setFormData({
             name: '',
-            color: '#FF6B6B',
-            type: 'expense'
+            color: '#39BE56',
+            type: 'income'
         });
         setFormErrors({});
         setEditingCategory(null);
@@ -158,44 +165,25 @@ const CategoryScreen = ({ navigation }) => {
             flex: 1,
             backgroundColor: colors.background,
         },
-        loadingContainer: {
+        content: {
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-        loadingText: {
-            marginTop: 10,
-            color: colors.textSecondary,
-            fontSize: 16,
-        },
-        header: {
-            paddingTop: 36,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 20,
-            paddingVertical: 15,
-            backgroundColor: colors.primary,
-        },
-        backButton: {
-            paddingVertical: 5,
-        },
-        backButtonText: {
-            color: colors.white,
-            fontSize: 16,
-        },
-        title: {
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: colors.white,
+            paddingTop: 20,
         },
         addButton: {
-            paddingVertical: 5,
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: colors.primary,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            borderRadius: 8,
+            marginBottom: 16,
+            alignSelf: 'center',
         },
         addButtonText: {
             color: colors.white,
             fontSize: 16,
             fontWeight: '600',
+            marginLeft: 8,
         },
         listContainer: {
             paddingHorizontal: 20,
@@ -214,6 +202,7 @@ const CategoryScreen = ({ navigation }) => {
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.1,
             shadowRadius: 2,
+            borderWidth: 1.5
         },
         categoryInfo: {
             flexDirection: 'row',
@@ -325,12 +314,7 @@ const CategoryScreen = ({ navigation }) => {
             paddingHorizontal: 16,
             borderRadius: 8,
             borderWidth: 1,
-            borderColor: colors.border,
             alignItems: 'center',
-        },
-        selectedType: {
-            backgroundColor: colors.primary,
-            borderColor: colors.primary,
         },
         typeOptionText: {
             fontSize: 16,
@@ -393,10 +377,28 @@ const CategoryScreen = ({ navigation }) => {
             fontSize: 16,
             fontWeight: '600',
         },
+        sectionHeader: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: colors.textPrimary,
+            marginBottom: 20,
+            marginTop: 20,
+            marginLeft: 20,
+        },
+        loadingContainer: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        loadingText: {
+            marginTop: 16,
+            fontSize: 16,
+            color: colors.textSecondary,
+        },
     });
 
     const renderCategory = ({ item }) => (
-        <View style={styles.categoryItem}>
+        <View style={[styles.categoryItem, { borderColor: item.type === "income" ? colors.softGreen : colors.softRed }]}>
             <View style={styles.categoryInfo}>
                 <View style={[styles.colorIndicator, { backgroundColor: item.color }]} />
                 <View style={styles.categoryDetails}>
@@ -459,32 +461,27 @@ const CategoryScreen = ({ navigation }) => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
 
-            <SafeAreaView style={styles.header}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => navigation.navigate('Home', { refresh: true })}
-                >
-                    <Text style={styles.backButtonText}>← Geri</Text>
-                </TouchableOpacity>
-                <Text style={styles.title}>Kategoriler</Text>
+            <View style={styles.content}>
+                <Text style={styles.sectionHeader}>Kategoriler</Text>
                 <TouchableOpacity
                     style={styles.addButton}
                     onPress={handleAddCategory}
                 >
-                    <Text style={styles.addButtonText}>+ Ekle</Text>
+                    <Icon name="add" size={20} color={colors.white} />
+                    <Text style={styles.addButtonText}>Yeni Kategori</Text>
                 </TouchableOpacity>
-            </SafeAreaView>
 
-            <FlatList
-                data={categories}
-                renderItem={renderCategory}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.listContainer}
-                showsVerticalScrollIndicator={false}
-            />
+                <FlatList
+                    data={categories}
+                    renderItem={renderCategory}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={styles.listContainer}
+                    showsVerticalScrollIndicator={false}
+                />
+            </View>
 
             <Modal
                 animationType="slide"
@@ -516,22 +513,8 @@ const CategoryScreen = ({ navigation }) => {
                                 <View style={styles.typeSelector}>
                                     <TouchableOpacity
                                         style={[
-                                            styles.typeOption,
-                                            formData.type === 'expense' && styles.selectedType
-                                        ]}
-                                        onPress={() => setFormData(prev => ({ ...prev, type: 'expense' }))}
-                                    >
-                                        <Text style={[
-                                            styles.typeOptionText,
-                                            formData.type === 'expense' && styles.selectedTypeText
-                                        ]}>
-                                            Gider
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={[
-                                            styles.typeOption,
-                                            formData.type === 'income' && styles.selectedType
+                                            styles.typeOption, { borderColor: colors.softGreen, borderWidth: 1.5 },
+                                            formData.type === 'income' && { borderColor: colors.border, backgroundColor: colors.success }
                                         ]}
                                         onPress={() => setFormData(prev => ({ ...prev, type: 'income' }))}
                                     >
@@ -542,6 +525,21 @@ const CategoryScreen = ({ navigation }) => {
                                             Gelir
                                         </Text>
                                     </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.typeOption, { borderColor: colors.softRed, borderWidth: 1.5 },
+                                            formData.type === 'expense' && { borderColor: colors.border, backgroundColor: colors.error }
+                                        ]}
+                                        onPress={() => setFormData(prev => ({ ...prev, type: 'expense' }))}
+                                    >
+                                        <Text style={[
+                                            styles.typeOptionText,
+                                            formData.type === 'expense' && styles.selectedTypeText
+                                        ]}>
+                                            Gider
+                                        </Text>
+                                    </TouchableOpacity>
+
                                 </View>
                                 {formErrors.type && <Text style={styles.errorText}>{formErrors.type}</Text>}
                             </View>
@@ -550,12 +548,6 @@ const CategoryScreen = ({ navigation }) => {
 
                             <View style={styles.modalButtons}>
                                 <TouchableOpacity
-                                    style={styles.cancelButton}
-                                    onPress={() => setModalVisible(false)}
-                                >
-                                    <Text style={styles.cancelButtonText}>İptal</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
                                     style={styles.saveButton}
                                     onPress={handleSaveCategory}
                                 >
@@ -563,12 +555,18 @@ const CategoryScreen = ({ navigation }) => {
                                         {editingCategory ? 'Güncelle' : 'Kaydet'}
                                     </Text>
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.cancelButton}
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={styles.cancelButtonText}>İptal</Text>
+                                </TouchableOpacity>
                             </View>
                         </ScrollView>
                     </View>
                 </View>
             </Modal>
-        </SafeAreaView>
+        </View>
     );
 };
 

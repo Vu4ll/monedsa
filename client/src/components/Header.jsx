@@ -1,51 +1,18 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { authService } from "../services";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export const Header = ({ colors, onLogout, navigation }) => {
-  const handleLogout = async () => {
-    Alert.alert(
-      'Çıkış',
-      'Hesabınızdan çıkış yapmak istediğimize emin misiniz?',
-      [
-        { text: 'İptal', style: 'cancel' },
-        { 
-          text: 'Çıkış Yap', 
-          style: 'destructive',
-          onPress: async () => {
-            await authService.logout();
-            if (onLogout) await onLogout();
-          }
-        }
-      ]
-    );
-  };
-
+export const Header = ({ colors, title, showBackButton = false, onBackPress }) => {
   return (
-    <View style={[styles.header, { backgroundColor: colors.headerBackgroud }]}>
-      <Text style={[styles.title, { color: colors.text }]}>
-        Gider Takip
-      </Text>
-      
-      <View style={styles.actionButtons}>
-        <TouchableOpacity 
-          style={[styles.actionButton, { backgroundColor: colors.primary }]}
-          onPress={() => navigation.navigate('AddTransaction')}
-        >
-          <Text style={styles.actionButtonText}>+ Ekle</Text>
+    <View style={[styles.header]}>
+      {showBackButton && (
+        <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
+          <Icon name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.actionButton, { backgroundColor: colors.secondary }]}
-          onPress={() => navigation.navigate('Category')}
-        >
-          <Text style={styles.actionButtonText}>Kategoriler</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={[styles.logoutText, { color: colors.error }]}>
-            Çıkış
-          </Text>
-        </TouchableOpacity>
+      )}
+      <View style={styles.titleContainer}>
+        <Text style={[styles.title, { color: colors.text }]}>
+          {title || "Gider Takip"}
+        </Text>
       </View>
     </View>
   );
@@ -53,39 +20,28 @@ export const Header = ({ colors, onLogout, navigation }) => {
 
 const styles = StyleSheet.create({
   header: {
+    flexDirection: "row",
     alignItems: "center",
     paddingTop: 36,
-    position: 'relative',
-    paddingBottom: 20,
+    paddingBottom: 12,
+    paddingHorizontal: 16,
+    position: "relative",
+  },
+  backButton: {
+    position: "absolute",
+    left: 16,
+    top: 36,
+    padding: 8,
+    zIndex: 1,
+  },
+  titleContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 20,
-  },
-  actionButtons: {
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
-  },
-  actionButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  actionButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  logoutButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    backgroundColor: 'rgba(255, 0, 0, 0.1)',
-  },
-  logoutText: {
-    fontSize: 14,
-    fontWeight: '500',
+    textAlign: "center",
   },
 });
