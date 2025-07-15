@@ -1,0 +1,138 @@
+import { View, TouchableOpacity, useColorScheme } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { HomeScreen, CategoryScreen, AddTransactionScreen } from "../screens";
+import { getColors } from '../constants';
+
+const Tab = createBottomTabNavigator();
+
+function EmptyComponent() {
+    return null;
+}
+
+function MainTabNavigator({ onLogout }) {
+    const isDarkMode = useColorScheme() === "dark";
+    const colors = getColors(isDarkMode);
+
+    return (
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
+
+                    if (route.name === 'Home') {
+                        iconName = 'home';
+                    } else if (route.name === 'Category') {
+                        iconName = 'category';
+                    } else if (route.name === 'AddTransaction') {
+                        iconName = 'add';
+                    } else if (route.name === 'Profile') {
+                        iconName = 'person';
+                    } else if (route.name === 'Settings') {
+                        iconName = 'settings';
+                    }
+
+                    return <Icon name={iconName} size={size} color={color} />;
+                },
+                tabBarActiveTintColor: colors.primary,
+                tabBarInactiveTintColor: colors.textSecondary,
+                tabBarStyle: {
+                    backgroundColor: colors.cardBackground,
+                    borderTopColor: colors.border,
+                    elevation: 8,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                        width: 0,
+                        height: -2,
+                    },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 3.84,
+                    paddingBottom: 8,
+                    paddingTop: 4,
+                    height: 70,
+                },
+                tabBarLabelStyle: {
+                    fontSize: 12,
+                    fontWeight: '500',
+                    marginBottom: 4,
+                },
+                tabBarItemStyle: {
+                    paddingVertical: -8,
+                },
+            })}
+        >
+            <Tab.Screen
+                name="Home"
+                options={{ tabBarLabel: 'Ana Sayfa' }}
+            >
+                {(props) => <HomeScreen {...props} onLogout={onLogout} />}
+            </Tab.Screen>
+
+            <Tab.Screen
+                name="Category"
+                component={CategoryScreen}
+                options={{ tabBarLabel: 'Kategoriler' }}
+            />
+
+            <Tab.Screen
+                name="AddTransaction"
+                component={AddTransactionScreen}
+                options={{
+                    tabBarLabel: '',
+                    tabBarIcon: ({ focused, color }) => (
+                        <View style={{
+                            backgroundColor: colors.primary,
+                            borderRadius: 30,
+                            width: 56,
+                            height: 56,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: -22,
+                            elevation: 4,
+                            shadowColor: colors.primary,
+                            shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 0.25,
+                            shadowRadius: 3.84,
+                        }}>
+                            <Icon name="add" size={28} color={colors.white} />
+                        </View>
+                    ),
+                }}
+            />
+
+            <Tab.Screen
+                name="Profile"
+                component={EmptyComponent}
+                options={({ navigation }) => ({
+                    tabBarLabel: 'Profil',
+                    tabBarButton: (props) => (
+                        <TouchableOpacity
+                            {...props}
+                            onPress={() => navigation.navigate('ProfileStack')}
+                        />
+                    ),
+                })}
+            />
+
+            <Tab.Screen
+                name="Settings"
+                component={EmptyComponent}
+                options={({ navigation }) => ({
+                    tabBarLabel: 'Ayarlar',
+                    tabBarButton: (props) => (
+                        <TouchableOpacity
+                            {...props}
+                            onPress={() => navigation.navigate('SettingsStack')}
+                        />
+                    ),
+                })}
+            />
+        </Tab.Navigator>
+    );
+}
+
+export default MainTabNavigator;
