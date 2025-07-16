@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { transactionService } from "../services";
 
+/**
+ * @description Custom hook to manage transactions.
+ * This hook fetches transactions, handles loading states, and manages errors.
+ */
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -9,6 +13,10 @@ export const useTransactions = () => {
   const [error, setError] = useState(null);
   const [isEmpty, setIsEmpty] = useState(false);
 
+  /**
+   * @description Fetches transactions from the server.
+   * @returns { Promise<void> }
+   */
   const fetchTransactions = async () => {
     setLoading(true);
     setError(null);
@@ -17,7 +25,7 @@ export const useTransactions = () => {
     try {
       const data = await transactionService.getTransaction();
       setTransactions(data);
-      console.log("Transactions fetched:", data);
+      console.log("Transactions fetched");
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setIsEmpty(true);
@@ -33,6 +41,10 @@ export const useTransactions = () => {
     }
   };
 
+  /**
+   * @description Refreshes the transactions data.
+   * @returns { Promise<void> }
+   */
   const onRefresh = async () => {
     setRefreshing(true);
     setError(null);
@@ -41,7 +53,7 @@ export const useTransactions = () => {
     try {
       const data = await transactionService.getTransaction();
       setTransactions(data);
-      console.log("Transactions refreshed:", data);
+      console.log("Transactions refreshed");
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setIsEmpty(true);

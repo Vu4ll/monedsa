@@ -35,7 +35,17 @@ api.interceptors.response.use(
   }
 );
 
+/**
+ * @description CategoryService handles category-related API requests.
+ */
 class CategoryService {
+
+  /**
+   * @description Fetches categories from the server.
+   * @param { string | null } type - The type of categories to fetch (optional).
+   * @param { boolean | null } showOnlyDefault - Whether to show only default categories (optional).
+   * @return { Promise<{ success: boolean, data?: any, error?: string }> }
+   */
   async getCategories(type = null, showOnlyDefault = null) {
     try {
       const queryParams = new URLSearchParams();
@@ -43,7 +53,7 @@ class CategoryService {
       if (showOnlyDefault !== null) queryParams.append('default', showOnlyDefault);
 
       const response = await api.get(
-        `${API_CONFIG.BASE_URL}/api/category/list?${queryParams.toString()}`
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.LIST}${queryParams.toString()}`
       );
 
       const data = response.data;
@@ -58,10 +68,14 @@ class CategoryService {
     }
   }
 
-  // Kategori ekle
+  /**
+   * @description Adds a new category.
+   * @param { Object } categoryData - The data of the category to add.
+   * @return { Promise<{ success: boolean, data?: any, error?: string }> }
+   */
   async addCategory(categoryData) {
     try {
-      const response = await api.post(`${API_CONFIG.BASE_URL}/api/category/add`, categoryData);
+      const response = await api.post(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.ADD}`, categoryData);
 
       const data = response.data;
       if (data.success) {
@@ -75,10 +89,15 @@ class CategoryService {
     }
   }
 
-  // Kategori düzenle
+  /**
+   * @description Updates an existing category.
+   * @param { string } categoryId - The ID of the category to update.,
+   * @param { Object } categoryData - The updated data for the category.
+   * @return { Promise<{ success: boolean, data?: any, error?: string }> } 
+   */
   async updateCategory(categoryId, categoryData) {
     try {
-      const response = await api.put(`${API_CONFIG.BASE_URL}/api/category/edit/${categoryId}`, categoryData);
+      const response = await api.put(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.EDIT}${categoryId}`, categoryData);
 
       const data = response.data;
       if (data.success) {
@@ -92,10 +111,14 @@ class CategoryService {
     }
   }
 
-  // Kategori sil
+  /**
+   * @description Deletes a category.
+   * @param { string } categoryId - The ID of the category to delete.
+   * @return { Promise<{ success: boolean, data?: any, error?: string }> }
+   */
   async deleteCategory(categoryId) {
     try {
-      const response = await api.delete(`${API_CONFIG.BASE_URL}/api/category/delete/${categoryId}`);
+      const response = await api.delete(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.DELETE}${categoryId}`);
 
       const data = response.data;
       if (data.success) {
@@ -126,5 +149,4 @@ class CategoryService {
   }
 }
 
-// Singleton instance
 export const categoryService = new CategoryService();

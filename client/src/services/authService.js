@@ -1,12 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_CONFIG } from '../constants';
 
+/**
+ * @description AuthService handles user authentication, token management, and profile retrieval.
+ */
 class AuthService {
   constructor() {
     this.token = null;
     this.refreshToken = null;
   }
 
+  /**
+   * @description Sets the authentication token and refresh token.
+   * @param { string } token - The authentication token.
+   * @param { string } refreshToken - The refresh token.
+   */
   setToken(token, refreshToken) {
     this.token = token;
     this.refreshToken = refreshToken;
@@ -16,14 +24,26 @@ class AuthService {
     }
   }
 
+  /**
+   * @description Gets the current authentication token.
+   * @returns { string | null } The current authentication token or null if not set.
+   */
   getToken() {
     return this.token;
   }
 
+  /**
+   * @description Gets the current refresh token.
+   * @returns { string | null } The current refresh token or null if not set.
+   */
   getRefreshToken() {
     return this.refreshToken;
   }
 
+  /**
+   * @description Loads the authentication token from storage.
+   * @returns { Promise<string | null> } The authentication token or null if not found.
+   */
   async loadToken() {
     try {
       const storedToken = await AsyncStorage.getItem('authToken');
@@ -37,6 +57,10 @@ class AuthService {
     }
   }
 
+  /**
+   * @description Clears the authentication token and refresh token from memory and storage.
+   * @returns { Promise<void> }
+   */
   async clearToken() {
     this.token = null;
     this.refreshToken = null;
@@ -48,46 +72,78 @@ class AuthService {
     }
   }
 
+  /**
+   * @description Checks if the current authentication token is valid.
+   * @returns { boolean } True if the token is valid, false otherwise.
+   */
   isTokenValid() {
-    if (!this.token) return false;
+    if (!this.token) {
+      return false;
+    }
 
     try {
       const payload = JSON.parse(atob(this.token.split('.')[1]));
       const currentTime = Date.now() / 1000;
+      const expiryTime = payload.exp;
+      const timeRemaining = expiryTime - currentTime;
 
-      return payload.exp > currentTime;
+      if (timeRemaining > 0) {
+        console.log(`Token geçerli - Kalan süre: ${Math.floor(timeRemaining / 60)} dakika`);
+      } else {
+        console.log('Token süresi dolmuş');
+      }
+
+      return timeRemaining > 0;
     } catch (error) {
       console.error('Token geçerlilik kontrolü hatası:', error);
       return false;
     }
   }
 
+  /**
+   * @description Refreshes the authentication token using the refresh token.
+   * @return { Promise<string | null> } The new authentication token or null if refresh failed.
+   */
   async refreshAccessToken() {
-    if (!this.refreshToken) return null;
+    if (!this.refreshToken) {
+      console.log('Refresh token bulunamadı');
+      return null;
+    }
+
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH_REFRESH}`, {
+      console.log('Refresh token ile yenileme yapılıyor...');
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH.REFRESH}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refreshToken: this.refreshToken }),
       });
+
       const data = await response.json();
-      if (response.ok && data.token) {
+
+      if (response.ok && data.success && data.token) {
         this.setToken(data.token, data.refreshToken || this.refreshToken);
-        console.log("Token refreshed");
+        console.log("Token başarıyla yenilendi");
         return data.token;
       } else {
+        console.log('Refresh token geçersiz veya süresi dolmuş');
         await this.clearToken();
         return null;
       }
     } catch (error) {
+      console.error('Refresh token error:', error);
       await this.clearToken();
       return null;
     }
   }
 
+  /**
+   * @description Registers a new user.
+   * @param { Object } userData - The user data for registration.
+   * @return { Promise<{ success: boolean, data?: any, error?: string }> }
+   */
   async register(userData) {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH_REGISTER}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH.REGISTER}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,9 +181,15 @@ class AuthService {
     }
   }
 
+  /**
+   * @description Logs in a user with username and password.
+   * @param { string } user - The username or email.
+   * @param { string } password - The password.
+   * @return { Promise<{ success: boolean, user?: any, error?: string }> }
+   */
   async login(user, password) {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH_LOGIN}`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH.LOGIN}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -147,17 +209,25 @@ class AuthService {
     }
   }
 
+  /**
+   * @description Logs out the user by clearing the token.
+   * @return { Promise<void> }
+   */
   async logout() {
     await this.clearToken();
   }
 
+  /**
+   * @description Gets the user's profile information.
+   * @returns { Promise<{ success: boolean, data?: any, error?: string }> }
+   */
   async getProfile() {
     try {
       if (!this.token) {
         return { success: false, error: 'Token bulunamadı' };
       }
 
-      const response = await fetch(`${API_CONFIG.BASE_URL}/api/profile/me`, {
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.ME}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

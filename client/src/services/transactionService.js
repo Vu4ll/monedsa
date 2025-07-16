@@ -35,6 +35,10 @@ api.interceptors.response.use(
   }
 );
 
+/**
+ * @description TransactionService handles transaction-related API requests.
+ * This service provides methods to fetch, add, update, and delete transactions,
+ */
 export const transactionService = {
   async getTransaction() {
     const response = await api.get(
@@ -43,6 +47,11 @@ export const transactionService = {
     return response.data ? response.data : "Veri yok";
   },
 
+  /**
+   * @description Adds a new transaction.
+   * @param { Object } transactionData - The data for the new transaction.
+   * @return { Promise<Object> } The response data from the server.
+   */
   async addTransaction(transactionData) {
     try {
       const response = await api.post(
@@ -55,6 +64,12 @@ export const transactionService = {
     }
   },
 
+  /**
+   * @description Updates an existing transaction.
+   * @param { string } transactionId - The ID of the transaction to update.
+   * @param { Object } transactionData - The updated data for the transaction.
+   * @return { Promise<Object> } The response data from the server.
+   */
   async updateTransaction(transactionId, transactionData) {
     try {
       const response = await api.put(
@@ -67,6 +82,11 @@ export const transactionService = {
     }
   },
 
+  /**
+   * @description Deletes a transaction.
+   * @param { string } transactionId - The ID of the transaction to delete.
+   * @return { Promise<Object> } The response data from the server.
+   */
   async deleteTransaction(transactionId) {
     try {
       const response = await api.delete(
@@ -78,6 +98,10 @@ export const transactionService = {
     }
   },
 
+  /**
+   * @description Fetches expenses from the server.
+   * @returns { Promise<Object> } The response data from the server.
+   */
   async getExpenses() {
     try {
       const response = await api.get(
@@ -89,6 +113,10 @@ export const transactionService = {
     }
   },
 
+  /**
+   * @description Fetches incomes from the server.
+   * @return { Promise<Object> } The response data from the server.
+   */
   async getIncomes() {
     try {
       const response = await api.get(

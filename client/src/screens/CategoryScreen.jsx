@@ -13,17 +13,20 @@ import {
     TextInput,
     ScrollView,
     useColorScheme,
-    ToastAndroid
+    ToastAndroid,
+    RefreshControl
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getColors } from '../constants';
 import { categoryService } from '../services';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CategoryScreen = ({ navigation }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const colors = getColors(isDarkMode);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
     const [formData, setFormData] = useState({
@@ -43,6 +46,12 @@ const CategoryScreen = ({ navigation }) => {
         loadCategories();
     }, []);
 
+    useFocusEffect(
+        React.useCallback(() => {
+            loadCategories();
+        }, [])
+    );
+
     const loadCategories = async () => {
         setLoading(true);
         try {
@@ -56,6 +65,22 @@ const CategoryScreen = ({ navigation }) => {
             Alert.alert('Hata', 'Kategoriler yüklenirken bir hata oluştu');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        try {
+            const result = await categoryService.getCategories();
+            if (result.success) {
+                setCategories(result.data);
+            } else {
+                ToastAndroid.show(`Hata: ${result.error}`, ToastAndroid.LONG);
+            }
+        } catch (error) {
+            ToastAndroid.show(`Kategoriler yüklenirken bir hata oluştu`, ToastAndroid.LONG);
+        } finally {
+            setRefreshing(false);
         }
     };
 
@@ -202,7 +227,8 @@ const CategoryScreen = ({ navigation }) => {
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.1,
             shadowRadius: 2,
-            borderWidth: 1.5
+            borderWidth: 1.5,
+            borderColor: colors.border
         },
         categoryInfo: {
             flexDirection: 'row',
@@ -222,6 +248,17 @@ const CategoryScreen = ({ navigation }) => {
             fontSize: 16,
             fontWeight: '600',
             color: colors.textPrimary,
+        },
+        categoryCorner: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: 30,
+            height: 30,
+            borderTopWidth: 25,
+            borderRightWidth: 35,
+            borderTopLeftRadius: 10,
+            borderRightColor: 'transparent',
         },
         categoryType: {
             fontSize: 14,
@@ -398,7 +435,8 @@ const CategoryScreen = ({ navigation }) => {
     });
 
     const renderCategory = ({ item }) => (
-        <View style={[styles.categoryItem, { borderColor: item.type === "income" ? colors.softGreen : colors.softRed }]}>
+        <View style={styles.categoryItem}>
+            <View style={[styles.categoryCorner, { borderTopColor: item.type === "income" ? colors.softGreen : colors.softRed }]} />
             <View style={styles.categoryInfo}>
                 <View style={[styles.colorIndicator, { backgroundColor: item.color }]} />
                 <View style={styles.categoryDetails}>
@@ -418,12 +456,15 @@ const CategoryScreen = ({ navigation }) => {
                     >
                         <Text style={styles.editButtonText}>Düzenle</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.deleteButton}
-                        onPress={() => handleDeleteCategory(item)}
-                    >
-                        <Text style={styles.deleteButtonText}>Sil</Text>
-                    </TouchableOpacity>
+
+                    {item.isDeletable && (
+                        <TouchableOpacity
+                            style={styles.deleteButton}
+                            onPress={() => handleDeleteCategory(item)}
+                        >
+                            <Text style={styles.deleteButtonText}>Sil</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
             )}
         </View>
@@ -480,6 +521,14 @@ const CategoryScreen = ({ navigation }) => {
                     keyExtractor={(item) => item.id}
                     contentContainerStyle={styles.listContainer}
                     showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            colors={[colors.primary]}
+                            tintColor={colors.primary}
+                        />
+                    }
                 />
             </View>
 

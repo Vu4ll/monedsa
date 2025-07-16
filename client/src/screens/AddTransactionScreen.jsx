@@ -10,7 +10,6 @@ import {
     Modal,
     FlatList,
     KeyboardAvoidingView,
-    Platform,
     useColorScheme,
     ToastAndroid
 } from 'react-native';

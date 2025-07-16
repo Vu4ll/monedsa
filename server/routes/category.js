@@ -28,15 +28,33 @@ router.get("/list", verifyToken, async (req, res) => {
             .select("-__v")
             .sort({ isDefault: -1, name: 1 });
 
-        const transformedData = categories.map(cat => ({
-            id: cat._id,
-            name: cat.name,
-            color: cat.color,
-            type: cat.type,
-            isDefault: cat.isDefault,
-            userId: cat.userId || null,
-            createdAt: cat.createdAt
-        }));
+        const userCategoryIds = categories
+            .filter(cat => !cat.isDefault)
+            .map(cat => cat._id);
+        const categoriesWithTransactions = await Transaction.distinct('category', {
+            category: { $in: userCategoryIds },
+            userId: req.user.id
+        });
+
+        const transformedData = categories.map(cat => {
+            let isDeletable = true;
+
+            if (cat.isDefault) isDeletable = false;
+            else isDeletable = !categoriesWithTransactions.some(id =>
+                id.toString() === cat._id.toString()
+            );
+
+            return {
+                id: cat._id,
+                name: cat.name,
+                color: cat.color,
+                type: cat.type,
+                isDefault: cat.isDefault,
+                isDeletable,
+                userId: cat.userId || null,
+                createdAt: cat.createdAt
+            }
+        });
 
         res.status(200).json({
             status: res.statusCode,

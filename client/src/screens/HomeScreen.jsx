@@ -6,7 +6,8 @@ import {
   RefreshControl,
   SafeAreaView,
   Text,
-  Alert
+  View,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from '@react-navigation/native';
@@ -83,15 +84,15 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[colors.success]}
-            tintColor={colors.success}
+            colors={[colors.primary]}
+            tintColor={colors.primary}
           />
         }
       >
-        <TransactionList 
-          transactions={transactions} 
-          loading={loading} 
-          colors={colors} 
+        <TransactionList
+          transactions={transactions}
+          loading={loading}
+          colors={colors}
           navigation={navigation}
           onTransactionUpdate={handleTransactionUpdate}
         />

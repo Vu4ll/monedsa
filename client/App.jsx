@@ -1,37 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, ActivityIndicator, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoginScreen, RegisterScreen, ProfileScreen, SettingsScreen, AddTransactionScreen } from "./src/screens";
 import { MainTabNavigator } from './src/components';
-import { authService } from './src/services';
+import { useAuth } from './src/hooks';
 import { getColors } from './src/constants';
 
 const Stack = createStackNavigator();
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const { isAuthenticated, isLoading, login, logout } = useAuth();
   const isDarkMode = useColorScheme() === "dark";
   const colors = getColors(isDarkMode);
-
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
-  const checkAuthStatus = async () => {
-    try {
-      await authService.loadToken();
-      const isValid = authService.isTokenValid();
-      setIsAuthenticated(isValid);
-    } catch (error) {
-      console.error('Auth check error:', error);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   if (isLoading) {
     return (
@@ -47,10 +28,10 @@ function App() {
         {isAuthenticated ? (
           <>
             <Stack.Screen name="MainApp">
-              {(props) => <MainTabNavigator {...props} onLogout={() => setIsAuthenticated(false)} />}
+              {(props) => <MainTabNavigator {...props} onLogout={logout} />}
             </Stack.Screen>
             <Stack.Screen name="ProfileStack">
-              {(props) => <ProfileScreen {...props} onLogout={() => setIsAuthenticated(false)} />}
+              {(props) => <ProfileScreen {...props} onLogout={logout} />}
             </Stack.Screen>
             <Stack.Screen name="SettingsStack" component={SettingsScreen} />
           </>
@@ -60,9 +41,11 @@ function App() {
               name="Login"
               options={{ gestureEnabled: false }}
             >
-              {(props) => <LoginScreen {...props} onLogin={() => setIsAuthenticated(true)} />}
+              {(props) => <LoginScreen {...props} onLogin={login} />}
             </Stack.Screen>
-            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="Register">
+              {(props) => <RegisterScreen {...props} onLogin={login} />}
+            </Stack.Screen>
           </>
         )}
       </Stack.Navigator>

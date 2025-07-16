@@ -1,7 +1,8 @@
 export const API_CONFIG = {
   BASE_URL: "http://10.70.2.9:3000",
+
   ENDPOINTS: {
-    TRANSACTION: { 
+    TRANSACTION: {
       LIST: "/api/transaction/list",
       ADD: "/api/transaction/add",
       EDIT: "/api/transaction/edit/",
@@ -9,10 +10,25 @@ export const API_CONFIG = {
       EXPENSES: "/api/transaction/expenses",
       INCOMES: "/api/transaction/incomes"
     },
-    AUTH_LOGIN: "/api/auth/login",
-    AUTH_REGISTER : "/api/auth/register",
-    AUTH_REFRESH: "/api/auth/refresh",
+
+    AUTH: {
+      LOGIN: "/api/auth/login",
+      REGISTER: "/api/auth/register",
+      REFRESH: "/api/auth/refresh"
+    },
+
+    CATEGORY: {
+      LIST: "/api/category/list?",
+      ADD: "/api/category/add",
+      EDIT: "/api/category/edit/",
+      DELETE: "/api/category/delete/",
+    },
+
+    PROFILE: {
+      ME: "/api/profile/me",
+    },
   },
+
   HEADERS: {
     "Content-Type": "application/json",
   },
