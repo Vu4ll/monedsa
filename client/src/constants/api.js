@@ -26,6 +26,7 @@ export const API_CONFIG = {
 
     PROFILE: {
       ME: "/api/profile/me",
+      STATS: "/api/profile/stats",
     },
   },
 

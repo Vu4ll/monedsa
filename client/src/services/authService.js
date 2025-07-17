@@ -263,6 +263,50 @@ class AuthService {
       return { success: false, error: 'Beklenmeyen bir hata oluştu' };
     }
   }
+
+  /**
+   * @description Gets the user's statistics.
+   * @returns { Promise<{ success: boolean, data?: any, error?: string }> }
+   */
+  async getStats() {
+    try {
+      if (!this.token) return { success: false, error: 'Token bulunamadı' };
+
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.STATS}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
+        },
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        return { success: true, data: data.data };
+      } else {
+        let errorMessage = data.message || 'Profil istatistikleri alınamadı';
+
+        if (response.status === 401) {
+          errorMessage = 'Oturum süresi dolmuş';
+          await this.clearToken();
+        } else if (response.status === 403) {
+          errorMessage = 'Bu işlem için yetkiniz yok';
+        } else if (response.status >= 500) {
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+        }
+
+        return { success: false, error: errorMessage };
+      }
+    } catch (error) {
+      console.error('Profile istatistik hatası:', error);
+
+      if (error.name === 'TypeError' && error.message.includes('Network')) {
+        return { success: false, error: 'İnternet bağlantısı hatası' };
+      }
+
+      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+    }
+  }
 }
 
 export const authService = new AuthService();

@@ -20,10 +20,12 @@ const ProfileScreen = ({ navigation, onLogout }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const colors = getColors(isDarkMode);
     const [userInfo, setUserInfo] = useState(null);
+    const [userStats, setUserStats] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadUserProfile();
+        loadUserStats();
     }, []);
 
     const loadUserProfile = async () => {
@@ -43,7 +45,6 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 });
             } else {
                 Alert.alert('Hata', result.error);
-                // Fallback data
                 setUserInfo({
                     name: 'Kullanıcı',
                     email: 'email@example.com',
@@ -53,8 +54,36 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 });
             }
         } catch (error) {
-            console.error('Profile yükleme hatası:', error);
+            console.error('Profil yükleme hatası:', error);
             Alert.alert('Hata', 'Profil bilgileri yüklenirken bir hata oluştu');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loadUserStats = async () => {
+        try {
+            setLoading(true);
+            const result = await authService.getStats();
+
+            const statData = result.data;
+            if (result.success) {
+                setUserStats({
+                    totalIncomes: statData.transactions.income,
+                    totalExpenses: statData.transactions.expense,
+                    totalTransactions: statData.transactions.total,
+                    totalCategories: statData.categories.userOwned,
+                });
+            } else {
+                console.error('İstatistik yükleme hatası:', result.error);
+                setUserStats({
+                    totalIncomes: 0, totalExpenses: 0,
+                    totalTransactions: 0, totalCategories: 0,
+                });
+            }
+        } catch (error) {
+            console.error('Profil istatistik hatası:', error);
+            Alert.alert('Hata', 'Profil istatistikleri yüklenirken bir hata oluştu');
         } finally {
             setLoading(false);
         }
@@ -278,23 +307,23 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                         <Text style={styles.sectionTitle}>İstatistikler</Text>
 
                         <View style={styles.infoRow}>
+                            <Text style={styles.infoLabel}>Toplam Kullanıcı Kategori Sayısı</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalCategories || 0}</Text>
+                        </View>
+
+                        <View style={styles.infoRow}>
                             <Text style={styles.infoLabel}>Toplam Gelir Sayısı</Text>
-                            <Text style={styles.infoValue}>10</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalIncomes || 0}</Text>
                         </View>
 
                         <View style={styles.infoRow}>
                             <Text style={styles.infoLabel}>Toplam Gider Sayısı</Text>
-                            <Text style={styles.infoValue}>10</Text>
-                        </View>
-
-                        <View style={styles.infoRow}>
-                            <Text style={styles.infoLabel}>Toplam İşlem Sayısı</Text>
-                            <Text style={styles.infoValue}>10</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalExpenses || 0}</Text>
                         </View>
 
                         <View style={[styles.infoRow, styles.lastInfoRow]}>
-                            <Text style={styles.infoLabel}>Toplam Kullanıcı Kategori Sayısı</Text>
-                            <Text style={styles.infoValue}>10</Text>
+                            <Text style={styles.infoLabel}>Toplam İşlem Sayısı</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalTransactions || 0}</Text>
                         </View>
                     </View>
 
