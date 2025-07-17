@@ -14,7 +14,6 @@ import {
     useColorScheme
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getColors } from '../constants';
 import { authService } from '../services';
 
@@ -120,10 +119,10 @@ const RegisterScreen = ({ navigation }) => {
             } else {
                 // Sunucudan gelen hata mesajlarını kontrol et
                 const errorMessage = response.error || 'Kayıt olurken bir hata oluştu';
-                
+
                 // Spesifik hata mesajlarını kullanıcı dostu hale getir
                 let displayMessage = errorMessage;
-                
+
                 if (errorMessage.includes('username') && errorMessage.includes('already taken')) {
                     displayMessage = 'Bu kullanıcı adı zaten kullanımda. Lütfen farklı bir kullanıcı adı seçin.';
                     setErrors(prev => ({ ...prev, username: 'Bu kullanıcı adı zaten kullanımda' }));
@@ -151,12 +150,12 @@ const RegisterScreen = ({ navigation }) => {
 
     const updateFormData = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
-        
+
         // Real-time validasyon
         if (errors[field]) {
             setErrors(prev => ({ ...prev, [field]: null }));
         }
-        
+
         // Spesifik alan validasyonları
         if (field === 'username' && value.trim()) {
             if (value.length < 2) {
@@ -167,26 +166,26 @@ const RegisterScreen = ({ navigation }) => {
                 setErrors(prev => ({ ...prev, username: 'Sadece harf, rakam ve alt çizgi kullanın' }));
             }
         }
-        
+
         if (field === 'email' && value.trim()) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(value)) {
                 setErrors(prev => ({ ...prev, email: 'Geçerli bir e-posta adresi girin' }));
             }
         }
-        
+
         if (field === 'password' && value) {
             const passwordErrors = [];
             if (value.length < 8) passwordErrors.push('en az 8 karakter');
             if (!/(?=.*[a-z])/.test(value)) passwordErrors.push('küçük harf');
             if (!/(?=.*[A-Z])/.test(value)) passwordErrors.push('büyük harf');
             if (!/(?=.*\d)/.test(value)) passwordErrors.push('rakam');
-            
+
             if (passwordErrors.length > 0) {
                 setErrors(prev => ({ ...prev, password: `Parola şunları içermeli: ${passwordErrors.join(', ')}` }));
             }
         }
-        
+
         if (field === 'confirmPassword' && value) {
             if (value !== formData.password) {
                 setErrors(prev => ({ ...prev, confirmPassword: 'Parolalar eşleşmiyor' }));
@@ -308,7 +307,7 @@ const RegisterScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+            <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
 
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

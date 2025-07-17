@@ -20,6 +20,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getColors } from '../constants';
 import { categoryService } from '../services';
 import { useFocusEffect } from '@react-navigation/native';
+import { Header } from '../components';
 
 const CategoryScreen = ({ navigation }) => {
     const isDarkMode = useColorScheme() === 'dark';
@@ -75,10 +76,10 @@ const CategoryScreen = ({ navigation }) => {
             if (result.success) {
                 setCategories(result.data);
             } else {
-                ToastAndroid.show(`Hata: ${result.error}`, ToastAndroid.LONG);
+                ToastAndroid.show(`Hata: ${result.error}`, ToastAndroid.SHORT);
             }
         } catch (error) {
-            ToastAndroid.show(`Kategoriler yüklenirken bir hata oluştu`, ToastAndroid.LONG);
+            ToastAndroid.show(`Kategoriler yüklenirken bir hata oluştu`, ToastAndroid.SHORT);
         } finally {
             setRefreshing(false);
         }
@@ -119,14 +120,14 @@ const CategoryScreen = ({ navigation }) => {
                 resetForm();
                 loadCategories();
                 // Alert.alert('Başarılı', editingCategory ? 'Kategori güncellendi' : 'Kategori eklendi');
-                ToastAndroid.show(editingCategory ? "Kategori başarılıyla güncellendi" : "Yeni kategori başarılıyla eklendi", ToastAndroid.LONG);
+                ToastAndroid.show(editingCategory ? "Kategori başarılıyla güncellendi" : "Yeni kategori başarılıyla eklendi", ToastAndroid.SHORT);
             } else {
                 // Alert.alert('Hata', result.error);
-                ToastAndroid.show(`Kategori ${editingCategory ? "güncellenemedi" : "eklenemedi"}`, ToastAndroid.LONG);
+                ToastAndroid.show(`Kategori ${editingCategory ? "güncellenemedi" : "eklenemedi"}`, ToastAndroid.SHORT);
             }
         } catch (error) {
             // Alert.alert('Hata', 'Kategori kaydedilirken bir hata oluştu');
-            ToastAndroid.show(`Kategori kaydedilirken bir hata oluştu`, ToastAndroid.LONG);
+            ToastAndroid.show(`Kategori kaydedilirken bir hata oluştu`, ToastAndroid.SHORT);
         }
     };
 
@@ -145,14 +146,14 @@ const CategoryScreen = ({ navigation }) => {
                             if (result.success) {
                                 loadCategories();
                                 // Alert.alert('Başarılı', 'Kategori silindi');
-                                ToastAndroid.show("Kategori başarıyla silindi", ToastAndroid.LONG);
+                                ToastAndroid.show("Kategori başarıyla silindi", ToastAndroid.SHORT);
                             } else {
                                 Alert.alert('Hata', result.error);
-                                // ToastAndroid.show(`Hata: ${result.error}`, ToastAndroid.LONG);
+                                // ToastAndroid.show(`Hata: ${result.error}`, ToastAndroid.SHORT);
                             }
                         } catch (error) {
                             // Alert.alert('Hata', 'Kategori silinirken bir hata oluştu');
-                            ToastAndroid.show(`Kategori silinirken bir hata oluştu`, ToastAndroid.LONG);
+                            ToastAndroid.show(`Kategori silinirken bir hata oluştu`, ToastAndroid.SHORT);
                         }
                     }
                 }
@@ -414,14 +415,6 @@ const CategoryScreen = ({ navigation }) => {
             fontSize: 16,
             fontWeight: '600',
         },
-        sectionHeader: {
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: colors.textPrimary,
-            marginBottom: 20,
-            marginTop: 20,
-            marginLeft: 20,
-        },
         loadingContainer: {
             flex: 1,
             justifyContent: 'center',
@@ -503,10 +496,11 @@ const CategoryScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+            <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
+
+            <Header colors={colors} title="Kategoriler" />
 
             <View style={styles.content}>
-                <Text style={styles.sectionHeader}>Kategoriler</Text>
                 <TouchableOpacity
                     style={styles.addButton}
                     onPress={handleAddCategory}
@@ -562,7 +556,7 @@ const CategoryScreen = ({ navigation }) => {
                                 <View style={styles.typeSelector}>
                                     <TouchableOpacity
                                         style={[
-                                            styles.typeOption, { borderColor: colors.softGreen, borderWidth: 1.5 },
+                                            styles.typeOption, { backgroundColor: colors.transparentGreen, borderColor: colors.softGreen, borderWidth: 1 },
                                             formData.type === 'income' && { borderColor: colors.border, backgroundColor: colors.success }
                                         ]}
                                         onPress={() => setFormData(prev => ({ ...prev, type: 'income' }))}
@@ -576,7 +570,7 @@ const CategoryScreen = ({ navigation }) => {
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={[
-                                            styles.typeOption, { borderColor: colors.softRed, borderWidth: 1.5 },
+                                            styles.typeOption, { backgroundColor: colors.transparentRed, borderColor: colors.softRed, borderWidth: 1 },
                                             formData.type === 'expense' && { borderColor: colors.border, backgroundColor: colors.error }
                                         ]}
                                         onPress={() => setFormData(prev => ({ ...prev, type: 'expense' }))}

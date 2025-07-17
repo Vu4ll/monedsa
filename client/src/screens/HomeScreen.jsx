@@ -8,6 +8,7 @@ import {
   Text,
   View,
   Alert,
+  ToastAndroid,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from '@react-navigation/native';
@@ -49,35 +50,33 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
     return () => unsubscribe();
   }, []);
 
-  // Navigation params değişikliklerini dinle ve ilk yükleme
   useEffect(() => {
     if (route?.params?.refresh) {
       onRefresh();
-      // Params'ı temizle
       navigation.setParams({ refresh: undefined });
     }
   }, [route?.params?.refresh]);
 
-  // Sayfa odaklandığında yenile (kategori değişikliklerini yakalamak için)
   useFocusEffect(
     React.useCallback(() => {
       onRefresh();
     }, [])
   );
 
-  const handleTransactionUpdate = () => {
-    onRefresh();
-  };
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <StatusBar
-        barStyle={isDarkMode ? "light-content" : "dark-content"}
-        backgroundColor={colors.background}
-        translucent={false}
-        animated={true}
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
+
+      <Header
+        colors={colors}
+        showLeftAction={true}
+        leftActionIcon="filter-list"
+        onLeftActionPress={() => {ToastAndroid.show("Sıralama", ToastAndroid.SHORT)}}
+        showRightAction={true}
+        rightActionIcon="filter-alt"
+        onRightActionPress={() => {ToastAndroid.show("Filtreleme", ToastAndroid.SHORT)}}
       />
-      <Header colors={colors} />
+
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         refreshControl={
@@ -94,7 +93,6 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
           loading={loading}
           colors={colors}
           navigation={navigation}
-          onTransactionUpdate={handleTransactionUpdate}
         />
       </ScrollView>
     </SafeAreaView>

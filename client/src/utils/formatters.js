@@ -9,5 +9,8 @@ export const formatDate = (dateString) => {
 };
 
 export const formatCurrency = (amount) => {
-  return `${amount.toFixed(2)} ₺`;
+  return new Intl.NumberFormat('tr-TR', {
+    style: 'currency',
+    currency: 'TRY'
+  }).format(amount);
 };

@@ -1,7 +1,9 @@
 export const getColors = (isDarkMode) => ({
+  /* Syntax
+  name: isDarkMode ? dark thema color : white thema color */
   background: isDarkMode ? "#121212" : "#FFFFFF",
   cardBackground: isDarkMode ? "#1E1E1E" : "#F5F5F5",
-  headerBackgroud: isDarkMode ? "#161616" : "#f0f0f0",
+  headerBackgroud: isDarkMode ? "#1f1f1f" : "#F9F9F9",
   text: isDarkMode ? "#FFFFFF" : "#000000",
   textSecondary: isDarkMode ? "#888888" : "#666666",
   textPrimary: isDarkMode ? "#FFFFFF" : "#000000",
@@ -10,8 +12,10 @@ export const getColors = (isDarkMode) => ({
   buttonText: "#FFFFFF",
   success: isDarkMode ? "#4CAF50" : "#2E7D32",
   error: isDarkMode ? "#F44336" : "#D32F2F",
-  softGreen: isDarkMode ? "#66BB6A" : "#81C784",
-  softRed: isDarkMode ? "#EF5350" : "#E57373",
+  softGreen: "#66BB6A",
+  softRed: "#EF5350",
+  transparentGreen: "rgba(57, 190, 86, 0.08)",
+  transparentRed: "rgba(255, 107, 107, 0.08)",
   danger: isDarkMode ? "#F44336" : "#D32F2F",
   primary: isDarkMode ? "#BB86FC" : "#6200EE",
   secondary: isDarkMode ? "#03DAC6" : "#018786",

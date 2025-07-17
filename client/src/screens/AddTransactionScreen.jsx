@@ -11,11 +11,13 @@ import {
     FlatList,
     KeyboardAvoidingView,
     useColorScheme,
-    ToastAndroid
+    ToastAndroid,
+    Alert
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { getColors } from '../constants';
 import { transactionService, categoryService } from '../services';
+import { Header } from '../components';
 
 const AddTransactionScreen = ({ navigation, route }) => {
     const isDarkMode = useColorScheme() === 'dark';
@@ -33,6 +35,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     const descriptionRef = useRef(null);
 
@@ -66,23 +69,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
             loadCategories();
         }, [route?.params?.transaction])
     );
-
-    useEffect(() => {
-        const unsubscribeBlur = navigation.addListener('blur', () => {
-            navigation.setParams({ transaction: undefined });
-        });
-
-        const unsubscribeTabPress = navigation.addListener('tabPress', (e) => {
-            if (route?.params?.transaction) {
-                navigation.setParams({ transaction: undefined });
-            }
-        });
-
-        return () => {
-            unsubscribeBlur();
-            unsubscribeTabPress();
-        };
-    }, [navigation, route?.params?.transaction]);
 
     const loadCategories = async () => {
         try {
@@ -136,18 +122,61 @@ const AddTransactionScreen = ({ navigation, route }) => {
             }
 
             if (result.success) {
-                ToastAndroid.show(`İşlem başarıyla ${editingTransaction ? 'güncellendi' : 'eklendi'}`, ToastAndroid.LONG);
-                navigation.navigate('Home', { refresh: true });
-                navigation.setParams({ transaction: undefined });
+                ToastAndroid.show(`İşlem başarıyla ${editingTransaction ? 'güncellendi' : 'eklendi'}`, ToastAndroid.SHORT);
+
+                // Stack navigation'da doğru yönlendirme
+                navigation.navigate('MainApp', {
+                    screen: 'Home',
+                    params: { refresh: true }
+                });
+
                 resetForm();
             } else {
-                ToastAndroid.show(`Hata: ${result.message || "İşlem başarısız"}`, ToastAndroid.LONG);
+                ToastAndroid.show(`Hata: ${result.message || "İşlem başarısız"}`, ToastAndroid.SHORT);
             }
         } catch (error) {
-            ToastAndroid.show(`Hata: ${result.message || "İşlem sırasında bir hata oluştu"}`, ToastAndroid.LONG);
+            ToastAndroid.show(`Hata: ${error.message || "İşlem sırasında bir hata oluştu"}`, ToastAndroid.SHORT);
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleDeleteTransaction = async () => {
+        if (!editingTransaction) return;
+
+        Alert.alert(
+            'İşlemi Sil',
+            'Bu işlemi silmek istediğinizden emin misiniz?',
+            [
+                { text: 'İptal', style: 'cancel' },
+                {
+                    text: 'Sil',
+                    style: 'destructive',
+                    onPress: async () => {
+                        setLoading(true);
+                        setDeleting(true);
+                        try {
+                            const result = await transactionService.deleteTransaction(editingTransaction.id);
+                            if (result.success) {
+                                ToastAndroid.show('İşlem başarıyla silindi', ToastAndroid.SHORT);
+
+                                navigation.navigate('MainApp', {
+                                    screen: 'Home',
+                                    params: { refresh: true }
+                                });
+                            } else {
+                                ToastAndroid.show(`Hata: ${result.message || "Silme başarısız"}`, ToastAndroid.SHORT);
+                            }
+                        } catch (error) {
+                            ToastAndroid.show(`Hata: ${error.message || "İşlem silinirken bir hata oluştu"}`, ToastAndroid.SHORT);
+                        } finally {
+                            setLoading(false);
+                            setDeleting(false);
+                        }
+                    }
+                }
+            ]
+        );
     };
 
     const handleCategorySelect = (category) => {
@@ -332,13 +361,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
             paddingVertical: 4,
             borderRadius: 12,
         },
-        sectionHeader: {
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: colors.textPrimary,
-            marginBottom: 20,
-            marginTop: 20,
-        },
     });
 
     const renderCategoryItem = ({ item }) => (
@@ -356,23 +378,35 @@ const AddTransactionScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
+            <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
+
+            <Header
+                colors={colors}
+                title={editingTransaction ? 'İşlemi Düzenle' : 'Yeni İşlem Ekle'}
+                showLeftAction={true}
+                onLeftActionPress={() => navigation.goBack()}
+                showRightAction={!!editingTransaction}
+                rightActionIcon="delete"
+                rightIconColor={colors.softRed}
+                onRightActionPress={handleDeleteTransaction}
+            />
 
             <KeyboardAvoidingView
                 behavior={'height'}
                 style={styles.keyboardAvoidingView}
             >
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
-                    <Text style={styles.sectionHeader}>{editingTransaction ? 'İşlemi Düzenle' : 'Yeni İşlem Ekle'}</Text>
                     <View style={styles.formContainer}>
 
-                        {/* Tür Seçimi */}
                         <View style={styles.inputContainer}>
                             <Text style={styles.inputLabel}>Tür</Text>
+
+                            {/* Type selector for expense/income*/}
                             <View style={styles.typeSelector}>
+                                {/* Income button*/}
                                 <TouchableOpacity
                                     style={[
-                                        styles.typeOption, { borderColor: colors.softGreen, borderWidth: 1.5 },
+                                        styles.typeOption, { backgroundColor: colors.transparentGreen, borderColor: colors.softGreen, borderWidth: 1 },
                                         formData.type === 'income' && { borderColor: colors.border, backgroundColor: colors.success }
                                     ]}
                                     onPress={() => {
@@ -388,9 +422,11 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                         Gelir
                                     </Text>
                                 </TouchableOpacity>
+
+                                {/* Expense button */}
                                 <TouchableOpacity
                                     style={[
-                                        styles.typeOption, { borderColor: colors.softRed, borderWidth: 1.5 },
+                                        styles.typeOption, { backgroundColor: colors.transparentRed, borderColor: colors.softRed, borderWidth: 1 },
                                         formData.type === 'expense' && { borderColor: colors.border, backgroundColor: colors.error }
                                     ]}
                                     onPress={() => {
@@ -410,7 +446,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                             {formErrors.type && <Text style={styles.errorText}>{formErrors.type}</Text>}
                         </View>
 
-                        {/* Tutar */}
+                        {/* Amount */}
                         <View style={styles.inputContainer}>
                             <Text style={styles.inputLabel}>Tutar (₺)</Text>
                             <TextInput
@@ -427,7 +463,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                             {formErrors.amount && <Text style={styles.errorText}>{formErrors.amount}</Text>}
                         </View>
 
-                        {/* Kategori */}
+                        {/* Category */}
                         <View style={styles.inputContainer}>
                             <Text style={styles.inputLabel}>Kategori</Text>
                             <TouchableOpacity
@@ -450,7 +486,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                             {formErrors.category && <Text style={styles.errorText}>{formErrors.category}</Text>}
                         </View>
 
-                        {/* Açıklama */}
+                        {/* Description */}
                         <View style={styles.inputContainer}>
                             <Text style={styles.inputLabel}>Açıklama (Opsiyonel)</Text>
                             <TextInput
@@ -467,21 +503,24 @@ const AddTransactionScreen = ({ navigation, route }) => {
                             />
                         </View>
 
-                        {/* Kaydet Butonu */}
+                        {/* Save button */}
                         <TouchableOpacity
                             style={[styles.saveButton, loading && styles.buttonDisabled]}
                             onPress={handleSaveTransaction}
                             disabled={loading}
                         >
                             <Text style={styles.saveButtonText}>
-                                {loading ? 'Kaydediliyor...' : (editingTransaction ? 'Güncelle' : 'Kaydet')}
+                                {loading ?
+                                    (editingTransaction ?
+                                        (deleting ? 'Siliniyor...' : 'Güncelleniyor...') : 'Kaydediliyor...') :
+                                    (editingTransaction ? 'Güncelle' : 'Kaydet')}
                             </Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
 
-            {/* Kategori Seçim Modal */}
+            {/* Category selecion modal */}
             <Modal
                 animationType="slide"
                 transparent={true}

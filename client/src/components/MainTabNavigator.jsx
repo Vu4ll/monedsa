@@ -1,7 +1,7 @@
 import { View, TouchableOpacity, useColorScheme } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { HomeScreen, CategoryScreen, AddTransactionScreen } from "../screens";
+import { HomeScreen, CategoryScreen } from "../screens";
 import { getColors } from '../constants';
 
 const Tab = createBottomTabNavigator();
@@ -77,8 +77,8 @@ function MainTabNavigator({ onLogout }) {
 
             <Tab.Screen
                 name="AddTransaction"
-                component={AddTransactionScreen}
-                options={{
+                component={EmptyComponent}
+                options={({ navigation }) => ({
                     tabBarLabel: '',
                     tabBarIcon: ({ focused, color }) => (
                         <View style={{
@@ -101,7 +101,13 @@ function MainTabNavigator({ onLogout }) {
                             <Icon name="add" size={28} color={colors.white} />
                         </View>
                     ),
-                }}
+                    tabBarButton: (props) => (
+                        <TouchableOpacity
+                            {...props}
+                            onPress={() => navigation.navigate('AddTransactionStack')}
+                        />
+                    ),
+                })}
             />
 
             <Tab.Screen

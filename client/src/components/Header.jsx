@@ -1,12 +1,50 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export const Header = ({ colors, title, showBackButton = false, onBackPress }) => {
+export const Header = ({ colors, title, showLeftAction = false, leftActionIcon = "arrow-back", onLeftActionPress, showRightAction = false, rightActionIcon = "more-vert", rightIconColor = colors.text, onRightActionPress }) => {
+  const styles = StyleSheet.create({
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingTop: 36,
+      paddingBottom: 12,
+      paddingHorizontal: 16,
+      position: "relative",
+      backgroundColor: colors.headerBackgroud,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
+    },
+    backButton: {
+      position: "absolute",
+      left: 16,
+      top: 36,
+      padding: 8,
+      zIndex: 1,
+    },
+    titleContainer: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+    rightButton: {
+      position: "absolute",
+      right: 16,
+      top: 36,
+      padding: 8,
+      zIndex: 1,
+    },
+  });
+
   return (
     <View style={[styles.header]}>
-      {showBackButton && (
-        <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
-          <Icon name="arrow-back" size={24} color={colors.text} />
+      {showLeftAction && (
+        <TouchableOpacity style={styles.backButton} onPress={onLeftActionPress}>
+          <Icon name={leftActionIcon} size={24} color={colors.text} />
         </TouchableOpacity>
       )}
       <View style={styles.titleContainer}>
@@ -14,34 +52,11 @@ export const Header = ({ colors, title, showBackButton = false, onBackPress }) =
           {title || "Gider Takip"}
         </Text>
       </View>
+      {showRightAction && (
+        <TouchableOpacity style={styles.rightButton} onPress={onRightActionPress}>
+          <Icon name={rightActionIcon} size={24} color={rightIconColor} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingTop: 36,
-    paddingBottom: 12,
-    paddingHorizontal: 16,
-    position: "relative",
-  },
-  backButton: {
-    position: "absolute",
-    left: 16,
-    top: 36,
-    padding: 8,
-    zIndex: 1,
-  },
-  titleContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});

@@ -206,7 +206,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             borderRadius: 12,
             padding: 16,
             alignItems: 'center',
-            marginTop: 20,
+            marginBottom: 10,
         },
         logoutText: {
             color: colors.white,
@@ -222,8 +222,8 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             <Header
                 colors={colors}
                 title="Profil"
-                showBackButton={true}
-                onBackPress={() => navigation.goBack()}
+                showLeftAction={true}
+                onLeftActionPress={() => navigation.goBack()}
             />
 
             {loading ? (

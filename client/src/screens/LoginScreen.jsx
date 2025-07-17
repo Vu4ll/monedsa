@@ -12,7 +12,8 @@ import {
     Platform,
     TouchableWithoutFeedback,
     Keyboard,
-    SafeAreaView
+    SafeAreaView,
+    StatusBar
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getColors } from '../constants';
@@ -32,15 +33,13 @@ const LoginScreen = ({ navigation, onLogin }) => {
 
     const validateForm = () => {
         const newErrors = {};
-        
-        // Email/Username validation
+
         if (!email || !email.trim()) {
             newErrors.email = 'E-posta veya kullanıcı adı gerekli';
         } else if (email.trim().length < 2) {
             newErrors.email = 'En az 2 karakter olmalıdır';
         }
 
-        // Password validation
         if (!password || !password.trim()) {
             newErrors.password = 'Parola gerekli';
         } else if (password.length < 8) {
@@ -59,13 +58,10 @@ const LoginScreen = ({ navigation, onLogin }) => {
             const result = await authService.login(email.trim(), password);
 
             if (result.success) {
-                // Ana ekrana yönlendir
                 onLogin && onLogin();
             } else {
-                // Sunucudan gelen hata mesajlarını kontrol et
                 const errorMessage = result.error || 'Giriş başarısız';
-                
-                // Spesifik hata mesajlarını form alanlarına yansıt
+
                 if (errorMessage.includes('User not found') || errorMessage.includes('Invalid credentials')) {
                     setErrors({ email: 'Kullanıcı bulunamadı veya hatalı bilgiler' });
                 } else if (errorMessage.includes('Invalid password')) {
@@ -73,7 +69,6 @@ const LoginScreen = ({ navigation, onLogin }) => {
                 } else if (errorMessage.includes('Network') || errorMessage.includes('connection')) {
                     Alert.alert('Bağlantı Hatası', 'İnternet bağlantınızı kontrol edin');
                 } else {
-                    // Genel hata mesajı
                     setErrors({ email: errorMessage });
                 }
             }
@@ -214,6 +209,8 @@ const LoginScreen = ({ navigation, onLogin }) => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+            <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
+
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

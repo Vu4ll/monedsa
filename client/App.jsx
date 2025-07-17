@@ -30,9 +30,15 @@ function App() {
             <Stack.Screen name="MainApp">
               {(props) => <MainTabNavigator {...props} onLogout={logout} />}
             </Stack.Screen>
+
             <Stack.Screen name="ProfileStack">
               {(props) => <ProfileScreen {...props} onLogout={logout} />}
             </Stack.Screen>
+
+            <Stack.Screen name="AddTransactionStack">
+              {(props) => <AddTransactionScreen {...props} onLogout={logout} />}
+            </Stack.Screen>
+
             <Stack.Screen name="SettingsStack" component={SettingsScreen} />
           </>
         ) : (

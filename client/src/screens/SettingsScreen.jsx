@@ -152,11 +152,11 @@ const SettingsScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
 
-            <Header 
-                colors={colors} 
-                title="Ayarlar" 
-                showBackButton={true} 
-                onBackPress={() => navigation.goBack()} 
+            <Header
+                colors={colors}
+                title="Ayarlar"
+                showLeftAction={true}
+                onLeftActionPress={() => navigation.goBack()}
             />
 
             <ScrollView contentContainerStyle={styles.scrollContainer}>
