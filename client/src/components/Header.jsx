@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export const Header = ({ colors, title, showLeftAction = false, leftActionIcon = "arrow-back", onLeftActionPress, showRightAction = false, rightActionIcon = "more-vert", rightIconColor = colors.text, onRightActionPress }) => {
@@ -6,7 +6,7 @@ export const Header = ({ colors, title, showLeftAction = false, leftActionIcon =
     header: {
       flexDirection: "row",
       alignItems: "center",
-      paddingTop: 36,
+      paddingTop: StatusBar.currentHeight + 4,
       paddingBottom: 12,
       paddingHorizontal: 16,
       position: "relative",
@@ -17,7 +17,7 @@ export const Header = ({ colors, title, showLeftAction = false, leftActionIcon =
     backButton: {
       position: "absolute",
       left: 16,
-      top: 36,
+      top: StatusBar.currentHeight + 4,
       padding: 8,
       zIndex: 1,
     },
@@ -34,7 +34,7 @@ export const Header = ({ colors, title, showLeftAction = false, leftActionIcon =
     rightButton: {
       position: "absolute",
       right: 16,
-      top: 36,
+      top: StatusBar.currentHeight + 4,
       padding: 8,
       zIndex: 1,
     },
