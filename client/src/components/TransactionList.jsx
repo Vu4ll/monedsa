@@ -133,12 +133,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   summaryLabel: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
-    marginBottom: 4,
   },
   summaryValue: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   balanceContainer: {
@@ -153,21 +152,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   balanceLabel: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '500',
-    marginBottom: 4,
   },
   balanceValue: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
   },
-  summaryText: {
-    fontSize: 16,
-    marginBottom: 15,
-    textAlign: "center",
-  },
   noDataText: {
-    fontSize: 16,
+    fontSize: 24,
     textAlign: "center",
     marginTop: 50,
   },

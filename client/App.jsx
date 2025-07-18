@@ -1,16 +1,16 @@
-import React from 'react';
 import { View, ActivityIndicator, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { LoginScreen, RegisterScreen, ProfileScreen, SettingsScreen, AddTransactionScreen } from "./src/screens";
 import { MainTabNavigator } from './src/components';
-import { useAuth } from './src/hooks';
+import { useAuth, useNetworkStatus } from './src/hooks';
 import { getColors } from './src/constants';
 
 const Stack = createStackNavigator();
 
 function App() {
   const { isAuthenticated, isLoading, login, logout } = useAuth();
+  const { isConnected } = useNetworkStatus();
   const isDarkMode = useColorScheme() === "dark";
   const colors = getColors(isDarkMode);
 
