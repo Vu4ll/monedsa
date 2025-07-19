@@ -31,18 +31,30 @@ router.get("/list", verifyToken, async (req, res) => {
         const userCategoryIds = categories
             .filter(cat => !cat.isDefault)
             .map(cat => cat._id);
-        const categoriesWithTransactions = await Transaction.distinct('category', {
+        const userCategoriesWithTransactions = await Transaction.distinct('category', {
             category: { $in: userCategoryIds },
             userId: req.user.id
+        });
+
+        const defaultCategoryIds = categories
+            .filter(cat => cat.isDefault)
+            .map(cat => cat._id);
+        const defaultCategoriesWithTransactions = await Transaction.distinct('category', {
+            category: { $in: defaultCategoryIds }
         });
 
         const transformedData = categories.map(cat => {
             let isDeletable = true;
 
-            if (cat.isDefault) isDeletable = false;
-            else isDeletable = !categoriesWithTransactions.some(id =>
-                id.toString() === cat._id.toString()
-            );
+            if (cat.isDefault) {
+                isDeletable = !defaultCategoriesWithTransactions.some(id =>
+                    id.toString() === cat._id.toString()
+                );
+            } else {
+                isDeletable = !userCategoriesWithTransactions.some(id =>
+                    id.toString() === cat._id.toString()
+                );
+            }
 
             return {
                 id: cat._id,

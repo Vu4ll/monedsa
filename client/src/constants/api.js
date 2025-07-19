@@ -22,6 +22,11 @@ export const API_CONFIG = {
       ADD: "/api/category/add",
       EDIT: "/api/category/edit/",
       DELETE: "/api/category/delete/",
+      ADMIN: {
+        ADD: "/api/category/admin/add",
+        EDIT: "/api/category/admin/edit/",
+        DELETE: "/api/category/admin/delete/",
+      },
     },
 
     PROFILE: {
