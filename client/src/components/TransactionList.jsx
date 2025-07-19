@@ -133,11 +133,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   summaryLabel: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
   },
   summaryValue: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   balanceContainer: {

@@ -230,18 +230,6 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             color: colors.textPrimary,
             flex: 1,
         },
-        logoutButton: {
-            backgroundColor: colors.danger,
-            borderRadius: 12,
-            padding: 16,
-            alignItems: 'center',
-            marginBottom: 10,
-        },
-        logoutText: {
-            color: colors.white,
-            fontSize: 16,
-            fontWeight: '600',
-        },
     });
 
     return (
@@ -253,6 +241,10 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 title="Profil"
                 showLeftAction={true}
                 onLeftActionPress={() => navigation.goBack()}
+                showRightAction={true}
+                rightActionIcon='logout'
+                rightIconColor={colors.softRed}
+                onRightActionPress={handleLogout}
             />
 
             {loading ? (
@@ -342,10 +334,6 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                         </TouchableOpacity>
                     </View>
-
-                    <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                        <Text style={styles.logoutText}>Çıkış Yap</Text>
-                    </TouchableOpacity>
                 </ScrollView>
             )}
         </SafeAreaView>
