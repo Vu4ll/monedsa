@@ -154,7 +154,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         userName: {
             fontSize: 22,
             fontWeight: 'bold',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 4,
         },
         userEmail: {
@@ -181,7 +181,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         sectionTitle: {
             fontSize: 18,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 16,
         },
         infoRow: {
@@ -203,7 +203,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         infoValue: {
             fontSize: 16,
             fontWeight: '500',
-            color: colors.textPrimary,
+            color: colors.text,
         },
         actionSection: {
             backgroundColor: colors.cardBackground,
@@ -227,7 +227,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         },
         actionText: {
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
             flex: 1,
         },
     });

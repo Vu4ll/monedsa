@@ -211,7 +211,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         inputLabel: {
             fontSize: 16,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 8,
         },
         input: {
@@ -221,7 +221,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
             paddingHorizontal: 16,
             paddingVertical: 12,
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
             backgroundColor: colors.cardBackground,
         },
         inputError: {
@@ -252,7 +252,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         },
         typeOptionText: {
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
         },
         selectedTypeText: {
             color: colors.white,
@@ -281,7 +281,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         },
         categoryText: {
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
         },
         placeholderText: {
             color: colors.textSecondary,
@@ -328,7 +328,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         modalTitle: {
             fontSize: 18,
             fontWeight: 'bold',
-            color: colors.textPrimary,
+            color: colors.text,
         },
         modalCloseButton: {
             padding: 4,
@@ -349,7 +349,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         },
         categoryModalName: {
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
             marginLeft: 12,
             flex: 1,
         },

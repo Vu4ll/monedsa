@@ -230,7 +230,7 @@ const RegisterScreen = ({ navigation }) => {
         label: {
             fontSize: 16,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 8,
         },
         input: {
@@ -240,7 +240,7 @@ const RegisterScreen = ({ navigation }) => {
             paddingHorizontal: 16,
             paddingVertical: 12,
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
             backgroundColor: colors.cardBackground,
         },
         passwordContainer: {
@@ -254,7 +254,7 @@ const RegisterScreen = ({ navigation }) => {
             paddingVertical: 12,
             paddingRight: 50,
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
             backgroundColor: colors.cardBackground,
         },
         passwordToggle: {

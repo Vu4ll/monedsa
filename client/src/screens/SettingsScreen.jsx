@@ -68,7 +68,7 @@ const SettingsScreen = ({ navigation }) => {
         sectionHeader: {
             fontSize: 20,
             fontWeight: 'bold',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 20,
             marginTop: 20,
         },
@@ -81,7 +81,7 @@ const SettingsScreen = ({ navigation }) => {
         sectionTitle: {
             fontSize: 18,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 16,
         },
         settingRow: {
@@ -104,7 +104,7 @@ const SettingsScreen = ({ navigation }) => {
         settingTitle: {
             fontSize: 16,
             fontWeight: '500',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 2,
         },
         settingDescription: {
@@ -144,7 +144,7 @@ const SettingsScreen = ({ navigation }) => {
         aboutValue: {
             fontSize: 16,
             fontWeight: '500',
-            color: colors.textPrimary,
+            color: colors.text,
         },
     });
 

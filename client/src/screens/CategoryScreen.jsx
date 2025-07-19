@@ -22,7 +22,7 @@ import { categoryService, authService } from '../services';
 import { useFocusEffect } from '@react-navigation/native';
 import { Header } from '../components';
 
-const CategoryScreen = ({ navigation }) => {
+const CategoryScreen = ({ navigation, route }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const colors = getColors(isDarkMode);
     const [categories, setCategories] = useState([]);
@@ -48,6 +48,13 @@ const CategoryScreen = ({ navigation }) => {
         loadCategories();
         loadUserRole();
     }, []);
+
+    useEffect(() => {
+        if (route?.params?.openAddModal) {
+            handleAddCategory();
+            navigation.setParams({ openAddModal: undefined });
+        }
+    }, [route?.params?.openAddModal]);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -255,7 +262,7 @@ const CategoryScreen = ({ navigation }) => {
         categoryName: {
             fontSize: 16,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: colors.text,
         },
         categoryCorner: {
             position: 'absolute',
@@ -328,7 +335,7 @@ const CategoryScreen = ({ navigation }) => {
         modalTitle: {
             fontSize: 20,
             fontWeight: 'bold',
-            color: colors.textPrimary,
+            color: colors.text,
         },
         modalCloseButton: {
             padding: 4,
@@ -339,7 +346,7 @@ const CategoryScreen = ({ navigation }) => {
         inputLabel: {
             fontSize: 16,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 8,
         },
         input: {
@@ -349,7 +356,7 @@ const CategoryScreen = ({ navigation }) => {
             paddingHorizontal: 12,
             paddingVertical: 12,
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
             backgroundColor: colors.background,
         },
         inputError: {
@@ -374,7 +381,7 @@ const CategoryScreen = ({ navigation }) => {
         },
         typeOptionText: {
             fontSize: 16,
-            color: colors.textPrimary,
+            color: colors.text,
         },
         selectedTypeText: {
             color: colors.white,
@@ -385,7 +392,7 @@ const CategoryScreen = ({ navigation }) => {
         colorPickerLabel: {
             fontSize: 16,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: colors.text,
             marginBottom: 8,
         },
         colorGrid: {
@@ -401,7 +408,7 @@ const CategoryScreen = ({ navigation }) => {
             borderColor: 'transparent',
         },
         selectedColor: {
-            borderColor: colors.textPrimary,
+            borderColor: colors.text,
         },
         modalButtons: {
             flexDirection: 'row',
@@ -472,7 +479,7 @@ const CategoryScreen = ({ navigation }) => {
         checkboxLabel: {
             fontSize: 16,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: colors.text,
         },
         checkboxDescription: {
             fontSize: 12,
@@ -501,12 +508,16 @@ const CategoryScreen = ({ navigation }) => {
                     </View>
                 </View>
 
-                {item.isDefault && (
+                {item.isDefault ? (
                     <View style={styles.defaultIndicator}>
                         {userRole === "admin" ?
-                            <Icon name="admin-panel-settings" size={20} color={colors.primary} /> :
+                            <Icon name="admin-panel-settings" size={20} color={colors.secondary} /> :
                             <Icon name="lock" size={20} color={colors.textSecondary} />
                         }
+                    </View>
+                ) : (
+                    <View style={styles.defaultIndicator}>
+                        <Icon name="person" size={20} color={colors.primary}></Icon>
                     </View>
                 )}
             </View>
@@ -515,7 +526,7 @@ const CategoryScreen = ({ navigation }) => {
 
     const renderColorPicker = () => (
         <View style={styles.colorPickerContainer}>
-            <Text style={styles.colorPickerLabel}>Renk Seçin:</Text>
+            <Text style={styles.colorPickerLabel}>Renk Seçin</Text>
             <View style={styles.colorGrid}>
                 {colorOptions.map((color) => (
                     <TouchableOpacity
@@ -574,17 +585,18 @@ const CategoryScreen = ({ navigation }) => {
         <View style={styles.container}>
             <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
 
-            <Header colors={colors} title="Kategoriler" />
+            <Header
+                colors={colors}
+                title="Kategoriler"
+                showLeftAction={true}
+                leftActionIcon="filter-list"
+                onLeftActionPress={() => { ToastAndroid.show("Sıralama", ToastAndroid.SHORT) }}
+                showRightAction={true}
+                rightActionIcon="filter-alt"
+                onRightActionPress={() => { ToastAndroid.show("Filtreleme", ToastAndroid.SHORT) }}
+            />
 
             <View style={styles.content}>
-                <TouchableOpacity
-                    style={styles.addButton}
-                    onPress={handleAddCategory}
-                >
-                    <Icon name="add" size={20} color={colors.white} />
-                    <Text style={styles.addButtonText}>Yeni Kategori</Text>
-                </TouchableOpacity>
-
                 <FlatList
                     data={categories}
                     renderItem={renderCategory}
@@ -629,7 +641,7 @@ const CategoryScreen = ({ navigation }) => {
                                 <TextInput
                                     style={[styles.input, formErrors.name && styles.inputError]}
                                     value={formData.name}
-                                    onChangeText={(text) => setFormData(prev => ({ ...prev, name: text }))}
+                                    onChangeText={(text) => setFormData(prev => ({ ...prev, name: text.charAt(0).toUpperCase() + text.slice(1) }))}
                                     placeholder="Kategori adını girin"
                                     placeholderTextColor={colors.textSecondary}
                                 />

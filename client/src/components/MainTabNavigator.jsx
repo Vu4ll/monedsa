@@ -1,5 +1,6 @@
 import { View, TouchableOpacity, useColorScheme } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigationState } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { HomeScreen, CategoryScreen } from "../screens";
 import { getColors } from '../constants';
@@ -101,12 +102,27 @@ function MainTabNavigator({ onLogout }) {
                             <Icon name="add" size={28} color={colors.white} />
                         </View>
                     ),
-                    tabBarButton: (props) => (
-                        <TouchableOpacity
-                            {...props}
-                            onPress={() => navigation.navigate('AddTransactionStack')}
-                        />
-                    ),
+                    tabBarButton: (props) => {
+                        const AddButton = (buttonProps) => {
+                            const navigationState = useNavigationState(state => state);
+                            const currentRouteName = navigationState?.routes?.[navigationState.index]?.name;
+
+                            return (
+                                <TouchableOpacity
+                                    {...buttonProps}
+                                    onPress={() => {
+                                        if (currentRouteName === 'Category') {
+                                            navigation.navigate('Category', { openAddModal: true });
+                                        } else {
+                                            navigation.navigate('AddTransactionStack');
+                                        }
+                                    }}
+                                />
+                            );
+                        };
+
+                        return <AddButton {...props} />;
+                    },
                 })}
             />
 
