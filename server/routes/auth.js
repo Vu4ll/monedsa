@@ -9,16 +9,19 @@ const { emailRegex, usernameRegex, passwordRegex } = config;
 const { badRequest, serverError } = require("../util/functions");
 const User = require("../models/user");
 const locale = require("../locales/en.json");
+const { seedCategoriesForUser } = require("../seeds/categorySeed");
 
 router.post("/register", async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 
-    const { email, password, username, name } = req.body;
+    const { email, password, username, name, language } = req.body;
 
     if (!email) return badRequest(res, locale.register.fail.emailField);
     if (!password) return badRequest(res, locale.register.fail.passwordField);
     if (!username) return badRequest(res, locale.register.fail.usernameField);
     if (!name) return badRequest(res, locale.register.fail.nameField);
+
+    const userLanguage = language && ["en", "tr"].includes(language) ? language : "en";
 
     if (email && !emailRegex.test(email)) return badRequest(res, locale.register.fail.invalidEmail);
     if (username && !usernameRegex.test(username)) return badRequest(res, locale.register.fail.invalidUsername);
@@ -57,6 +60,13 @@ router.post("/register", async (req, res) => {
                 name: newUser.name,
             }
         });
+
+        try {
+            await seedCategoriesForUser(newUser._id, userLanguage);
+            console.log(`Default categories (${userLanguage}) created for new user: ${newUser.username}`);
+        } catch (categoryError) {
+            console.error(`Error creating categories for user ${newUser.username}:`, categoryError);
+        }
     } catch (error) {
         console.error(`Register error: \n${error.message}`);
         return serverError(res, locale.register.fail.serverError);

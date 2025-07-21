@@ -107,7 +107,8 @@ const RegisterScreen = ({ navigation }) => {
                 username: formData.username.trim(),
                 email: formData.email.trim(),
                 name: formData.name.trim(),
-                password: formData.password
+                password: formData.password,
+                language: "tr" // temptorarily
             });
 
             if (response.success) {

@@ -19,7 +19,7 @@ router.post("/add", verifyToken, async (req, res) => {
     const { amount, description, category, type } = req.body;
     const getCategory = await Category.findOne({
         name: category, type,
-        $or: [{ isDefault: true }, { userId: req.user.id }]
+        userId: req.user.id,
     });
 
     if (!type) return badRequest(res, locale.transaction.fail.add.typeField);

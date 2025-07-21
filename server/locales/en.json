@@ -125,12 +125,6 @@
             },
             "delete": {
                 "deleted": "Category deleted successfully."
-            },
-            "admin": {
-                "defaultListed": "Default categories listed successfully.",
-                "defaultAdded": "Default category added successfully.",
-                "defaultUpdated": "Default category updated successfully.",
-                "defaultDeleted": "Default category deleted successfully."
             }
         },
         "fail": {
@@ -162,12 +156,6 @@
                 "notFound": "Category not found or access denied.",
                 "serverError": "Server error occurred while deleting category.",
                 "isRelated": "This category cannot be deleted because there are related transactions."
-            },
-            "admin": {
-                "listError": "Server error occurred while listing default categories.",
-                "addError": "Server error occurred while adding default category.",
-                "editError": "Server error occurred while editing default category.",
-                "deleteError": "Server error occurred while deleting default category."
             }
         }
     },
@@ -193,6 +181,18 @@
             "incorrectCurrentPassword": "Current password is incorrect.",
             "samePassword": "New password cannot be the same as current password.",
             "serverError": "Server error occurred."
+        }
+    },
+    "categorySeed": {
+        "fail": {
+            "noUsers": "No users found. Please create users first.",
+            "seedError": "Error seeding categories"
+        },
+        "success": {
+            "creating": "Found {length} users. Creating categories for each user...",
+            "createdUser": "Created category for user {id}: {name} ({type})",
+            "added": "Added {count} new categories for user: {username}",
+            "addedAll": "Categories seeded successfully for all users!"
         }
     }
 }

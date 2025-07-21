@@ -146,11 +146,9 @@ router.put("/change-password", verifyToken, async (req, res) => {
 router.get("/stats", verifyToken, async (req, res) => {
     try {
         const Transaction = require("../models/transaction");
-        const Category = require("../models/category");
 
-        const [totalTransactions, totalCategories, expenseCount, incomeCount] = await Promise.all([
+        const [totalTransactions, expenseCount, incomeCount] = await Promise.all([
             Transaction.countDocuments({ userId: req.user.id }),
-            Category.countDocuments({ userId: req.user.id }),
             Transaction.countDocuments({ userId: req.user.id, type: "expense" }),
             Transaction.countDocuments({ userId: req.user.id, type: "income" })
         ]);
@@ -178,9 +176,6 @@ router.get("/stats", verifyToken, async (req, res) => {
                     total: totalTransactions,
                     expense: expenseCount,
                     income: incomeCount
-                },
-                categories: {
-                    userOwned: totalCategories
                 },
                 summary: {
                     totalExpense,

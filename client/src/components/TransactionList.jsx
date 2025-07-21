@@ -7,12 +7,34 @@ export const TransactionList = ({ transactions, loading, colors, navigation }) =
 
   const handleEdit = (transaction) => navigation.navigate('AddTransactionStack', { transaction });
 
-  if (!transactions) {
-    return (
-      <Text style={[styles.noDataText, { color: colors.textSecondary }]}>
-        {loading ? "Veriler yükleniyor..." : "Henüz veri yok."}
+  const renderEmptyState = () => (
+    <View style={styles.emptyStateContainer}>
+      <Icon name="receipt-long" size={80} color={colors.textSecondary} />
+      <Text style={[styles.emptyStateTitle, { color: colors.text }]}>Henüz işlem bulunmuyor</Text>
+      <Text style={[styles.emptyStateSubtitle, { color: colors.textSecondary }]}>
+        Gezinme çubuğundaki + tuşuna basarak{'\n'}ilk işleminizi ekleyebilirsiniz.
       </Text>
-    );
+    </View>
+  );
+
+  const renderLoadingState = () => (
+    <View style={styles.loadingContainer}>
+      <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+        Veriler yükleniyor...
+      </Text>
+    </View>
+  );
+
+  if (loading && !transactions) {
+    return renderLoadingState();
+  }
+
+  if (!loading && (!transactions || (transactions?.data && transactions?.data?.length === 0))) {
+    return renderEmptyState();
+  }
+
+  if (!transactions) {
+    return renderLoadingState();
   }
 
   return (
@@ -159,9 +181,32 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
   },
-  noDataText: {
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
     fontSize: 24,
+    fontWeight: "bold",
     textAlign: "center",
-    marginTop: 50,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  emptyStateTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginTop: 24,
+    textAlign: 'center',
+  },
+  emptyStateSubtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 12,
+    lineHeight: 24,
   },
 });

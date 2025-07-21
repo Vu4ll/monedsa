@@ -27,7 +27,6 @@ const CategoryScreen = ({ navigation, route }) => {
     const colors = getColors(isDarkMode);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [userRole, setUserRole] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingCategory, setEditingCategory] = useState(null);
@@ -35,7 +34,6 @@ const CategoryScreen = ({ navigation, route }) => {
         name: '',
         color: '#39BE56',
         type: 'income',
-        isDefault: false
     });
     const [formErrors, setFormErrors] = useState({});
 
@@ -46,7 +44,6 @@ const CategoryScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         loadCategories();
-        loadUserRole();
     }, []);
 
     useEffect(() => {
@@ -59,14 +56,8 @@ const CategoryScreen = ({ navigation, route }) => {
     useFocusEffect(
         React.useCallback(() => {
             loadCategories();
-            loadUserRole();
         }, [])
     );
-
-    const loadUserRole = async () => {
-        const result = (await authService.getProfile());
-        if (result.success) setUserRole(result.data.role);
-    };
 
     const loadCategories = async () => {
         setLoading(true);
@@ -125,11 +116,9 @@ const CategoryScreen = ({ navigation, route }) => {
         try {
             let result;
             if (editingCategory) {
-                const useAdminEndpoint = editingCategory.isDefault && userRole === "admin";
-                result = await categoryService.updateCategory(editingCategory.id, formData, useAdminEndpoint);
+                result = await categoryService.updateCategory(editingCategory.id, formData);
             } else {
-                const useAdminEndpoint = formData.isDefault && userRole === "admin";
-                result = await categoryService.addCategory(formData, useAdminEndpoint);
+                result = await categoryService.addCategory(formData);
             }
 
             if (result.success) {
@@ -156,8 +145,7 @@ const CategoryScreen = ({ navigation, route }) => {
                     style: 'destructive',
                     onPress: async () => {
                         try {
-                            const useAdminEndpoint = category.isDefault && userRole === "admin";
-                            const result = await categoryService.deleteCategory(category.id, useAdminEndpoint);
+                            const result = await categoryService.deleteCategory(category.id);
                             if (result.success) {
                                 loadCategories();
                                 ToastAndroid.show("Kategori başarıyla silindi", ToastAndroid.SHORT);
@@ -179,7 +167,6 @@ const CategoryScreen = ({ navigation, route }) => {
             name: category.name,
             color: category.color,
             type: category.type,
-            isDefault: category.isDefault,
         });
         setModalVisible(true);
     };
@@ -189,7 +176,6 @@ const CategoryScreen = ({ navigation, route }) => {
             name: '',
             color: '#39BE56',
             type: 'income',
-            isDefault: false
         });
         setFormErrors({});
         setEditingCategory(null);
@@ -207,27 +193,10 @@ const CategoryScreen = ({ navigation, route }) => {
         },
         content: {
             flex: 1,
-            paddingTop: 20,
-        },
-        addButton: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: colors.primary,
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            borderRadius: 8,
-            marginBottom: 16,
-            alignSelf: 'center',
-        },
-        addButtonText: {
-            color: colors.white,
-            fontSize: 16,
-            fontWeight: '600',
-            marginLeft: 8,
         },
         listContainer: {
             paddingHorizontal: 20,
-            paddingVertical: 10,
+            paddingTop: 16,
         },
         categoryItem: {
             flexDirection: 'row',
@@ -278,33 +247,11 @@ const CategoryScreen = ({ navigation, route }) => {
         categoryType: {
             fontSize: 14,
             color: colors.textSecondary,
-            marginTop: 2,
+            // marginTop: 2,
         },
         categoryActions: {
             flexDirection: 'row',
             gap: 10,
-        },
-        editButton: {
-            paddingHorizontal: 12,
-            paddingVertical: 6,
-            backgroundColor: colors.primary,
-            borderRadius: 6,
-        },
-        editButtonText: {
-            color: colors.white,
-            fontSize: 14,
-            fontWeight: '600',
-        },
-        deleteButton: {
-            paddingHorizontal: 12,
-            paddingVertical: 6,
-            backgroundColor: colors.danger,
-            borderRadius: 6,
-        },
-        deleteButtonText: {
-            color: colors.white,
-            fontSize: 14,
-            fontWeight: '600',
         },
         modalOverlay: {
             flex: 1,
@@ -449,6 +396,29 @@ const CategoryScreen = ({ navigation, route }) => {
             fontSize: 16,
             color: colors.textSecondary,
         },
+        emptyStateContainer: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 40,
+        },
+        emptyStateTitle: {
+            fontSize: 20,
+            fontWeight: '600',
+            color: colors.text,
+            marginTop: 24,
+            textAlign: 'center',
+        },
+        emptyStateSubtitle: {
+            fontSize: 16,
+            color: colors.textSecondary,
+            textAlign: 'center',
+            marginTop: 12,
+            lineHeight: 24,
+        },
+        emptyListContainer: {
+            flexGrow: 1,
+        },
         defaultIndicator: {
             padding: 8,
             backgroundColor: colors.background,
@@ -456,70 +426,29 @@ const CategoryScreen = ({ navigation, route }) => {
             justifyContent: 'center',
             alignItems: 'center',
         },
-        checkboxContainer: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 8,
-        },
-        checkbox: {
-            width: 20,
-            height: 20,
-            borderRadius: 4,
-            borderWidth: 2,
-            borderColor: colors.border,
-            marginRight: 12,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: colors.background,
-        },
-        checkboxChecked: {
-            backgroundColor: colors.primary,
-            borderColor: colors.primary,
-        },
-        checkboxLabel: {
-            fontSize: 16,
-            fontWeight: '600',
-            color: colors.text,
-        },
-        checkboxDescription: {
-            fontSize: 12,
-            color: colors.textSecondary,
-            fontStyle: 'italic',
-            marginLeft: 32,
-        },
     });
 
     const renderCategory = ({ item }) => (
         <TouchableOpacity
-            onPress={() => (userRole === "admin" || !item.isDefault) && handleEditCategory(item)}
-            disabled={item.isDefault && userRole !== "admin"}
-            activeOpacity={item.isDefault && userRole !== "admin" ? 1 : 0.7}
+            onPress={() => handleEditCategory(item)}
         >
             <View style={styles.categoryItem}>
                 <View style={[styles.categoryCorner, { borderTopColor: item.type === "income" ? colors.softGreen : colors.softRed }]} />
                 <View style={styles.categoryInfo}>
                     <View style={[styles.colorIndicator, { backgroundColor: item.color }]} />
                     <View style={styles.categoryDetails}>
-                        <Text style={styles.categoryName}>{item.name}</Text>
-                        <Text style={styles.categoryType}>
-                            {item.type === 'expense' ? 'Gider' : 'Gelir'}
-                            {item.isDefault ? ' • Varsayılan' : ' • Kullanıcı'}
+                        <Text style={styles.categoryName}>
+                            {item.name}
+                            <Text style={styles.categoryType}>
+                                {item.type === 'expense' ? '  •  Gider' : '  •  Gelir'}
+                            </Text>
                         </Text>
                     </View>
                 </View>
 
-                {item.isDefault ? (
-                    <View style={styles.defaultIndicator}>
-                        {userRole === "admin" ?
-                            <Icon name="admin-panel-settings" size={20} color={colors.secondary} /> :
-                            <Icon name="lock" size={20} color={colors.textSecondary} />
-                        }
-                    </View>
-                ) : (
-                    <View style={styles.defaultIndicator}>
-                        <Icon name="person" size={20} color={colors.primary}></Icon>
-                    </View>
-                )}
+                <View style={styles.defaultIndicator}>
+                    <Icon name="edit" size={20} color={colors.text}></Icon>
+                </View>
             </View>
         </TouchableOpacity>
     );
@@ -544,31 +473,16 @@ const CategoryScreen = ({ navigation, route }) => {
         </View>
     );
 
-    const renderDefaultCheckbox = () => {
-        if (userRole !== "admin" || editingCategory) return null;
 
-        return (
-            <View style={styles.inputContainer}>
-                <TouchableOpacity
-                    style={styles.checkboxContainer}
-                    onPress={() => setFormData(prev => ({ ...prev, isDefault: !prev.isDefault }))}
-                >
-                    <View style={[
-                        styles.checkbox,
-                        formData.isDefault && styles.checkboxChecked
-                    ]}>
-                        {formData.isDefault && (
-                            <Icon name="check" size={16} color={colors.white} />
-                        )}
-                    </View>
-                    <Text style={styles.checkboxLabel}>Varsayılan Kategori</Text>
-                </TouchableOpacity>
-                <Text style={styles.checkboxDescription}>
-                    Varsayılan kategoriler tüm kullanıcılar tarafından görülebilir ve kullanılabilir.
-                </Text>
-            </View>
-        );
-    };
+    const renderEmptyState = () => (
+        <View style={styles.emptyStateContainer}>
+            <Icon name="category" size={80} color={colors.textSecondary} />
+            <Text style={styles.emptyStateTitle}>Henüz kategori bulunmuyor</Text>
+            <Text style={styles.emptyStateSubtitle}>
+                Gezinme çubuğundaki + tuşuna basarak{'\n'}ilk kategorinizi ekleyebilirsiniz.
+            </Text>
+        </View>
+    );
 
     if (loading) {
         return (
@@ -601,8 +515,12 @@ const CategoryScreen = ({ navigation, route }) => {
                     data={categories}
                     renderItem={renderCategory}
                     keyExtractor={(item) => item.id}
-                    contentContainerStyle={styles.listContainer}
+                    contentContainerStyle={[
+                        styles.listContainer,
+                        categories.length === 0 && styles.emptyListContainer
+                    ]}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={renderEmptyState}
                     refreshControl={
                         <RefreshControl
                             refreshing={refreshing}
@@ -685,7 +603,6 @@ const CategoryScreen = ({ navigation, route }) => {
                             </View>
 
                             {renderColorPicker()}
-                            {renderDefaultCheckbox()}
 
                             <View style={styles.modalButtons}>
                                 <TouchableOpacity
@@ -697,22 +614,17 @@ const CategoryScreen = ({ navigation, route }) => {
                                     </Text>
                                 </TouchableOpacity>
 
-                                {editingCategory && (
-                                    editingCategory.isDeletable && (
-                                        (!editingCategory.isDefault) ||
-                                        (editingCategory.isDefault && userRole === "admin")
-                                    )
-                                ) && (
-                                        <TouchableOpacity
-                                            style={styles.deleteButton}
-                                            onPress={() => {
-                                                setModalVisible(false);
-                                                handleDeleteCategory(editingCategory);
-                                            }}
-                                        >
-                                            <Text style={styles.deleteButtonText}>Sil</Text>
-                                        </TouchableOpacity>
-                                    )}
+                                {editingCategory && editingCategory.isDeletable && (
+                                    <TouchableOpacity
+                                        style={styles.deleteButton}
+                                        onPress={() => {
+                                            setModalVisible(false);
+                                            handleDeleteCategory(editingCategory);
+                                        }}
+                                    >
+                                        <Text style={styles.deleteButtonText}>Sil</Text>
+                                    </TouchableOpacity>
+                                )}
                             </View>
                         </ScrollView>
                     </View>

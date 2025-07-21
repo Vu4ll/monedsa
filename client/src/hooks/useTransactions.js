@@ -49,6 +49,7 @@ export const useTransactions = () => {
     setRefreshing(true);
     setError(null);
     setIsEmpty(false);
+    // Refresh sırasında mevcut transactions'ı temizleme
     
     try {
       const data = await transactionService.getTransaction();

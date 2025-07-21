@@ -43,14 +43,12 @@ class CategoryService {
   /**
    * @description Fetches categories from the server.
    * @param { string | null } type - The type of categories to fetch (optional).
-   * @param { boolean | null } showOnlyDefault - Whether to show only default categories (optional).
    * @return { Promise<{ success: boolean, data?: any, error?: string }> }
    */
-  async getCategories(type = null, showOnlyDefault = null) {
+  async getCategories(type = null) {
     try {
       const queryParams = new URLSearchParams();
       if (type) queryParams.append('type', type);
-      if (showOnlyDefault !== null) queryParams.append('default', showOnlyDefault);
 
       const response = await api.get(
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.LIST}${queryParams.toString()}`
@@ -71,12 +69,11 @@ class CategoryService {
   /**
    * @description Adds a new category.
    * @param { Object } categoryData - The data of the category to add.
-   * @param { boolean } useAdminRoute - Whether to use the admin route for the request.
    * @return { Promise<{ success: boolean, data?: any, error?: string }> }
    */
-  async addCategory(categoryData, useAdminRoute = false) {
+  async addCategory(categoryData) {
     try {
-      const response = await api.post(`${API_CONFIG.BASE_URL}${useAdminRoute ? API_CONFIG.ENDPOINTS.CATEGORY.ADMIN.ADD : API_CONFIG.ENDPOINTS.CATEGORY.ADD}`, categoryData);
+      const response = await api.post(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.ADD}`, categoryData);
 
       const data = response.data;
       if (data.success) {
@@ -94,13 +91,12 @@ class CategoryService {
    * @description Updates an existing category.
    * @param { string } categoryId - The ID of the category to update.,
    * @param { Object } categoryData - The updated data for the category.
-   * @param { boolean } useAdminRoute - Whether to use the admin route for the request.
    * @return { Promise<{ success: boolean, data?: any, error?: string }> } 
    */
-  async updateCategory(categoryId, categoryData, useAdminRoute = false) {
+  async updateCategory(categoryId, categoryData) {
     console.log(categoryData);
     try {
-      const response = await api.put(`${API_CONFIG.BASE_URL}${useAdminRoute ? API_CONFIG.ENDPOINTS.CATEGORY.ADMIN.EDIT : API_CONFIG.ENDPOINTS.CATEGORY.EDIT}${categoryId}`, categoryData);
+      const response = await api.put(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.EDIT}${categoryId}`, categoryData);
 
       const data = response.data;
       if (data.success) {
@@ -117,12 +113,11 @@ class CategoryService {
   /**
    * @description Deletes a category.
    * @param { string } categoryId - The ID of the category to delete.
-   * @param { boolean } useAdminRoute - Whether to use the admin route for the request.
    * @return { Promise<{ success: boolean, data?: any, error?: string }> }
    */
-  async deleteCategory(categoryId, useAdminRoute = false) {
+  async deleteCategory(categoryId) {
     try {
-      const response = await api.delete(`${API_CONFIG.BASE_URL}${useAdminRoute ? API_CONFIG.ENDPOINTS.CATEGORY.ADMIN.DELETE : API_CONFIG.ENDPOINTS.CATEGORY.DELETE}${categoryId}`);
+      const response = await api.delete(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.DELETE}${categoryId}`);
 
       const data = response.data;
       if (data.success) {

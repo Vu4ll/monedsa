@@ -27,8 +27,10 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      onRefresh();
-    }, [])
+      if (!transactions && !loading) {
+        onRefresh();
+      }
+    }, [transactions, loading])
   );
 
   return (

@@ -9,7 +9,10 @@ import {
     StatusBar,
     useColorScheme,
     ScrollView,
-    ActivityIndicator
+    ActivityIndicator,
+    Modal,
+    TextInput,
+    ToastAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getColors } from '../constants';
@@ -22,6 +25,19 @@ const ProfileScreen = ({ navigation, onLogout }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [userStats, setUserStats] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+    const [editFormData, setEditFormData] = useState({
+        name: '',
+        username: '',
+        email: ''
+    });
+    const [passwordFormData, setPasswordFormData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+    const [formErrors, setFormErrors] = useState({});
 
     useEffect(() => {
         loadUserProfile();
@@ -69,16 +85,16 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             const statData = result.data;
             if (result.success) {
                 setUserStats({
-                    totalIncomes: statData.transactions.income,
-                    totalExpenses: statData.transactions.expense,
-                    totalTransactions: statData.transactions.total,
-                    totalCategories: statData.categories.userOwned,
+                    totalIncomes: statData?.transactions?.income,
+                    totalExpenses: statData?.transactions?.expense,
+                    totalTransactions: statData?.transactions?.total,
                 });
             } else {
                 console.error('İstatistik yükleme hatası:', result.error);
                 setUserStats({
-                    totalIncomes: 0, totalExpenses: 0,
-                    totalTransactions: 0, totalCategories: 0,
+                    totalIncomes: "Bulunmuyor",
+                    totalExpenses: "Bulunmuyor",
+                    totalTransactions: "Bulunmuyor",
                 });
             }
         } catch (error) {
@@ -105,6 +121,111 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 }
             ]
         );
+    };
+
+    const handleEditProfile = () => {
+        setEditFormData({
+            name: userInfo?.name || '',
+            username: userInfo?.username || '',
+            email: userInfo?.email || ''
+        });
+        setFormErrors({});
+        setEditModalVisible(true);
+    };
+
+    const handleChangePassword = () => {
+        setPasswordFormData({
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+        });
+        setFormErrors({});
+        setPasswordModalVisible(true);
+    };
+
+    const validateEditForm = () => {
+        const errors = {};
+
+        if (!editFormData.name.trim()) {
+            errors.name = 'Ad boş olamaz';
+        }
+
+        if (!editFormData.username.trim()) {
+            errors.username = 'Kullanıcı adı boş olamaz';
+        }
+
+        if (!editFormData.email.trim()) {
+            errors.email = 'E-posta boş olamaz';
+        } else if (!/\S+@\S+\.\S+/.test(editFormData.email)) {
+            errors.email = 'Geçerli bir e-posta adresi girin';
+        }
+
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const validatePasswordForm = () => {
+        const errors = {};
+
+        if (!passwordFormData.currentPassword) {
+            errors.currentPassword = 'Mevcut şifre boş olamaz';
+        }
+
+        if (!passwordFormData.newPassword) {
+            errors.newPassword = 'Yeni şifre boş olamaz';
+        } else if (passwordFormData.newPassword.length < 8) {
+            errors.newPassword = 'Şifre en az 8 karakter olmalı';
+        }
+
+        if (passwordFormData.newPassword !== passwordFormData.confirmPassword) {
+            errors.confirmPassword = 'Şifreler uyuşmuyor';
+        }
+
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleSaveProfile = async () => {
+        if (!validateEditForm()) return;
+
+        try {
+            const result = await authService.updateProfile(editFormData);
+
+            if (result.success) {
+                setUserInfo(prev => ({
+                    ...prev,
+                    name: result.data.name,
+                    username: result.data.username,
+                    email: result.data.email
+                }));
+                setEditModalVisible(false);
+                ToastAndroid.show('Profil başarıyla güncellendi', ToastAndroid.SHORT);
+            } else {
+                ToastAndroid.show(result.error, ToastAndroid.SHORT);
+            }
+        } catch (error) {
+            ToastAndroid.show('Profil güncellenirken bir hata oluştu', ToastAndroid.SHORT);
+        }
+    };
+
+    const handleSavePassword = async () => {
+        if (!validatePasswordForm()) return;
+
+        try {
+            const result = await authService.changePassword({
+                currentPassword: passwordFormData.currentPassword,
+                newPassword: passwordFormData.newPassword
+            });
+
+            if (result.success) {
+                setPasswordModalVisible(false);
+                ToastAndroid.show('Şifre başarıyla değiştirildi', ToastAndroid.SHORT);
+            } else {
+                ToastAndroid.show(result.error, ToastAndroid.SHORT);
+            }
+        } catch (error) {
+            ToastAndroid.show('Şifre değiştirilirken bir hata oluştu', ToastAndroid.SHORT);
+        }
     };
 
     const styles = StyleSheet.create({
@@ -230,6 +351,83 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             color: colors.text,
             flex: 1,
         },
+        modalOverlay: {
+            flex: 1,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        modalContainer: {
+            width: '90%',
+            maxHeight: '80%',
+            backgroundColor: colors.cardBackground,
+            borderRadius: 12,
+        },
+        modalHeader: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 20,
+            paddingTop: 16,
+            paddingBottom: 12,
+            borderBottomWidth: 1,
+            borderBottomColor: colors.border,
+        },
+        modalTitle: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: colors.text,
+        },
+        modalCloseButton: {
+            padding: 4,
+        },
+        modalContent: {
+            padding: 20,
+        },
+        inputContainer: {
+            marginBottom: 16,
+        },
+        inputLabel: {
+            fontSize: 16,
+            fontWeight: '600',
+            color: colors.text,
+            marginBottom: 8,
+        },
+        input: {
+            borderWidth: 1,
+            borderColor: colors.border,
+            borderRadius: 8,
+            paddingHorizontal: 12,
+            paddingVertical: 12,
+            fontSize: 16,
+            color: colors.text,
+            backgroundColor: colors.background,
+        },
+        inputError: {
+            borderColor: colors.danger,
+        },
+        errorText: {
+            color: colors.danger,
+            fontSize: 14,
+            marginTop: 4,
+        },
+        modalButtons: {
+            flexDirection: 'row',
+            gap: 12,
+            marginTop: 20,
+        },
+        saveButton: {
+            flex: 1,
+            paddingVertical: 14,
+            borderRadius: 8,
+            backgroundColor: colors.primary,
+            alignItems: 'center',
+        },
+        saveButtonText: {
+            fontSize: 16,
+            fontWeight: '600',
+            color: colors.white,
+        },
     });
 
     return (
@@ -282,13 +480,6 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             <Text style={styles.infoValue}>{userInfo?.email || 'email@example.com'}</Text>
                         </View>
 
-                        <View style={styles.infoRow}>
-                            <Text style={styles.infoLabel}>Rol</Text>
-                            <Text style={styles.infoValue}>
-                                {userInfo?.role === 'admin' ? 'Yönetici' : 'Kullanıcı'}
-                            </Text>
-                        </View>
-
                         <View style={[styles.infoRow, styles.lastInfoRow]}>
                             <Text style={styles.infoLabel}>Üyelik Tarihi</Text>
                             <Text style={styles.infoValue}>{userInfo?.joinDate || '01.01.2024'}</Text>
@@ -299,36 +490,31 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                         <Text style={styles.sectionTitle}>İstatistikler</Text>
 
                         <View style={styles.infoRow}>
-                            <Text style={styles.infoLabel}>Toplam Kullanıcı Kategori Sayısı</Text>
-                            <Text style={styles.infoValue}>{userStats?.totalCategories || 0}</Text>
-                        </View>
-
-                        <View style={styles.infoRow}>
                             <Text style={styles.infoLabel}>Toplam Gelir Sayısı</Text>
-                            <Text style={styles.infoValue}>{userStats?.totalIncomes || 0}</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalIncomes || "Bulunmuyor"}</Text>
                         </View>
 
                         <View style={styles.infoRow}>
                             <Text style={styles.infoLabel}>Toplam Gider Sayısı</Text>
-                            <Text style={styles.infoValue}>{userStats?.totalExpenses || 0}</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalExpenses || "Bulunmuyor"}</Text>
                         </View>
 
                         <View style={[styles.infoRow, styles.lastInfoRow]}>
                             <Text style={styles.infoLabel}>Toplam İşlem Sayısı</Text>
-                            <Text style={styles.infoValue}>{userStats?.totalTransactions || 0}</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalTransactions || "Bulunmuyor"}</Text>
                         </View>
                     </View>
 
                     <View style={styles.actionSection}>
                         <Text style={styles.sectionTitle}>Hesap İşlemleri</Text>
 
-                        <TouchableOpacity style={styles.actionButton}>
+                        <TouchableOpacity style={styles.actionButton} onPress={handleEditProfile}>
                             <Icon name="edit" size={24} color={colors.textSecondary} style={styles.actionIcon} />
                             <Text style={styles.actionText}>Profili Düzenle</Text>
                             <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.actionButton, styles.lastActionButton]}>
+                        <TouchableOpacity style={[styles.actionButton, styles.lastActionButton]} onPress={handleChangePassword}>
                             <Icon name="security" size={24} color={colors.textSecondary} style={styles.actionIcon} />
                             <Text style={styles.actionText}>Şifre Değiştir</Text>
                             <Icon name="chevron-right" size={24} color={colors.textSecondary} />
@@ -336,6 +522,149 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                     </View>
                 </ScrollView>
             )}
+
+            {/* Profil Düzenleme Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={editModalVisible}
+                onRequestClose={() => setEditModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>Profili Düzenle</Text>
+                            <TouchableOpacity
+                                onPress={() => setEditModalVisible(false)}
+                                style={styles.modalCloseButton}
+                            >
+                                <Icon name="close" size={24} color={colors.textSecondary} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <ScrollView style={styles.modalContent}>
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.inputLabel}>Ad</Text>
+                                <TextInput
+                                    style={[styles.input, formErrors.name && styles.inputError]}
+                                    value={editFormData.name}
+                                    onChangeText={(text) => setEditFormData(prev => ({ ...prev, name: text }))}
+                                    placeholder="Adınızı girin"
+                                    placeholderTextColor={colors.textSecondary}
+                                />
+                                {formErrors.name && <Text style={styles.errorText}>{formErrors.name}</Text>}
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.inputLabel}>Kullanıcı Adı</Text>
+                                <TextInput
+                                    style={[styles.input, formErrors.username && styles.inputError]}
+                                    value={editFormData.username}
+                                    onChangeText={(text) => setEditFormData(prev => ({ ...prev, username: text }))}
+                                    placeholder="Kullanıcı adınızı girin"
+                                    placeholderTextColor={colors.textSecondary}
+                                />
+                                {formErrors.username && <Text style={styles.errorText}>{formErrors.username}</Text>}
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.inputLabel}>E-posta</Text>
+                                <TextInput
+                                    style={[styles.input, formErrors.email && styles.inputError]}
+                                    value={editFormData.email}
+                                    onChangeText={(text) => setEditFormData(prev => ({ ...prev, email: text }))}
+                                    placeholder="E-posta adresinizi girin"
+                                    placeholderTextColor={colors.textSecondary}
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"
+                                />
+                                {formErrors.email && <Text style={styles.errorText}>{formErrors.email}</Text>}
+                            </View>
+
+                            <View style={styles.modalButtons}>
+                                <TouchableOpacity
+                                    style={styles.saveButton}
+                                    onPress={handleSaveProfile}
+                                >
+                                    <Text style={styles.saveButtonText}>Kaydet</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* Şifre Değiştirme Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={passwordModalVisible}
+                onRequestClose={() => setPasswordModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>Şifre Değiştir</Text>
+                            <TouchableOpacity
+                                onPress={() => setPasswordModalVisible(false)}
+                                style={styles.modalCloseButton}
+                            >
+                                <Icon name="close" size={24} color={colors.textSecondary} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <ScrollView style={styles.modalContent}>
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.inputLabel}>Mevcut Şifre</Text>
+                                <TextInput
+                                    style={[styles.input, formErrors.currentPassword && styles.inputError]}
+                                    value={passwordFormData.currentPassword}
+                                    onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, currentPassword: text }))}
+                                    placeholder="Mevcut şifrenizi girin"
+                                    placeholderTextColor={colors.textSecondary}
+                                    secureTextEntry
+                                />
+                                {formErrors.currentPassword && <Text style={styles.errorText}>{formErrors.currentPassword}</Text>}
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.inputLabel}>Yeni Şifre</Text>
+                                <TextInput
+                                    style={[styles.input, formErrors.newPassword && styles.inputError]}
+                                    value={passwordFormData.newPassword}
+                                    onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, newPassword: text }))}
+                                    placeholder="Yeni şifrenizi girin"
+                                    placeholderTextColor={colors.textSecondary}
+                                    secureTextEntry
+                                />
+                                {formErrors.newPassword && <Text style={styles.errorText}>{formErrors.newPassword}</Text>}
+                            </View>
+
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.inputLabel}>Yeni Şifre Tekrar</Text>
+                                <TextInput
+                                    style={[styles.input, formErrors.confirmPassword && styles.inputError]}
+                                    value={passwordFormData.confirmPassword}
+                                    onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, confirmPassword: text }))}
+                                    placeholder="Yeni şifrenizi tekrar girin"
+                                    placeholderTextColor={colors.textSecondary}
+                                    secureTextEntry
+                                />
+                                {formErrors.confirmPassword && <Text style={styles.errorText}>{formErrors.confirmPassword}</Text>}
+                            </View>
+
+                            <View style={styles.modalButtons}>
+                                <TouchableOpacity
+                                    style={styles.saveButton}
+                                    onPress={handleSavePassword}
+                                >
+                                    <Text style={styles.saveButtonText}>Değiştir</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 };

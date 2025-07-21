@@ -353,14 +353,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
             marginLeft: 12,
             flex: 1,
         },
-        categoryModalBadge: {
-            fontSize: 12,
-            color: colors.textSecondary,
-            backgroundColor: colors.background,
-            paddingHorizontal: 8,
-            paddingVertical: 4,
-            borderRadius: 12,
-        },
     });
 
     const renderCategoryItem = ({ item }) => (
@@ -370,9 +362,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
         >
             <View style={[styles.categoryColor, { backgroundColor: item.color }]} />
             <Text style={styles.categoryModalName}>{item.name}</Text>
-            {item.isDefault && (
-                <Text style={styles.categoryModalBadge}>Varsayılan</Text>
-            )}
         </TouchableOpacity>
     );
 

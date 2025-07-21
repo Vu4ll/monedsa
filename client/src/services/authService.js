@@ -307,6 +307,104 @@ class AuthService {
       return { success: false, error: 'Beklenmeyen bir hata oluştu' };
     }
   }
+
+  /**
+   * @description Updates user profile information.
+   * @param { Object } profileData - The profile data to update.
+   * @returns { Promise<Object> } Response object with success status and data or error message.
+   */
+  async updateProfile(profileData) {
+    try {
+      if (!this.token) {
+        return { success: false, error: 'Oturum açmanız gerekiyor' };
+      }
+
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.UPDATE}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
+        },
+        body: JSON.stringify(profileData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return { success: true, data: data.data };
+      } else {
+        let errorMessage = data.message || 'Profil güncellenemedi';
+
+        if (response.status === 401) {
+          errorMessage = 'Oturum süresi dolmuş';
+          await this.clearToken();
+        } else if (response.status === 403) {
+          errorMessage = 'Bu işlem için yetkiniz yok';
+        } else if (response.status >= 500) {
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+        }
+
+        return { success: false, error: errorMessage };
+      }
+    } catch (error) {
+      console.error('Profil güncelleme hatası:', error);
+
+      if (error.name === 'TypeError' && error.message.includes('Network')) {
+        return { success: false, error: 'İnternet bağlantısı hatası' };
+      }
+
+      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+    }
+  }
+
+  /**
+   * @description Changes user password.
+   * @param { Object } passwordData - The password change data.
+   * @returns { Promise<Object> } Response object with success status and message or error.
+   */
+  async changePassword(passwordData) {
+    try {
+      if (!this.token) {
+        return { success: false, error: 'Oturum açmanız gerekiyor' };
+      }
+
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.CHANGE_PASSWORD}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
+        },
+        body: JSON.stringify(passwordData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return { success: true, message: data.message };
+      } else {
+        let errorMessage = data.message || 'Şifre değiştirilemedi';
+
+        if (response.status === 401) {
+          errorMessage = 'Oturum süresi dolmuş';
+          await this.clearToken();
+        } else if (response.status === 403) {
+          errorMessage = 'Bu işlem için yetkiniz yok';
+        } else if (response.status >= 500) {
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+        }
+
+        return { success: false, error: errorMessage };
+      }
+    } catch (error) {
+      console.error('Şifre değiştirme hatası:', error);
+
+      if (error.name === 'TypeError' && error.message.includes('Network')) {
+        return { success: false, error: 'İnternet bağlantısı hatası' };
+      }
+
+      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+    }
+  }
 }
 
 export const authService = new AuthService();
