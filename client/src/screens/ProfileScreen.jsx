@@ -38,11 +38,21 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         confirmPassword: ''
     });
     const [formErrors, setFormErrors] = useState({});
+    
+    // Refs for input navigation
+    const usernameRef = React.useRef();
+    const emailRef = React.useRef();
+    const newPasswordRef = React.useRef();
+    const confirmPasswordRef = React.useRef();
 
     useEffect(() => {
-        loadUserProfile();
-        loadUserStats();
+        loadUserData();
     }, []);
+
+    const loadUserData = async () => {
+        await loadUserProfile();
+        await loadUserStats();
+    };
 
     const loadUserProfile = async () => {
         try {
@@ -66,7 +76,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                     email: 'email@example.com',
                     username: 'kullanici123',
                     role: 'user',
-                    joinDate: '01.01.2024'
+                    joinDate: '01.01.2025'
                 });
             }
         } catch (error) {
@@ -147,11 +157,15 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         const errors = {};
 
         if (!editFormData.name.trim()) {
-            errors.name = 'Ad boş olamaz';
+            errors.name = 'İsim boş olamaz';
         }
 
         if (!editFormData.username.trim()) {
             errors.username = 'Kullanıcı adı boş olamaz';
+        }
+
+        if (editFormData.username.trim().split(" ").length > 1) {
+            errors.username = 'Kullanıcı adı boşluk içeremez';
         }
 
         if (!editFormData.email.trim()) {
@@ -168,17 +182,25 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         const errors = {};
 
         if (!passwordFormData.currentPassword) {
-            errors.currentPassword = 'Mevcut şifre boş olamaz';
+            errors.currentPassword = 'Mevcut parola boş olamaz';
         }
 
         if (!passwordFormData.newPassword) {
-            errors.newPassword = 'Yeni şifre boş olamaz';
+            errors.newPassword = 'Yeni parola boş olamaz';
         } else if (passwordFormData.newPassword.length < 8) {
-            errors.newPassword = 'Şifre en az 8 karakter olmalı';
+            errors.newPassword = 'Parola en az 8 karakter olmalı';
+        } else if (passwordFormData.newPassword.length > 100) {
+            errors.newPassword = 'Parola çok uzun';
+        } else if (!/(?=.*[a-z])/.test(passwordFormData.newPassword)) {
+            errors.newPassword = 'Parola en az bir küçük harf içermeli';
+        } else if (!/(?=.*[A-Z])/.test(passwordFormData.newPassword)) {
+            errors.newPassword = 'Parola en az bir büyük harf içermeli';
+        } else if (!/(?=.*\d)/.test(passwordFormData.newPassword)) {
+            errors.newPassword = 'Parola en az bir rakam içermeli';
         }
 
         if (passwordFormData.newPassword !== passwordFormData.confirmPassword) {
-            errors.confirmPassword = 'Şifreler uyuşmuyor';
+            errors.confirmPassword = 'Parolalar uyuşmuyor';
         }
 
         setFormErrors(errors);
@@ -201,6 +223,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 setEditModalVisible(false);
                 ToastAndroid.show('Profil başarıyla güncellendi', ToastAndroid.SHORT);
             } else {
+                setEditModalVisible(false);
                 ToastAndroid.show(result.error, ToastAndroid.SHORT);
             }
         } catch (error) {
@@ -219,12 +242,13 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
             if (result.success) {
                 setPasswordModalVisible(false);
-                ToastAndroid.show('Şifre başarıyla değiştirildi', ToastAndroid.SHORT);
+                ToastAndroid.show('Parola başarıyla değiştirildi', ToastAndroid.SHORT);
             } else {
+                setPasswordModalVisible(false);
                 ToastAndroid.show(result.error, ToastAndroid.SHORT);
             }
         } catch (error) {
-            ToastAndroid.show('Şifre değiştirilirken bir hata oluştu', ToastAndroid.SHORT);
+            ToastAndroid.show('Parola değiştirilirken bir hata oluştu', ToastAndroid.SHORT);
         }
     };
 
@@ -516,7 +540,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
                         <TouchableOpacity style={[styles.actionButton, styles.lastActionButton]} onPress={handleChangePassword}>
                             <Icon name="security" size={24} color={colors.textSecondary} style={styles.actionIcon} />
-                            <Text style={styles.actionText}>Şifre Değiştir</Text>
+                            <Text style={styles.actionText}>Parola Değiştir</Text>
                             <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                         </TouchableOpacity>
                     </View>
@@ -544,13 +568,15 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
                         <ScrollView style={styles.modalContent}>
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Ad</Text>
+                                <Text style={styles.inputLabel}>İsim</Text>
                                 <TextInput
                                     style={[styles.input, formErrors.name && styles.inputError]}
                                     value={editFormData.name}
                                     onChangeText={(text) => setEditFormData(prev => ({ ...prev, name: text }))}
-                                    placeholder="Adınızı girin"
+                                    placeholder="İsminizi girin"
                                     placeholderTextColor={colors.textSecondary}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => usernameRef.current?.focus()}
                                 />
                                 {formErrors.name && <Text style={styles.errorText}>{formErrors.name}</Text>}
                             </View>
@@ -558,11 +584,14 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             <View style={styles.inputContainer}>
                                 <Text style={styles.inputLabel}>Kullanıcı Adı</Text>
                                 <TextInput
+                                    ref={usernameRef}
                                     style={[styles.input, formErrors.username && styles.inputError]}
                                     value={editFormData.username}
                                     onChangeText={(text) => setEditFormData(prev => ({ ...prev, username: text }))}
                                     placeholder="Kullanıcı adınızı girin"
                                     placeholderTextColor={colors.textSecondary}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => emailRef.current?.focus()}
                                 />
                                 {formErrors.username && <Text style={styles.errorText}>{formErrors.username}</Text>}
                             </View>
@@ -570,6 +599,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             <View style={styles.inputContainer}>
                                 <Text style={styles.inputLabel}>E-posta</Text>
                                 <TextInput
+                                    ref={emailRef}
                                     style={[styles.input, formErrors.email && styles.inputError]}
                                     value={editFormData.email}
                                     onChangeText={(text) => setEditFormData(prev => ({ ...prev, email: text }))}
@@ -577,6 +607,8 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                                     placeholderTextColor={colors.textSecondary}
                                     keyboardType="email-address"
                                     autoCapitalize="none"
+                                    returnKeyType="done"
+                                    onSubmitEditing={handleSaveProfile}
                                 />
                                 {formErrors.email && <Text style={styles.errorText}>{formErrors.email}</Text>}
                             </View>
@@ -594,7 +626,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 </View>
             </Modal>
 
-            {/* Şifre Değiştirme Modal */}
+            {/* Parola Değiştirme Modal */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -604,7 +636,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Şifre Değiştir</Text>
+                            <Text style={styles.modalTitle}>Parola Değiştir</Text>
                             <TouchableOpacity
                                 onPress={() => setPasswordModalVisible(false)}
                                 style={styles.modalCloseButton}
@@ -615,40 +647,48 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
                         <ScrollView style={styles.modalContent}>
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Mevcut Şifre</Text>
+                                <Text style={styles.inputLabel}>Mevcut Parola</Text>
                                 <TextInput
                                     style={[styles.input, formErrors.currentPassword && styles.inputError]}
                                     value={passwordFormData.currentPassword}
                                     onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, currentPassword: text }))}
-                                    placeholder="Mevcut şifrenizi girin"
+                                    placeholder="Mevcut parolanızı girin"
                                     placeholderTextColor={colors.textSecondary}
                                     secureTextEntry
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => newPasswordRef.current?.focus()}
                                 />
                                 {formErrors.currentPassword && <Text style={styles.errorText}>{formErrors.currentPassword}</Text>}
                             </View>
 
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Yeni Şifre</Text>
+                                <Text style={styles.inputLabel}>Yeni Parola</Text>
                                 <TextInput
+                                    ref={newPasswordRef}
                                     style={[styles.input, formErrors.newPassword && styles.inputError]}
                                     value={passwordFormData.newPassword}
                                     onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, newPassword: text }))}
-                                    placeholder="Yeni şifrenizi girin"
+                                    placeholder="Yeni parolanızı girin"
                                     placeholderTextColor={colors.textSecondary}
                                     secureTextEntry
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                                 />
                                 {formErrors.newPassword && <Text style={styles.errorText}>{formErrors.newPassword}</Text>}
                             </View>
 
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Yeni Şifre Tekrar</Text>
+                                <Text style={styles.inputLabel}>Yeni Parola Tekrar</Text>
                                 <TextInput
+                                    ref={confirmPasswordRef}
                                     style={[styles.input, formErrors.confirmPassword && styles.inputError]}
                                     value={passwordFormData.confirmPassword}
                                     onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, confirmPassword: text }))}
-                                    placeholder="Yeni şifrenizi tekrar girin"
+                                    placeholder="Yeni parolanızı tekrar girin"
                                     placeholderTextColor={colors.textSecondary}
                                     secureTextEntry
+                                    returnKeyType="done"
+                                    onSubmitEditing={handleSavePassword}
                                 />
                                 {formErrors.confirmPassword && <Text style={styles.errorText}>{formErrors.confirmPassword}</Text>}
                             </View>

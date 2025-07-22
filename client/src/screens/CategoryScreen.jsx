@@ -503,7 +503,7 @@ const CategoryScreen = ({ navigation, route }) => {
                 colors={colors}
                 title="Kategoriler"
                 showLeftAction={true}
-                leftActionIcon="filter-list"
+                leftActionIcon="sort"
                 onLeftActionPress={() => { ToastAndroid.show("Sıralama", ToastAndroid.SHORT) }}
                 showRightAction={true}
                 rightActionIcon="filter-alt"

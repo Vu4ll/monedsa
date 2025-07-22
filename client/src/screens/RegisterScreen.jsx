@@ -47,10 +47,12 @@ const RegisterScreen = ({ navigation }) => {
             newErrors.username = 'Kullanıcı adı gerekli';
         } else if (formData.username.length < 2) {
             newErrors.username = 'Kullanıcı adı en az 2 karakter olmalı';
-        } else if (formData.username.length > 20) {
-            newErrors.username = 'Kullanıcı adı en fazla 20 karakter olmalı';
+        } else if (formData.username.length >= 16) {
+            newErrors.username = 'Kullanıcı adı en fazla 16 karakter olmalı';
         } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
             newErrors.username = 'Kullanıcı adı sadece harf, rakam ve alt çizgi içerebilir';
+        } else if (formData.username.split(" ").length > 1) {
+            newErrors.username = 'Kullanıcı adı boşluk içeremez';
         }
 
         // Email validation
@@ -132,8 +134,6 @@ const RegisterScreen = ({ navigation }) => {
                     setErrors(prev => ({ ...prev, email: 'Bu e-posta adresi zaten kayıtlı' }));
                 } else if (errorMessage.includes('User already exists')) {
                     displayMessage = 'Bu kullanıcı bilgileri zaten kayıtlı. Lütfen farklı bilgiler kullanın.';
-                } else if (errorMessage.includes('validation')) {
-                    displayMessage = 'Girdiğiniz bilgiler geçersiz. Lütfen kontrol edin.';
                 }
 
                 Alert.alert('Kayıt Hatası', displayMessage);
@@ -161,8 +161,8 @@ const RegisterScreen = ({ navigation }) => {
         if (field === 'username' && value.trim()) {
             if (value.length < 2) {
                 setErrors(prev => ({ ...prev, username: 'Kullanıcı adı en az 2 karakter olmalı' }));
-            } else if (value.length > 20) {
-                setErrors(prev => ({ ...prev, username: 'Kullanıcı adı en fazla 20 karakter olmalı' }));
+            } else if (value.length > 16) {
+                setErrors(prev => ({ ...prev, username: 'Kullanıcı adı en fazla 16 karakter olmalı' }));
             } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
                 setErrors(prev => ({ ...prev, username: 'Sadece harf, rakam ve alt çizgi kullanın' }));
             }

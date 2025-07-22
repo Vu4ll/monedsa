@@ -40,10 +40,20 @@ api.interceptors.response.use(
  * This service provides methods to fetch, add, update, and delete transactions,
  */
 export const transactionService = {
-  async getTransaction() {
-    const response = await api.get(
-      `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.LIST}`
-    );
+  async getTransaction(queryParams = {}) {
+    // Query parametrelerini URL'e çevir
+    const searchParams = new URLSearchParams();
+    
+    Object.keys(queryParams).forEach(key => {
+      if (queryParams[key] !== undefined && queryParams[key] !== null && queryParams[key] !== '') {
+        searchParams.append(key, queryParams[key]);
+      }
+    });
+    
+    const queryString = searchParams.toString();
+    const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.LIST}${queryString ? '?' + queryString : ''}`;
+    
+    const response = await api.get(url);
     return response.data ? response.data : "Veri yok";
   },
 

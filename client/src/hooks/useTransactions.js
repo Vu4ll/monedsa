@@ -6,7 +6,7 @@ import { transactionService } from "../services";
  * @description Custom hook to manage transactions.
  * This hook fetches transactions, handles loading states, and manages errors.
  */
-export const useTransactions = () => {
+export const useTransactions = (filters = {}) => {
   const [transactions, setTransactions] = useState(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -15,15 +15,16 @@ export const useTransactions = () => {
 
   /**
    * @description Fetches transactions from the server.
+   * @param { Object } queryParams - Query parameters for filtering and sorting
    * @returns { Promise<void> }
    */
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (queryParams = {}) => {
     setLoading(true);
     setError(null);
     setIsEmpty(false);
     
     try {
-      const data = await transactionService.getTransaction();
+      const data = await transactionService.getTransaction(queryParams);
       setTransactions(data);
       console.log("Transactions fetched");
     } catch (error) {
@@ -43,16 +44,17 @@ export const useTransactions = () => {
 
   /**
    * @description Refreshes the transactions data.
+   * @param { Object } queryParams - Query parameters for filtering and sorting
    * @returns { Promise<void> }
    */
-  const onRefresh = async () => {
+  const onRefresh = async (queryParams = {}) => {
     setRefreshing(true);
     setError(null);
     setIsEmpty(false);
     // Refresh sırasında mevcut transactions'ı temizleme
     
     try {
-      const data = await transactionService.getTransaction();
+      const data = await transactionService.getTransaction(queryParams);
       setTransactions(data);
       console.log("Transactions refreshed");
     } catch (error) {
@@ -72,7 +74,7 @@ export const useTransactions = () => {
   };
 
   useEffect(() => {
-    fetchTransactions();
+    fetchTransactions(filters);
   }, []);
 
   return {
@@ -81,5 +83,7 @@ export const useTransactions = () => {
     refreshing,
     onRefresh,
     fetchTransactions,
+    error,
+    isEmpty,
   };
 };

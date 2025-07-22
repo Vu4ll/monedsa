@@ -96,12 +96,18 @@ router.post("/login", async (req, res) => {
             id: userData._id,
             email: userData.email,
             username: userData.username,
-        }, process.env.JWT_SECRET, { expiresIn: config.env.JWT_EXPIRATION });
+        }, process.env.JWT_SECRET, { 
+            expiresIn: config.env.JWT_EXPIRATION,
+            algorithm: 'HS256'
+        });
 
         const refreshToken = jwt.sign({
             id: userData._id,
             type: "refresh"
-        }, process.env.JWT_REFRESH_SECRET, { expiresIn: config.env.JWT_REFRESH_EXPIRATION });
+        }, process.env.JWT_REFRESH_SECRET, { 
+            expiresIn: config.env.JWT_REFRESH_EXPIRATION,
+            algorithm: 'HS256'
+        });
 
         res.status(200).json({
             status: res.statusCode,
@@ -139,7 +145,10 @@ router.post("/refresh", async (req, res) => {
             id: userData._id,
             email: userData.email,
             username: userData.username,
-        }, process.env.JWT_SECRET, { expiresIn: config.env.JWT_EXPIRATION });
+        }, process.env.JWT_SECRET, { 
+            expiresIn: config.env.JWT_EXPIRATION,
+            algorithm: 'HS256'
+        });
 
         res.status(200).json({
             status: res.statusCode,
@@ -149,6 +158,13 @@ router.post("/refresh", async (req, res) => {
         });
     } catch (error) {
         console.error(`Refresh token error: \n${error.message}`);
+        
+        if (error.name === 'JsonWebTokenError') {
+            return badRequest(res, locale.refresh.fail.invalidToken);
+        } else if (error.name === 'TokenExpiredError') {
+            return badRequest(res, locale.refresh.fail.expiredToken);
+        }
+        
         return badRequest(res, locale.refresh.fail.expiredToken);
     }
 });

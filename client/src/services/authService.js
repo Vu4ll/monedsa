@@ -224,6 +224,10 @@ class AuthService {
   async getProfile() {
     try {
       if (!this.token) {
+        await this.loadToken();
+      }
+
+      if (!this.token) {
         return { success: false, error: 'Token bulunamadı' };
       }
 
@@ -270,7 +274,13 @@ class AuthService {
    */
   async getStats() {
     try {
-      if (!this.token) return { success: false, error: 'Token bulunamadı' };
+      if (!this.token) {
+        await this.loadToken();
+      }
+
+      if (!this.token) {
+        return { success: false, error: 'Token bulunamadı' };
+      }
 
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.STATS}`, {
         method: 'GET',
@@ -315,6 +325,11 @@ class AuthService {
    */
   async updateProfile(profileData) {
     try {
+      // Token yüklenmemişse önce yüklemeye çalış
+      if (!this.token) {
+        await this.loadToken();
+      }
+
       if (!this.token) {
         return { success: false, error: 'Oturum açmanız gerekiyor' };
       }
@@ -334,6 +349,10 @@ class AuthService {
         return { success: true, data: data.data };
       } else {
         let errorMessage = data.message || 'Profil güncellenemedi';
+
+        if (errorMessage.includes("No changes detected")) {
+          errorMessage = "Herhangi bir değişiklik bulunmadığı için işlem iptal edildi."
+        }
 
         if (response.status === 401) {
           errorMessage = 'Oturum süresi dolmuş';
@@ -364,6 +383,11 @@ class AuthService {
    */
   async changePassword(passwordData) {
     try {
+      // Token yüklenmemişse önce yüklemeye çalış
+      if (!this.token) {
+        await this.loadToken();
+      }
+
       if (!this.token) {
         return { success: false, error: 'Oturum açmanız gerekiyor' };
       }
@@ -384,6 +408,8 @@ class AuthService {
       } else {
         let errorMessage = data.message || 'Şifre değiştirilemedi';
 
+        if (errorMessage.includes("Current password is incorrect"))
+          errorMessage = "Belirtilen mevcut şifre yanlış.";
         if (response.status === 401) {
           errorMessage = 'Oturum süresi dolmuş';
           await this.clearToken();

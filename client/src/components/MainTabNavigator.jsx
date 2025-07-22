@@ -1,9 +1,11 @@
-import { View, TouchableOpacity, useColorScheme } from 'react-native';
+import React from 'react';
+import { View, TouchableOpacity, useColorScheme, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useNavigationState } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { HomeScreen, CategoryScreen } from "../screens";
+import { HomeScreen, CategoryScreen, AddTransactionScreen } from "../screens";
 import { getColors } from '../constants';
+import { useNavigationState } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,6 +16,7 @@ function EmptyComponent() {
 function MainTabNavigator({ onLogout }) {
     const isDarkMode = useColorScheme() === "dark";
     const colors = getColors(isDarkMode);
+    const insets = useSafeAreaInsets();
 
     return (
         <Tab.Navigator
@@ -49,17 +52,17 @@ function MainTabNavigator({ onLogout }) {
                     },
                     shadowOpacity: 0.1,
                     shadowRadius: 3.84,
-                    paddingBottom: 8,
+                    paddingBottom: Platform.OS === 'ios' ? insets.bottom : Math.max(insets.bottom, 8),
                     paddingTop: 4,
-                    height: 70,
+                    height: Platform.OS === 'ios' ? 55 + insets.bottom : Math.max(55, 55 + insets.bottom),
                 },
                 tabBarLabelStyle: {
                     fontSize: 12,
                     fontWeight: '500',
-                    marginBottom: 4,
+                    marginBottom: Platform.OS === 'ios' ? 0 : 4,
                 },
                 tabBarItemStyle: {
-                    paddingVertical: -8,
+                    paddingVertical: Platform.OS === 'ios' ? 0 : -8,
                 },
             })}
         >
@@ -89,7 +92,7 @@ function MainTabNavigator({ onLogout }) {
                             height: 56,
                             justifyContent: 'center',
                             alignItems: 'center',
-                            marginTop: -22,
+                            marginTop: Platform.OS === 'android' ? -22 - (insets.bottom > 0 ? insets.bottom * 0.3 : 0) : -22,
                             elevation: 4,
                             shadowColor: colors.primary,
                             shadowOffset: {
