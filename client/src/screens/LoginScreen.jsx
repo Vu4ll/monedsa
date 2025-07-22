@@ -16,7 +16,7 @@ import {
     StatusBar
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getColors } from '../constants';
+import { useTheme } from "../contexts/ThemeContext";
 import { authService } from '../services';
 
 const LoginScreen = ({ navigation, onLogin }) => {
@@ -25,11 +25,8 @@ const LoginScreen = ({ navigation, onLogin }) => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
-
+    const { isDarkMode, colors } = useTheme();
     const passwordRef = useRef(null);
-
-    const isDarkMode = useColorScheme() === "dark";
-    const colors = getColors(isDarkMode);
 
     const validateForm = () => {
         const newErrors = {};

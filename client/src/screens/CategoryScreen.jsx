@@ -17,18 +17,20 @@ import {
     RefreshControl
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getColors } from '../constants';
+import { useTheme } from "../contexts/ThemeContext";
 import { categoryService, authService } from '../services';
 import { useFocusEffect } from '@react-navigation/native';
 import { Header } from '../components';
 
 const CategoryScreen = ({ navigation, route }) => {
-    const isDarkMode = useColorScheme() === 'dark';
-    const colors = getColors(isDarkMode);
+    const { isDarkMode, colors } = useTheme();
     const [categories, setCategories] = useState([]);
+    const [filteredCategories, setFilteredCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [filterModalVisible, setFilterModalVisible] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState('all'); // 'all', 'income', 'expense'
     const [editingCategory, setEditingCategory] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
@@ -65,6 +67,7 @@ const CategoryScreen = ({ navigation, route }) => {
             const result = await categoryService.getCategories();
             if (result.success) {
                 setCategories(result.data);
+                applyFilter(result.data, selectedFilter);
             } else {
                 Alert.alert('Hata', result.error);
             }
@@ -75,12 +78,35 @@ const CategoryScreen = ({ navigation, route }) => {
         }
     };
 
+    const applyFilter = (categoriesData, filter) => {
+        let filtered = categoriesData;
+
+        if (filter === 'income') {
+            filtered = categoriesData.filter(cat => cat.type === 'income');
+        } else if (filter === 'expense') {
+            filtered = categoriesData.filter(cat => cat.type === 'expense');
+        }
+
+        setFilteredCategories(filtered);
+    };
+
+    const handleFilterChange = (filter) => {
+        setSelectedFilter(filter);
+        applyFilter(categories, filter);
+        setFilterModalVisible(false);
+
+        const filterText = filter === 'all' ? 'Tüm kategoriler' :
+            filter === 'income' ? 'Gelir kategorileri' : 'Gider kategorileri';
+        ToastAndroid.show(filterText + ' gösteriliyor', ToastAndroid.SHORT);
+    };
+
     const onRefresh = async () => {
         setRefreshing(true);
         try {
             const result = await categoryService.getCategories();
             if (result.success) {
                 setCategories(result.data);
+                applyFilter(result.data, selectedFilter);
             } else {
                 ToastAndroid.show(`Hata: ${result.error}`, ToastAndroid.SHORT);
             }
@@ -124,7 +150,12 @@ const CategoryScreen = ({ navigation, route }) => {
             if (result.success) {
                 setModalVisible(false);
                 resetForm();
-                loadCategories();
+                // Kategorileri yeniden yükle ve filtreyi uygula
+                const categoriesResult = await categoryService.getCategories();
+                if (categoriesResult.success) {
+                    setCategories(categoriesResult.data);
+                    applyFilter(categoriesResult.data, selectedFilter);
+                }
                 ToastAndroid.show(editingCategory ? "Kategori başarılıyla güncellendi" : "Yeni kategori başarılıyla eklendi", ToastAndroid.SHORT);
             } else {
                 ToastAndroid.show(`Kategori ${editingCategory ? "güncellenemedi" : "eklenemedi"}`, ToastAndroid.SHORT);
@@ -147,7 +178,12 @@ const CategoryScreen = ({ navigation, route }) => {
                         try {
                             const result = await categoryService.deleteCategory(category.id);
                             if (result.success) {
-                                loadCategories();
+                                // Kategorileri yeniden yükle ve filtreyi uygula
+                                const categoriesResult = await categoryService.getCategories();
+                                if (categoriesResult.success) {
+                                    setCategories(categoriesResult.data);
+                                    applyFilter(categoriesResult.data, selectedFilter);
+                                }
                                 ToastAndroid.show("Kategori başarıyla silindi", ToastAndroid.SHORT);
                             } else {
                                 Alert.alert('Hata', result.error);
@@ -426,6 +462,64 @@ const CategoryScreen = ({ navigation, route }) => {
             justifyContent: 'center',
             alignItems: 'center',
         },
+        filterModalContainer: {
+            backgroundColor: colors.cardBackground,
+            borderRadius: 16,
+            width: '90%',
+            padding: 20,
+            paddingTop: 0,
+            maxWidth: 400,
+        },
+        filterOption: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingVertical: 16,
+            paddingHorizontal: 12,
+            borderRadius: 12,
+            marginBottom: 8,
+        },
+        filterOptionActive: {
+            backgroundColor: colors.primary + '15',
+            borderWidth: 1,
+            borderColor: colors.primary,
+        },
+        filterOptionInactive: {
+            backgroundColor: colors.background,
+        },
+        radioButton: {
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+            borderWidth: 2,
+            marginRight: 12,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        radioButtonActive: {
+            borderColor: colors.primary,
+        },
+        radioButtonInactive: {
+            borderColor: colors.border,
+        },
+        radioButtonInner: {
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            backgroundColor: colors.primary,
+        },
+        filterOptionContent: {
+            flex: 1,
+        },
+        filterOptionTitle: {
+            fontSize: 16,
+            fontWeight: '500',
+            color: colors.text,
+            marginBottom: 2,
+        },
+        filterOptionDescription: {
+            fontSize: 14,
+            color: colors.textSecondary,
+        },
     });
 
     const renderCategory = ({ item }) => (
@@ -502,22 +596,19 @@ const CategoryScreen = ({ navigation, route }) => {
             <Header
                 colors={colors}
                 title="Kategoriler"
-                showLeftAction={true}
-                leftActionIcon="sort"
-                onLeftActionPress={() => { ToastAndroid.show("Sıralama", ToastAndroid.SHORT) }}
                 showRightAction={true}
                 rightActionIcon="filter-alt"
-                onRightActionPress={() => { ToastAndroid.show("Filtreleme", ToastAndroid.SHORT) }}
+                onRightActionPress={() => setFilterModalVisible(true)}
             />
 
             <View style={styles.content}>
                 <FlatList
-                    data={categories}
+                    data={filteredCategories}
                     renderItem={renderCategory}
                     keyExtractor={(item) => item.id}
                     contentContainerStyle={[
                         styles.listContainer,
-                        categories.length === 0 && styles.emptyListContainer
+                        filteredCategories.length === 0 && styles.emptyListContainer
                     ]}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={renderEmptyState}
@@ -627,6 +718,85 @@ const CategoryScreen = ({ navigation, route }) => {
                                 )}
                             </View>
                         </ScrollView>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* Filter Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={filterModalVisible}
+                onRequestClose={() => setFilterModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.filterModalContainer}>
+                        <View style={[styles.modalHeader, { paddingHorizontal: 4 }]}>
+                            <Text style={styles.modalTitle}>Kategori Filtresi</Text>
+                            <TouchableOpacity
+                                style={styles.modalCloseButton}
+                                onPress={() => setFilterModalVisible(false)}
+                            >
+                                <Icon name="close" size={24} color={colors.textSecondary} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <TouchableOpacity
+                            style={[
+                                styles.filterOption,
+                                selectedFilter === 'all' ? styles.filterOptionActive : styles.filterOptionInactive
+                            ]}
+                            onPress={() => handleFilterChange('all')}
+                        >
+                            <View style={[
+                                styles.radioButton,
+                                selectedFilter === 'all' ? styles.radioButtonActive : styles.radioButtonInactive
+                            ]}>
+                                {selectedFilter === 'all' && <View style={styles.radioButtonInner} />}
+                            </View>
+                            <View style={styles.filterOptionContent}>
+                                <Text style={styles.filterOptionTitle}>Tüm Kategoriler</Text>
+                                <Text style={styles.filterOptionDescription}>Hem gelir hem gider kategorilerini göster</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[
+                                styles.filterOption,
+                                selectedFilter === 'income' ? styles.filterOptionActive : styles.filterOptionInactive
+                            ]}
+                            onPress={() => handleFilterChange('income')}
+                        >
+                            <View style={[
+                                styles.radioButton,
+                                selectedFilter === 'income' ? styles.radioButtonActive : styles.radioButtonInactive
+                            ]}>
+                                {selectedFilter === 'income' && <View style={styles.radioButtonInner} />}
+                            </View>
+                            <View style={styles.filterOptionContent}>
+                                <Text style={styles.filterOptionTitle}>Gelir Kategorileri</Text>
+                                <Text style={styles.filterOptionDescription}>Sadece gelir kategorilerini göster</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[
+                                styles.filterOption,
+                                selectedFilter === 'expense' ? styles.filterOptionActive : styles.filterOptionInactive
+                            ]}
+                            onPress={() => handleFilterChange('expense')}
+                        >
+                            <View style={[
+                                styles.radioButton,
+                                selectedFilter === 'expense' ? styles.radioButtonActive : styles.radioButtonInactive
+                            ]}>
+                                {selectedFilter === 'expense' && <View style={styles.radioButtonInner} />}
+                            </View>
+                            <View style={styles.filterOptionContent}>
+                                <Text style={styles.filterOptionTitle}>Gider Kategorileri</Text>
+                                <Text style={styles.filterOptionDescription}>Sadece gider kategorilerini göster</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>

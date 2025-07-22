@@ -1,20 +1,18 @@
 import {
   StatusBar,
   StyleSheet,
-  useColorScheme,
   ScrollView,
   RefreshControl,
   SafeAreaView,
 } from "react-native";
 import React, { useEffect } from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { getColors } from "../constants";
 import { useTransactions, useFilters } from "../hooks";
 import { Header, TransactionList, SortModal, FilterModal } from "../components";
+import { useTheme } from "../contexts/ThemeContext";
 
 export const HomeScreen = ({ onLogout, navigation, route }) => {
-  const isDarkMode = useColorScheme() === "dark";
-  const colors = getColors(isDarkMode);
+  const { isDarkMode, colors } = useTheme();
 
   const {
     filters,
@@ -34,7 +32,6 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
 
   const { transactions, loading, refreshing, onRefresh, fetchTransactions } = useTransactions(filters);
 
-  // Wrapper functions to pass fetchTransactions
   const handleApplySorting = (sortBy, sortOrder) => {
     applySorting(sortBy, sortOrder, fetchTransactions);
   };

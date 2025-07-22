@@ -1,19 +1,18 @@
-import { View, ActivityIndicator, useColorScheme } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LoginScreen, RegisterScreen, ProfileScreen, SettingsScreen, AddTransactionScreen } from "./src/screens";
 import { MainTabNavigator } from './src/components';
 import { useAuth, useNetworkStatus } from './src/hooks';
-import { getColors } from './src/constants';
+import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
 
 const Stack = createStackNavigator();
 
-function App() {
+function AppContent() {
   const { isAuthenticated, isLoading, login, logout } = useAuth();
   const { isConnected } = useNetworkStatus();
-  const isDarkMode = useColorScheme() === "dark";
-  const colors = getColors(isDarkMode);
+  const { colors } = useTheme();
 
   if (isLoading) {
     return (
@@ -59,6 +58,14 @@ function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

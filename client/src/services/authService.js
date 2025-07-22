@@ -105,9 +105,13 @@ class AuthService {
    * @return { Promise<string | null> } The new authentication token or null if refresh failed.
    */
   async refreshAccessToken() {
+    if (!this.token) {
+      await this.loadToken();
+    }
+
     if (!this.refreshToken) {
       console.log('Refresh token bulunamadı');
-      return null;
+      return await this.clearToken();
     }
 
     try {

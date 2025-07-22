@@ -14,12 +14,11 @@ import {
     useColorScheme
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getColors } from '../constants';
+import { useTheme } from "../contexts/ThemeContext";
 import { authService } from '../services';
 
 const RegisterScreen = ({ navigation }) => {
-    const isDarkMode = useColorScheme() === 'dark';
-    const colors = getColors(isDarkMode);
+    const { isDarkMode, colors } = useTheme();
 
     const [formData, setFormData] = useState({
         username: '',

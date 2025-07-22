@@ -7,7 +7,6 @@ import {
     Alert,
     SafeAreaView,
     StatusBar,
-    useColorScheme,
     ScrollView,
     ActivityIndicator,
     Modal,
@@ -15,13 +14,12 @@ import {
     ToastAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getColors } from '../constants';
+import { useTheme } from "../contexts/ThemeContext";
 import { authService } from '../services';
 import { Header } from '../components';
 
 const ProfileScreen = ({ navigation, onLogout }) => {
-    const isDarkMode = useColorScheme() === 'dark';
-    const colors = getColors(isDarkMode);
+    const { isDarkMode, colors } = useTheme();
     const [userInfo, setUserInfo] = useState(null);
     const [userStats, setUserStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -38,7 +36,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         confirmPassword: ''
     });
     const [formErrors, setFormErrors] = useState({});
-    
+
     // Refs for input navigation
     const usernameRef = React.useRef();
     const emailRef = React.useRef();
