@@ -40,13 +40,23 @@ export const useFilters = () => {
     }, [filters]);
 
     const handleFilter = useCallback(() => {
+        const convertServerDateToUI = (serverDate) => {
+            if (!serverDate) return '';
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            if (dateRegex.test(serverDate)) {
+                const [year, month, day] = serverDate.split('-');
+                return `${day}-${month}-${year}`;
+            }
+            return serverDate;
+        };
+
         setTempFilters({
             category: filters.category || '',
             type: filters.type || '',
             minAmount: filters.minAmount || '',
             maxAmount: filters.maxAmount || '',
-            startDate: filters.startDate || '',
-            endDate: filters.endDate || '',
+            startDate: convertServerDateToUI(filters.startDate) || '',
+            endDate: convertServerDateToUI(filters.endDate) || '',
         });
         setFilterModalVisible(true);
     }, [filters]);
@@ -56,8 +66,7 @@ export const useFilters = () => {
         Object.keys(tempFilters).forEach(key => {
             if (tempFilters[key] && tempFilters[key].toString().trim() !== '') {
                 let value = tempFilters[key];
-                
-                // Tarih formatını backend için dönüştür (DD-MM-YYYY -> YYYY-MM-DD)
+
                 if ((key === 'startDate' || key === 'endDate') && value) {
                     const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
                     if (dateRegex.test(value)) {
@@ -65,7 +74,7 @@ export const useFilters = () => {
                         value = `${year}-${month}-${day}`;
                     }
                 }
-                
+
                 cleanFilters[key] = value;
             }
         });
@@ -115,7 +124,7 @@ export const useFilters = () => {
         tempFilters,
         setTempFilters,
         sortOptions,
- 
+
         handleSort,
         applySorting,
         handleFilter,

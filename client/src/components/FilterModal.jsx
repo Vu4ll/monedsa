@@ -88,6 +88,18 @@ const FilterModal = ({
         return `${day}-${month}-${year}`;
     };
 
+    const convertServerDateToUI = (serverDate) => {
+        if (!serverDate) return '';
+        const [year, month, day] = serverDate.split('-');
+        return `${day}-${month}-${year}`;
+    };
+
+    const convertUIDateToServer = (uiDate) => {
+        if (!uiDate || !validateDateFormat(uiDate)) return '';
+        const [day, month, year] = uiDate.split('-');
+        return `${year}-${month}-${day}`;
+    };
+
     const getFilteredCategories = () => {
         if (!tempFilters.type) {
             return categories;
@@ -365,7 +377,7 @@ const FilterModal = ({
                                     type: prev.type === 'income' ? '' : 'income'
                                 }))}
                             >
-                                <Text style={[styles.typeText, { color: colors.white }]}>Gelir</Text>
+                                <Text style={[styles.typeText, tempFilters.type === 'income' && { color: colors.white }]}>Gelir</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
@@ -382,7 +394,7 @@ const FilterModal = ({
                                     type: prev.type === 'expense' ? '' : 'expense'
                                 }))}
                             >
-                                <Text style={styles.typeText}>Gider</Text>
+                                <Text style={[styles.typeText, tempFilters.type === 'expense' && { color: colors.white }]}>Gider</Text>
                             </TouchableOpacity>
                         </View>
 
