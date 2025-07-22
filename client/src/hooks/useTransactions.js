@@ -77,6 +77,13 @@ export const useTransactions = (filters = {}) => {
     fetchTransactions(filters);
   }, []);
 
+  // Filters değiştiğinde yeniden veri çek
+  useEffect(() => {
+    if (Object.keys(filters).length > 0) {
+      fetchTransactions(filters);
+    }
+  }, [filters]);
+
   return {
     transactions,
     loading,

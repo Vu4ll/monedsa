@@ -53,6 +53,10 @@ export const transactionService = {
     const queryString = searchParams.toString();
     const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.LIST}${queryString ? '?' + queryString : ''}`;
     
+    // Debug için
+    console.log('Query Params:', queryParams);
+    console.log('Request URL:', url);
+    
     const response = await api.get(url);
     return response.data ? response.data : "Veri yok";
   },
