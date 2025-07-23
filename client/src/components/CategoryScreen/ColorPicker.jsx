@@ -7,7 +7,6 @@ const ColorPicker = ({ colors, formData, setFormData, formErrors, colorOptions }
     const [customColorModalVisible, setCustomColorModalVisible] = useState(false);
     const [selectedCustomColor, setSelectedCustomColor] = useState(formData.color || '#39BE56');
 
-    // Seçilen rengin custom renk olup olmadığını kontrol et
     const isCustomColor = !colorOptions.includes(formData.color);
 
     const handleCustomColorSave = () => {
@@ -58,6 +57,7 @@ const ColorPicker = ({ colors, formData, setFormData, formErrors, colorOptions }
         customColorOptionSelected: {
             borderStyle: 'solid',
             borderColor: colors.text,
+            borderWidth: 1.5
         },
         customColorIndicator: {
             position: 'absolute',

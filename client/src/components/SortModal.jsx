@@ -98,7 +98,9 @@ const SortModal = ({
             backgroundColor: colors.background,
         },
         selectedOptionButton: {
-            backgroundColor: colors.primary,
+            backgroundColor: colors.primary + "15",
+            borderWidth: 1,
+            borderColor: colors.primary
         },
         optionText: {
             fontSize: 16,

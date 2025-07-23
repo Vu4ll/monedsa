@@ -15,13 +15,12 @@ import {
     Alert
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { getColors } from '../constants';
+import { useTheme } from "../contexts/ThemeContext";
 import { transactionService, categoryService } from '../services';
 import { Header } from '../components';
 
 const AddTransactionScreen = ({ navigation, route }) => {
-    const isDarkMode = useColorScheme() === 'dark';
-    const colors = getColors(isDarkMode);
+    const { isDarkMode, colors } = useTheme();
 
     const editingTransaction = route?.params?.transaction || null;
     const [formData, setFormData] = useState({
