@@ -49,7 +49,7 @@ export const Header = ({ colors, title, showLeftAction = false, leftActionIcon =
       )}
       <View style={styles.titleContainer}>
         <Text style={[styles.title, { color: colors.text }]}>
-          {title || "Gider Takip"}
+          {title || "Monera"}
         </Text>
       </View>
       {showRightAction && (

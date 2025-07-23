@@ -210,8 +210,8 @@ const LoginScreen = ({ navigation, onLogin }) => {
 
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+                behavior='height'
+                keyboardVerticalOffset={20}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView
@@ -221,7 +221,7 @@ const LoginScreen = ({ navigation, onLogin }) => {
                         style={{ flex: 1 }}
                     >
                         <View style={styles.formContainer}>
-                            <Text style={styles.title}>Gider Takip</Text>
+                            <Text style={styles.title}>Monera</Text>
                             <Text style={styles.subtitle}>Hesabınıza giriş yapın</Text>
 
                             <View style={styles.inputContainer}>

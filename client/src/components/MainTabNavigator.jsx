@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, useColorScheme, Platform } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -49,25 +49,17 @@ function MainTabNavigator({ onLogout }) {
                     },
                     shadowOpacity: 0.1,
                     shadowRadius: 3.84,
-                    paddingBottom: Platform.OS === 'ios'
-                        ? insets.bottom
-                        : Math.max(insets.bottom, 8),
+                    paddingBottom: Math.max(insets.bottom, 8),
                     paddingTop: 4,
-                    height: Platform.OS === 'ios'
-                        ? 55 + insets.bottom
-                        : Math.max(55, 55 + insets.bottom)
+                    height: Math.max(55, 55 + insets.bottom)
                 },
                 tabBarLabelStyle: {
                     fontSize: 12,
                     fontWeight: '500',
-                    marginBottom: Platform.OS === 'ios'
-                        ? 0
-                        : 4
+                    marginBottom: 4
                 },
                 tabBarItemStyle: {
-                    paddingVertical: Platform.OS === 'ios'
-                        ? 0
-                        : -8
+                    paddingVertical: -8
                 }
             })}>
             <Tab.Screen
@@ -99,11 +91,7 @@ function MainTabNavigator({ onLogout }) {
                                 height: 56,
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                marginTop: Platform.OS === 'android'
-                                    ? -22 - (insets.bottom > 0
-                                        ? insets.bottom * 0.3
-                                        : 0)
-                                    : -22,
+                                marginTop: -22 - (insets.bottom > 0 ? insets.bottom * 0.3 : 0),
                                 elevation: 4,
                                 shadowColor: colors.primary,
                                 shadowOffset: {

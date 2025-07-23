@@ -123,7 +123,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
             if (result.success) {
                 ToastAndroid.show(`İşlem başarıyla ${editingTransaction ? 'güncellendi' : 'eklendi'}`, ToastAndroid.SHORT);
 
-                // Stack navigation'da doğru yönlendirme
                 navigation.navigate('MainApp', {
                     screen: 'Home',
                     params: { refresh: true }

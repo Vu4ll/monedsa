@@ -97,7 +97,7 @@ export const useCategoryLogic = (route, navigation) => {
         }
     };
 
-    const validateForm = () => {
+    const validateForm = async () => {
         const errors = {};
 
         if (!formData.name.trim()) {
@@ -112,12 +112,26 @@ export const useCategoryLogic = (route, navigation) => {
             errors.type = 'Tür seçimi gerekli';
         }
 
+        if (formData.name.trim() && formData.type) {
+            const existsCheck = await categoryService.checkCategoryExists(
+                formData.name.trim(),
+                formData.type,
+                editingCategory?.id,
+            );
+
+            if (existsCheck.exists) {
+                const typeText = formData.type === 'income' ? 'gelir' : 'gider';
+                errors.name = `Bu ${typeText} türünde ${formData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçin.`;
+            }
+        }
+
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
     const handleSaveCategory = async () => {
-        if (!validateForm()) return;
+        const isValid = await validateForm();
+        if (!isValid) return;
 
         try {
             let result;

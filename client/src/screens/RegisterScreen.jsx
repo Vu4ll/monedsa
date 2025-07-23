@@ -119,10 +119,8 @@ const RegisterScreen = ({ navigation }) => {
                     [{ text: 'Tamam', onPress: () => navigation.navigate('Login') }]
                 );
             } else {
-                // Sunucudan gelen hata mesajlarını kontrol et
                 const errorMessage = response.error || 'Kayıt olurken bir hata oluştu';
 
-                // Spesifik hata mesajlarını kullanıcı dostu hale getir
                 let displayMessage = errorMessage;
 
                 if (errorMessage.includes('username') && errorMessage.includes('already taken')) {
@@ -151,12 +149,10 @@ const RegisterScreen = ({ navigation }) => {
     const updateFormData = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
 
-        // Real-time validasyon
         if (errors[field]) {
             setErrors(prev => ({ ...prev, [field]: null }));
         }
 
-        // Spesifik alan validasyonları
         if (field === 'username' && value.trim()) {
             if (value.length < 2) {
                 setErrors(prev => ({ ...prev, username: 'Kullanıcı adı en az 2 karakter olmalı' }));
@@ -310,12 +306,12 @@ const RegisterScreen = ({ navigation }) => {
             <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
 
             <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                behavior='height'
                 style={styles.keyboardAvoidingView}
             >
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.title}>Gider Takip</Text>
+                        <Text style={styles.title}>Monera</Text>
                         <Text style={styles.subtitle}>Yeni Hesap Oluştur</Text>
                     </View>
 

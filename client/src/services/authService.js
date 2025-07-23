@@ -235,6 +235,14 @@ class AuthService {
         return { success: false, error: 'Token bulunamadı' };
       }
 
+      if (!this.isTokenValid()) {
+        console.log('Token süresi dolmuş, yenileme yapılıyor...');
+        const newToken = await this.refreshAccessToken();
+        if (!newToken) {
+          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapın' };
+        }
+      }
+
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.ME}`, {
         method: 'GET',
         headers: {
@@ -251,7 +259,22 @@ class AuthService {
         let errorMessage = data.message || 'Profil bilgileri alınamadı';
 
         if (response.status === 401) {
-          errorMessage = 'Oturum süresi dolmuş';
+          console.log('401 hatası alındı, token yenileme deneniyor...');
+          const newToken = await this.refreshAccessToken();
+          if (newToken) {
+            const retryResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.ME}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.token}`,
+              },
+            });
+            const retryData = await retryResponse.json();
+            if (retryResponse.ok && retryData.success) {
+              return { success: true, data: retryData.data };
+            }
+          }
+          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapın';
           await this.clearToken();
         } else if (response.status === 403) {
           errorMessage = 'Bu işlem için yetkiniz yok';
@@ -286,6 +309,14 @@ class AuthService {
         return { success: false, error: 'Token bulunamadı' };
       }
 
+      if (!this.isTokenValid()) {
+        console.log('Token süresi dolmuş, yenileme yapılıyor...');
+        const newToken = await this.refreshAccessToken();
+        if (!newToken) {
+          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapın' };
+        }
+      }
+
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.STATS}`, {
         method: 'GET',
         headers: {
@@ -301,7 +332,22 @@ class AuthService {
         let errorMessage = data.message || 'Profil istatistikleri alınamadı';
 
         if (response.status === 401) {
-          errorMessage = 'Oturum süresi dolmuş';
+          console.log('401 hatası alındı, token yenileme deneniyor...');
+          const newToken = await this.refreshAccessToken();
+          if (newToken) {
+            const retryResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.STATS}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.token}`,
+              },
+            });
+            const retryData = await retryResponse.json();
+            if (retryResponse.ok) {
+              return { success: true, data: retryData.data };
+            }
+          }
+          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapın';
           await this.clearToken();
         } else if (response.status === 403) {
           errorMessage = 'Bu işlem için yetkiniz yok';
@@ -329,13 +375,20 @@ class AuthService {
    */
   async updateProfile(profileData) {
     try {
-      // Token yüklenmemişse önce yüklemeye çalış
       if (!this.token) {
         await this.loadToken();
       }
 
       if (!this.token) {
         return { success: false, error: 'Oturum açmanız gerekiyor' };
+      }
+
+      if (!this.isTokenValid()) {
+        console.log('Token süresi dolmuş, yenileme yapılıyor...');
+        const newToken = await this.refreshAccessToken();
+        if (!newToken) {
+          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapın' };
+        }
       }
 
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.UPDATE}`, {
@@ -359,7 +412,23 @@ class AuthService {
         }
 
         if (response.status === 401) {
-          errorMessage = 'Oturum süresi dolmuş';
+          console.log('401 hatası alındı, token yenileme deneniyor...');
+          const newToken = await this.refreshAccessToken();
+          if (newToken) {
+            const retryResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.UPDATE}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.token}`,
+              },
+              body: JSON.stringify(profileData),
+            });
+            const retryData = await retryResponse.json();
+            if (retryResponse.ok) {
+              return { success: true, data: retryData.data };
+            }
+          }
+          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapın';
           await this.clearToken();
         } else if (response.status === 403) {
           errorMessage = 'Bu işlem için yetkiniz yok';
@@ -387,13 +456,20 @@ class AuthService {
    */
   async changePassword(passwordData) {
     try {
-      // Token yüklenmemişse önce yüklemeye çalış
       if (!this.token) {
         await this.loadToken();
       }
 
       if (!this.token) {
         return { success: false, error: 'Oturum açmanız gerekiyor' };
+      }
+
+      if (!this.isTokenValid()) {
+        console.log('Token süresi dolmuş, yenileme yapılıyor...');
+        const newToken = await this.refreshAccessToken();
+        if (!newToken) {
+          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapın' };
+        }
       }
 
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.CHANGE_PASSWORD}`, {
@@ -415,7 +491,23 @@ class AuthService {
         if (errorMessage.includes("Current password is incorrect"))
           errorMessage = "Belirtilen mevcut şifre yanlış.";
         if (response.status === 401) {
-          errorMessage = 'Oturum süresi dolmuş';
+          console.log('401 hatası alındı, token yenileme deneniyor...');
+          const newToken = await this.refreshAccessToken();
+          if (newToken) {
+            const retryResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE.CHANGE_PASSWORD}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.token}`,
+              },
+              body: JSON.stringify(passwordData),
+            });
+            const retryData = await retryResponse.json();
+            if (retryResponse.ok) {
+              return { success: true, message: retryData.message };
+            }
+          }
+          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapın';
           await this.clearToken();
         } else if (response.status === 403) {
           errorMessage = 'Bu işlem için yetkiniz yok';

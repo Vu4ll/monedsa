@@ -108,7 +108,7 @@ const SortModal = ({
             color: colors.text,
         },
         selectedOptionText: {
-            color: colors.white,
+            color: colors.text,
             fontWeight: '600',
         },
     });
@@ -147,7 +147,7 @@ const SortModal = ({
                                     <Icon 
                                         name={option.icon} 
                                         size={20} 
-                                        color={isSelected ? colors.white : colors.primary} 
+                                        color={isSelected ? colors.text : colors.primary} 
                                     />
                                     <Text style={[
                                         styles.optionText,

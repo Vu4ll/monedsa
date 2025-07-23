@@ -41,6 +41,38 @@ api.interceptors.response.use(
 class CategoryService {
 
   /**
+   * @description Checks if a category with the same name and type already exists.
+   * @param { string } name - The category name to check.
+   * @param { string } type - The category type to check.
+   * @param { string | null } excludeId - Category ID to exclude from check (for updates).
+   * @return { Promise<{ exists: boolean, categoryName?: string, categoryType?: string }> }
+   */
+  async checkCategoryExists(name, type, excludeId = null) {
+    try {
+      const result = await this.getCategories();
+      if (result.success && result.data) {
+        const existingCategory = result.data.find(category =>
+          category.name.toLowerCase() === name.toLowerCase() &&
+          category.type === type &&
+          (excludeId ? category.id !== excludeId : true)
+        );
+
+        if (existingCategory) {
+          return {
+            exists: true,
+            categoryName: existingCategory.name,
+            categoryType: existingCategory.type
+          };
+        }
+      }
+      return { exists: false };
+    } catch (error) {
+      console.error('Kategori kontrol hatası:', error);
+      return { exists: false };
+    }
+  }
+
+  /**
    * @description Fetches categories from the server.
    * @param { string | null } type - The type of categories to fetch (optional).
    * @return { Promise<{ success: boolean, data?: any, error?: string }> }
@@ -83,6 +115,26 @@ class CategoryService {
       }
     } catch (error) {
       console.error('Kategori ekleme hatası:', error);
+
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+
+        if (errorData.status === 400 && errorData.message) {
+          if (errorData.message.includes('already exists')) {
+
+            const typeText = categoryData.type === 'income' ? 'gelir' : 'gider';
+            return {
+              success: false,
+              error: `Bu ${typeText} türünde ${categoryData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçin.`
+            };
+          }
+
+          return { success: false, error: errorData.message };
+        }
+
+        return { success: false, error: errorData.message || 'Kategori eklenemedi' };
+      }
+
       return { success: false, error: 'Bağlantı hatası' };
     }
   }
@@ -106,6 +158,26 @@ class CategoryService {
       }
     } catch (error) {
       console.error('Kategori güncelleme hatası:', error);
+
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+
+        if (errorData.status === 400 && errorData.message) {
+          if (errorData.message.includes('already exists')) {
+
+            const typeText = categoryData.type === 'income' ? 'gelir' : 'gider';
+            return {
+              success: false,
+              error: `Bu ${typeText} türünde ${categoryData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçin.`
+            };
+          }
+
+          return { success: false, error: errorData.message };
+        }
+
+        return { success: false, error: errorData.message || 'Kategori güncellenemedi' };
+      }
+
       return { success: false, error: 'Bağlantı hatası' };
     }
   }

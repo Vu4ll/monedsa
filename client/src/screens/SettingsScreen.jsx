@@ -23,6 +23,7 @@ import { authService } from '../services';
 const SettingsScreen = ({ navigation }) => {
     const { themeMode, isDarkMode, colors, changeTheme, getThemeDisplay } = useTheme();
     const [showThemeModal, setShowThemeModal] = useState(false);
+    const [showLanguageModal, setShowLanguageModal] = useState(false);
     const [showIssueModal, setShowIssueModal] = useState(false);
     const [userMail, setUserMail] = useState(null);
     const [issueReport, setIssueReport] = useState({
@@ -62,6 +63,10 @@ const SettingsScreen = ({ navigation }) => {
 
     const showThemePicker = () => {
         setShowThemeModal(true);
+    };
+
+    const showLanguagePicker = () => {
+        setShowLanguageModal(true);
     };
 
     const handleThemeSelect = (selectedTheme) => {
@@ -409,7 +414,7 @@ const SettingsScreen = ({ navigation }) => {
                     <Text style={styles.sectionTitle}>Görünüm</Text>
 
                     <TouchableOpacity
-                        style={[styles.settingRow, styles.lastSettingRow, { paddingTop: 0 }]}
+                        style={[styles.settingRow, { paddingTop: 8 }]}
                         onPress={showThemePicker}
                     >
                         <Icon name="palette" size={24} color={colors.textSecondary} style={styles.settingIcon} />
@@ -422,6 +427,21 @@ const SettingsScreen = ({ navigation }) => {
                             <Icon name="chevron-right" size={20} color={colors.textSecondary} style={{ marginLeft: 8 }} />
                         </View>
                     </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[styles.settingRow, styles.lastSettingRow]}
+                        onPress={showLanguagePicker}
+                    >
+                        <Icon name="language" size={24} color={colors.textSecondary} style={styles.settingIcon} />
+                        <View style={styles.settingContent}>
+                            <Text style={styles.settingTitle}>Dil</Text>
+                            <Text style={styles.settingDescription}>Uygulama dilini seçin</Text>
+                        </View>
+                        <View style={styles.settingAction}>
+                            <Text style={styles.settingValue}>Türkçe</Text>
+                            <Icon name="chevron-right" size={20} color={colors.textSecondary} style={{ marginLeft: 8 }} />
+                        </View>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.aboutSection}>
@@ -429,8 +449,15 @@ const SettingsScreen = ({ navigation }) => {
 
                     <View style={styles.aboutRow}>
                         <Text style={styles.aboutLabel}>Versiyon</Text>
-                        <Text style={styles.aboutValue}>1.0.0</Text>
+                        <Text style={styles.aboutValue}>1.0</Text>
                     </View>
+
+                    <TouchableOpacity
+                        style={styles.aboutRow}
+                        onPress={() => Linking.openURL("https://github.com/Vu4ll/monera")}>
+                        <Text style={styles.aboutLabel}>Açık Kaynaklar</Text>
+                        <Icon name="chevron-right" size={24} color={colors.textSecondary} />
+                    </TouchableOpacity>
 
                     <TouchableOpacity style={styles.aboutRow}>
                         <Text style={styles.aboutLabel}>Gizlilik Politikası</Text>
@@ -462,7 +489,7 @@ const SettingsScreen = ({ navigation }) => {
 
             {/* Tema Seçim Modalı */}
             <Modal
-                animationType="fade"
+                animationType="slide"
                 transparent={true}
                 visible={showThemeModal}
                 onRequestClose={() => setShowThemeModal(false)}
@@ -533,6 +560,66 @@ const SettingsScreen = ({ navigation }) => {
                             <View style={styles.themeOptionContent}>
                                 <Text style={styles.themeOptionTitle}>Koyu Tema</Text>
                                 <Text style={styles.themeOptionDescription}>Her zaman koyu tema kullanır</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* Dil Seçim Modalı */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showLanguageModal}
+                onRequestClose={() => setShowLanguageModal(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>Dil Seçin</Text>
+                            <TouchableOpacity
+                                style={styles.closeButton}
+                                onPress={() => setShowLanguageModal(false)}
+                            >
+                                <Icon name="close" size={24} color={colors.textSecondary} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <TouchableOpacity
+                            style={[
+                                styles.themeOption,
+                                styles.themeOptionActive
+                            ]}
+                            disabled={true}
+                        >
+                            <View style={[
+                                styles.radioButton,
+                                styles.radioButtonActive
+                            ]}>
+                                <View style={styles.radioButtonInner} />
+                            </View>
+                            <View style={styles.themeOptionContent}>
+                                <Text style={styles.themeOptionTitle}>Türkçe</Text>
+                                <Text style={styles.themeOptionDescription}>Varsayılan dil</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[
+                                styles.themeOption,
+                                styles.themeOptionInactive,
+                                { opacity: 0.5 }
+                            ]}
+                            disabled={true}
+                        >
+                            <View style={[
+                                styles.radioButton,
+                                styles.radioButtonInactive
+                            ]}>
+                            </View>
+                            <View style={styles.themeOptionContent}>
+                                <Text style={styles.themeOptionTitle}>English</Text>
+                                <Text style={styles.themeOptionDescription}>Coming soon...</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
