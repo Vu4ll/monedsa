@@ -71,6 +71,7 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
         showRightAction={true}
         rightActionIcon="filter-alt"
         onRightActionPress={handleFilter}
+        showLogo={true}
       />
 
       <ScrollView

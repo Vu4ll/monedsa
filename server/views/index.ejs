@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= app.name %> - <%= app.tagline %>
+    </title>
+    <meta name="description" content="<%= app.description %>">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <div class="brand-logo">
+                    <div class="logo-icon">
+                        <img src="/images/icon-trans-white.png" height="40" width="40" />
+                    </div>
+                    <h1>Monera</h1>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Özellikler</a>
+                <a href="#screenshots">Ekran Görüntüleri</a>
+                <a href="#download">İndir</a>
+                <a href="<%= app.githubUrl %>" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>
+                        <%= app.name %>
+                    </h1>
+                    <p class="hero-tagline">
+                        <%= app.tagline %>
+                    </p>
+                    <p class="hero-description">
+                        <%= app.description %>
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#download" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Uygulamayı İndir
+                        </a>
+                        <a href="<%= app.githubUrl %>" target="_blank" class="btn btn-secondary">
+                            <i class="fab fa-github"></i> Kaynak Kod
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="phone-mockup">
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="app-preview">
+                                    <div class="app-header">
+                                        <h3>Monera</h3>
+                                        <span class="balance">₺2,450.00</span>
+                                    </div>
+                                    <div class="quick-stats">
+                                        <div class="stat-item income">
+                                            <span class="label">Gelir</span>
+                                            <span class="amount">+₺3,200</span>
+                                        </div>
+                                        <div class="stat-item expense">
+                                            <span class="label">Gider</span>
+                                            <span class="amount">-₺750</span>
+                                        </div>
+                                    </div>
+                                    <div class="recent-transactions">
+                                        <div class="transaction">
+                                            <span class="desc">Maaş</span>
+                                            <span class="amount positive">+₺3,000</span>
+                                        </div>
+                                        <div class="transaction">
+                                            <span class="desc">Market</span>
+                                            <span class="amount negative">-₺150</span>
+                                        </div>
+                                        <div class="transaction">
+                                            <span class="desc">Kira</span>
+                                            <span class="amount negative">-₺600</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Özellikler</h2>
+            <div class="features-grid">
+                <% app.features.forEach(feature=> { %>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <%= feature.icon %>
+                        </div>
+                        <h3>
+                            <%= feature.title %>
+                        </h3>
+                        <p>
+                            <%= feature.description %>
+                        </p>
+                    </div>
+                    <% }); %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots">
+        <div class="container">
+            <h2>Ekran Görüntüleri</h2>
+            <div class="screenshots-grid">
+                <% app.screenshots.forEach((screenshot, index)=> { %>
+                    <div class="screenshot-item">
+                        <img src="<%= screenshot %>" alt="Screenshot <%= index + 1 %>">
+                    </div>
+                    <% }); %>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <div class="container">
+            <h2>Uygulamayı İndir</h2>
+            <p>Android cihazınıza ücretsiz olarak indirin</p>
+            <div class="download-buttons">
+                <a href="<%= app.downloadLinks.playStore %>" class="download-btn play-store" target="_blank">
+                    <i class="fab fa-google-play"></i>
+                    <div>
+                        <span>Google Play'den</span>
+                        <strong>İndir</strong>
+                    </div>
+                </a>
+                <a href="<%= app.downloadLinks.apk %>" class="download-btn apk-download">
+                    <i class="fas fa-download"></i>
+                    <div>
+                        <span>Direkt APK</span>
+                        <strong>İndir</strong>
+                    </div>
+                </a>
+            </div>
+            <p class="version-info">
+                Sürüm: <%= app.version %>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <%= app.name %>
+                    </h3>
+                    <p>Gelir gider takibinizi kolaylaştıran Android uygulaması</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Bağlantılar</h4>
+                    <ul>
+                        <li><a href="<%= app.githubUrl %>" target="_blank">GitHub</a></li>
+                        <li><a href="<%= app.githubUrl %>/issues" target="_blank">Sorun Bildir</a></li>
+                        <li><a href="<%= app.githubUrl %>/releases" target="_blank">Sürümler</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Geliştirici</h4>
+                    <p>
+                        <a href="https://github.com/Vu4ll" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://vu4ll.com.tr/" target="_blank">
+                            <i class="fas fa-globe"></i> Web Sitesi
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    &copy; <%= new Date().getFullYear() %>
+                        <%= app.name %> - Açık kaynak lisansı altında.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+
+</html>

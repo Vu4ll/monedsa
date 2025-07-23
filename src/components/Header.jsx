@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar, Image } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { API_CONFIG } from '../constants/api';
 
-export const Header = ({ colors, title, showLeftAction = false, leftActionIcon = "arrow-back", onLeftActionPress, showRightAction = false, rightActionIcon = "more-vert", rightIconColor = colors.text, onRightActionPress }) => {
+export const Header = ({ colors, title, showLeftAction = false, leftActionIcon = "arrow-back", onLeftActionPress, showRightAction = false, rightActionIcon = "more-vert", rightIconColor = colors.text, onRightActionPress, showLogo = false }) => {
   const styles = StyleSheet.create({
     header: {
       flexDirection: "row",
@@ -25,6 +26,17 @@ export const Header = ({ colors, title, showLeftAction = false, leftActionIcon =
       flex: 1,
       alignItems: "center",
       justifyContent: "center",
+      flexDirection: "row",
+    },
+    titleWithLogo: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    logo: {
+      width: 32,
+      height: 32,
+      marginRight: 4,
     },
     title: {
       fontSize: 28,
@@ -48,9 +60,22 @@ export const Header = ({ colors, title, showLeftAction = false, leftActionIcon =
         </TouchableOpacity>
       )}
       <View style={styles.titleContainer}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          {title || "Monera"}
-        </Text>
+        {showLogo ? (
+          <View style={styles.titleWithLogo}>
+            <Image
+              source={{ uri: `${API_CONFIG.BASE_URL}/images/icon-trans-white.png` }}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+            <Text style={[styles.title, { color: colors.text }]}>
+              {title || "Monera"}
+            </Text>
+          </View>
+        ) : (
+          <Text style={[styles.title, { color: colors.text }]}>
+            {title || "Monera"}
+          </Text>
+        )}
       </View>
       {showRightAction && (
         <TouchableOpacity style={styles.rightButton} onPress={onRightActionPress}>

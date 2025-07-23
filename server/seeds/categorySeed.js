@@ -20,14 +20,13 @@ const defaultCategoriesTr = [
     { name: "Eğlence", color: "#45B7D1", type: "expense" },
     { name: "Alışveriş", color: "#96CEB4", type: "expense" },
     { name: "Maaş", color: "#FECA57", type: "income" },
-    { name: "Serbest çalışma", color: "#FF9FF3", type: "income" },
+    { name: "Freelance", color: "#FF9FF3", type: "income" },
     { name: "Yatırım", color: "#54A0FF", type: "income" }
 ];
 
 async function seedCategoriesForUser(userId, language = "en") {
     let addedCount = 0;
 
-    // Dile göre kategorileri seç
     const categories = language === "tr" ? defaultCategoriesTr : defaultCategoriesEn;
 
     for (const cat of categories) {

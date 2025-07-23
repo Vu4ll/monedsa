@@ -455,17 +455,12 @@ const SettingsScreen = ({ navigation }) => {
                     <TouchableOpacity
                         style={styles.aboutRow}
                         onPress={() => Linking.openURL("https://github.com/Vu4ll/monera")}>
-                        <Text style={styles.aboutLabel}>Açık Kaynaklar</Text>
-                        <Icon name="chevron-right" size={24} color={colors.textSecondary} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.aboutRow}>
-                        <Text style={styles.aboutLabel}>Gizlilik Politikası</Text>
+                        <Text style={styles.aboutLabel}>Kaynak Kod (Github)</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={[styles.aboutRow, styles.lastAboutRow]}>
-                        <Text style={styles.aboutLabel}>Kullanım Şartları</Text>
+                        <Text style={styles.aboutLabel}>Gizlilik Politikası</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
                 </View>
