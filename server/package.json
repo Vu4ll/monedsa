@@ -1,6 +1,6 @@
 {
-  "name": "gider-takip",
-  "version": "1.0.0",
+  "name": "monera-server",
+  "version": "1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "dev": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vu4ll",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

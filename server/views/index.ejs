@@ -10,30 +10,11 @@
     <meta name="description" content="<%= app.description %>">
     <link rel="stylesheet" href="/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="/images/icon-trans.png" type="image/x-icon">
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header">
-        <nav class="nav">
-            <div class="nav-brand">
-                <div class="brand-logo">
-                    <div class="logo-icon">
-                        <img src="/images/icon-trans-white.png" height="40" width="40" />
-                    </div>
-                    <h1>Monera</h1>
-                </div>
-            </div>
-            <div class="nav-links">
-                <a href="#features">Özellikler</a>
-                <a href="#screenshots">Ekran Görüntüleri</a>
-                <a href="#download">İndir</a>
-                <a href="<%= app.githubUrl %>" target="_blank">
-                    <i class="fab fa-github"></i> GitHub
-                </a>
-            </div>
-        </nav>
-    </header>
+    <%- include("partials/header") %>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -163,46 +144,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>
-                        <%= app.name %>
-                    </h3>
-                    <p>Gelir gider takibinizi kolaylaştıran Android uygulaması</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Bağlantılar</h4>
-                    <ul>
-                        <li><a href="<%= app.githubUrl %>" target="_blank">GitHub</a></li>
-                        <li><a href="<%= app.githubUrl %>/issues" target="_blank">Sorun Bildir</a></li>
-                        <li><a href="<%= app.githubUrl %>/releases" target="_blank">Sürümler</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Geliştirici</h4>
-                    <p>
-                        <a href="https://github.com/Vu4ll" target="_blank">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
-                    </p>
-                    <p>
-                        <a href="https://vu4ll.com.tr/" target="_blank">
-                            <i class="fas fa-globe"></i> Web Sitesi
-                        </a>
-                    </p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>
-                    &copy; <%= new Date().getFullYear() %>
-                        <%= app.name %> - Açık kaynak lisansı altında.
-                </p>
-            </div>
-        </div>
-    </footer>
+    <%- include("partials/footer") %>
 
     <script src="/js/script.js"></script>
 </body>

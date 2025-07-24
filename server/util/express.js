@@ -12,43 +12,55 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-app.get("/", (req, res) => {
-    const appData = {
-        name: "Monera",
-        tagline: "Gelir Gider Takip Uygulaması",
-        description: "Android cihazlarınızda kolayca gelir ve giderlerinizi takip edin. Basit, hızlı ve güvenli.",
-        features: [
-            {
-                icon: "💰",
-                title: "Gelir Takibi",
-                description: "Tüm gelirlerinizi kategorilere ayırarak takip edin",
-            },
-            {
-                icon: "📊",
-                title: "Gider Analizi",
-                description: "Harcamalarınızı analiz edin ve bütçenizi kontrol altında tutun",
-            },
-            {
-                icon: "📱",
-                title: "Mobil Uyumlu",
-                description: "Android cihazlarınızda sorunsuz çalışan modern arayüz",
-            },
-            {
-                icon: "🔒",
-                title: "Güvenli",
-                description: "Verileriniz güvenli bir şekilde cihazınızda saklanır",
-            },
-        ],
-        screenshots: ["/images/image.png", "/images/image.png", "/images/image.png"],
-        downloadLinks: {
-            playStore: "#",
-            apk: "#",
+const appData = {
+    name: "Monera",
+    tagline: "Gelir Gider Takip Uygulaması",
+    description: "Android cihazlarınızda kolayca gelir ve giderlerinizi takip edin. Basit, hızlı ve güvenli.",
+    features: [
+        {
+            icon: "💰",
+            title: "Gelir Takibi",
+            description: "Tüm gelirlerinizi kategorilere ayırarak takip edin",
         },
-        githubUrl: "https://github.com/Vu4ll/monera",
-        version: "1.0",
-    };
+        {
+            icon: "📊",
+            title: "Gider Analizi",
+            description: "Harcamalarınızı analiz edin ve bütçenizi kontrol altında tutun",
+        },
+        {
+            icon: "📱",
+            title: "Mobil Uyumlu",
+            description: "Android cihazlarınızda sorunsuz çalışan modern arayüz",
+        },
+        {
+            icon: "🔒",
+            title: "Güvenli",
+            description: "Verileriniz güvenli bir şekilde cihazınızda saklanır",
+        },
+    ],
+    screenshots: ["/images/image.png", "/images/image.png", "/images/image.png"],
+    downloadLinks: {
+        playStore: "#",
+        apk: "#",
+    },
+    githubUrl: "https://github.com/Vu4ll/monera",
+    version: "1.0",
+};
 
+app.get("/", (req, res) => {
     res.render("index", { app: appData });
+});
+
+app.get("/privacy-policy", (req, res) => {
+    res.render("privacy", { app: appData });
+});
+
+app.get("/privacy-policy/tr", (req, res) => {
+    res.render("privacy-tr", { app: appData });
+});
+
+app.get("/privacy-policy/nl", (req, res) => {
+    res.render("privacy-nl", { app: appData });
 });
 
 app.listen(PORT, () =>

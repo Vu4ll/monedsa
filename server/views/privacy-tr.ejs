@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gizlilik Politikası - <%= app.name %>
+    </title>
+    <meta name="description" content="Monera uygulaması gizlilik politikası ve kişisel veri koruma bilgileri">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="/images/icon-trans.png" type="image/x-icon">
+</head>
+
+<body>
+    <%- include("partials/header") %>
+
+        <!-- Privacy Policy Content -->
+        <main class="privacy-page">
+            <div class="container">
+                <div class="privacy-content">
+                    <div class="privacy-header">
+                        <h1>Gizlilik Politikası</h1>
+                        <p class="languages">
+                            <a href="/privacy-policy">İngilizce</a> | Türkçe | <a href="/privacy-policy/nl">Felemenkçe</a>
+                        </p>
+                        <p class="last-updated">Son güncelleme: 24 Temmuz 2025</p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>1. Genel Bilgiler</h2>
+                        <p>
+                            Bu Gizlilik Politikası, Monera uygulamasını kullandığınızda kişisel bilgilerinizin nasıl
+                            toplandığını, kullanıldığını ve korunduğunu açıklar. Uygulamayı kullanarak bu politikayı kabul etmiş
+                            sayılırsınız.
+                        </p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>2. Toplanan Veriler</h2>
+                        <p>Monera uygulaması aşağıdaki verileri toplayabilir:</p>
+                        <ul>
+                            <li>
+                                <strong>Finansal Veriler:</strong> Gelir-gider kayıtlarınız, işlem tutarları, açıklamalar ve tarih bilgileri.
+                            </li>
+                            <li>
+                                <strong>Kullanıcı Hesap Bilgileri:</strong> E-posta, kullanıcı adı, şifre (şifrelenmiş).
+                            </li>
+                            <li>
+                                <strong>Kategori Verileri:</strong> Oluşturduğunuz özel kategoriler ve renkleri.
+                            </li>
+                            <li>
+                                <strong>Tema Tercihleri:</strong> Açık/koyu görünüm tercihleriniz.
+                            </li>
+                            <li>
+                                <strong>Cihaz Bilgileri (anonim):</strong> Android sürümü, uygulama versiyonu.
+                            </li>
+                            <li>
+                                <strong>Ağ Durumu:</strong> İnternet bağlantı durumu (veritabanı bağlantısı için)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>3. Veri Saklama</h2>
+                        <p>Monera hibrit bir veri saklama yaklaşımı kullanır:</p>
+                        <ul>
+                            <li>
+                                <strong>Bulut Veritabanı:</strong> Hesap oluşturduğunuzda verileriniz 
+                                <a href="https://www.mongodb.com/products/platform/atlas-database" target="_blank">MongoDB Atlas</a>
+                                veritabanı üzerinde güvenli bir şekilde saklanır.
+                            </li>
+                            <li>
+                                <strong>Yerel Veriler:</strong> Uygulamada bazı veriler sadece cihaz üzerinde AsyncStorage kullanılarak saklanır.
+                                Örneğin tema tercihleri ve JSON web token bilgileri.
+                            </li>
+                            <li>
+                                <strong>Çapraz Cihaz Erişimi:</strong> Aynı hesapla farklı cihazlarda verilerinize erişebilirsiniz.
+                            </li>
+                            <li>
+                                <strong>JWT Token Yönetimi:</strong> Oturumlar JSON Web Token ile güvenli şekilde yönetilir.
+                            </li>
+                            <li>
+                                <strong>Veri Yedekliliği:</strong> Verilerinizi korumak adına plansız aralıklarla veritabanı yedekleri 
+                                alınmaktadır. Yedeklenen veritabanı verileri sunucumuz da güvenli bir şekilde saklanmaktadır.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>4. Veri Güvenliği</h2>
+                        <p>Verilerinizin güvenliği için aşağıdaki önlemler alınmıştır:</p>
+                        <ul>
+                            <li>
+                                <strong>Yerel Şifreleme:</strong> AsyncStorage kullanılarak cihazda güvenli bir şekilde veriler saklanmaktadır.
+                            </li>
+                            <li>
+                                <strong>Sunucu Şifrelemesi:</strong> MongoDB veritabanında sunucu tarafında güvenli bir şekilde veriler saklanmaktadır.
+                            </li>
+                            <li>
+                                <strong>JWT Güvenliği:</strong> Token tabanlı kimlik doğrulama ile kullanıcı oturum güvenliği sağlanmaktadır. (15 dakika erişim, 14 gün yenileme)
+                            </li>
+                            <li>
+                                <strong>HTTPS Bağlantıları:</strong> Tüm sunucu iletişimi şifrelenmiş kanal üzerinden gerçekleştirilir.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>5. Üçüncü Taraf Hizmetler ve Kütüphaneler</h2>
+                        <p>Monera aşağıdaki üçüncü taraf hizmetleri ve kütüphaneleri kullanır:</p>
+                        <ul>
+                            <li>
+                                <strong>React Native Ekosistemi:</strong> Uygulama geliştirme ortamında React Native kullanılır.
+                            </li>
+                            <li>
+                                <strong>AsyncStorage:</strong> Yerel veri saklama                                (@react-native-async-storage/async-storage)
+                            </li>
+                            <li>
+                                <strong>Network Info:</strong> İnternet bağlantı durumu kontrolü
+                                (@react-native-community/netinfo)
+                            </li>
+                            <li>
+                                <strong>Axios:</strong> HTTP istekleri yönetimi için.
+                            </li>
+                            <li>
+                                <strong>MongoDB:</strong> Sunucu tarafı veri saklamak için.
+                            </li>
+                            <li>
+                                <strong>Nodemailer:</strong> E-posta gönderimi için. (destek talepleri)
+                            </li>
+                            <li>
+                                <strong>Google Play Services:</strong> Uygulamanın Play Store üzerinden güncellenmesini ve analizlerini sağlar.
+                            </li>
+                        </ul>
+                        <p>
+                            📌 Bu hizmetlerin kendi gizlilik politikaları geçerlidir ve kendi güvenlik standartlarına sahiptir.
+                        </p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>6. Veri Silme ve Hesap Yönetimi</h2>
+                        <p>Verilerinizi silmek ve hesabınızı yönetmek için aşağıdaki seçenekleriniz bulunur:</p>
+                        <ul>
+                            <li>
+                                <strong>Uygulama Kaldırma:</strong> Uygulamayı cihazınızdan kaldırarak yerel verileri
+                                silebilirsiniz.
+                            </li>
+                            <li>
+                                <strong>Hesap Silme:</strong> Hesabınızı silmek için destek ekibimizle iletişime
+                                geçebilirsiniz.
+                            </li>
+                            <li>
+                                <strong>Sunucu Verilerini Silme:</strong> Hesap silme işlemi sunucudaki tüm verilerinizi
+                                kalıcı olarak siler.
+                            </li>
+                            <li>
+                                <strong>Seçici Silme:</strong> Belirli işlemleri veya kategorileri tek tek
+                                silebilirsiniz.
+                            </li>
+                        </ul>
+                        <p>
+                            📌 Hesap silme işlemi geri alınamaz ve tüm verileriniz kalıcı olarak silinir.
+                        </p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>7. Destek ve Sorun Bildirimi</h2>
+                        <p>Uygulama içi destek sistemi kullanıldığında:</p>
+                        <ul>
+                            <li>
+                                <strong>Toplanan Bilgiler:</strong> E-posta adresiniz, belirtilen sorun hakkında bilgiler.
+                            </li>
+                            <li>
+                                <strong>E-posta Gönderimi:</strong> Nodemailer kullanılarak otomatik e-posta bildirimleri gönderilir.
+                            </li>
+                            <li>
+                                <strong>Paylaşım:</strong> Destek verileri sadece teknik sorunları çözmek için kullanılır.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>8. Politika Değişiklikleri</h2>
+                        <p>
+                            Bu gizlilik politikası zaman zaman güncellenebilir. Güncel politikayı düzenli olarak kontrol etmenizi öneririz.
+                        </p>
+                        <p>📌 Değişiklikler bu sayfada yayınlandığı tarihte yürürlüğe girer.</p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>9. İletişim</h2>
+                        <p>Gizlilik politikası hakkında sorularınız için:</p>
+                        <ul>
+                            <li>
+                                <strong>GitHub Issues:</strong>
+                                <a href="<%= app.githubUrl %>/issues" target="_blank">
+                                    <%= app.githubUrl %>/issues
+                                </a>
+                            </li>
+                            <li>
+                                <strong>E-posta:</strong> <a href="mailto:support@vu4ll.com.tr">support@vu4ll.com.tr</a>
+                            </li>
+                            <li>
+                                <strong>Uygulama İçi Destek:</strong> Ayarlar > Sorun Bildir menüsünden
+                            </li>
+                        </ul>
+                        <p>📌 Destek taleplerini ortalama 24-48 saat içerisinde yanıtlamaya çalışıyoruz.</p>
+                    </div>
+
+                    <div class="privacy-section">
+                        <h2>10. Açık Kaynaklar</h2>
+                        <p>
+                            Monera, açık kaynaklı bir yazılım projesidir. Uygulamanın kaynak kodları ve geliştirici belgeleri herkesin erişimine açıktır.
+                        </p>
+                        <ul>
+                            <li>
+                                <strong>Kod Deposu:</strong> 
+                                <a href="<%= app.githubUrl %>" target="_blank">
+                                    <%= app.githubUrl %>
+                                </a>
+                            </li>
+                            <li>
+                                <strong>Lisans:</strong> Monera, GNU Genel Kamu Lisansı Sürüm 3 (GPL-3.0) altında lisanslanmıştır.
+                            </li>
+                            <li>
+                                <strong>Bu lisans kapsamında:</strong> Yazılımı kullanabilir, kopyalayabilir, dağıtabilir ve değiştirebilirsiniz. <br>
+                                Ancak değiştirilen veya türetilen sürümler de aynı lisansla (GPL-3.0) lisanslanmalıdır. <br>
+                                Yazılımın dağıtımı sırasında orijinal lisans metni ve telif hakkı bildirimleri korunmalı, ayrıca kaynak kod erişimi
+                                sağlanmalıdır.
+                            </li>
+                            <li>
+                                <strong>Üçüncü Taraf Bileşenler:</strong> Monera, geliştirme sürecinde bazı açık kaynak kütüphaneler kullanmaktadır
+                                (örneğin React Native, Mongoose, Axios vb.). Bu bileşenlerin her biri kendi lisans koşullarına tabidir.
+                            </li>
+                        </ul>
+                        <p>
+                            📌 GPL-3.0 hakkında daha fazla bilgi için: <br>
+                            🔗 <a href="https://www.gnu.org/licenses/gpl-3.0.tr.html">https://www.gnu.org/licenses/gpl-3.0.tr.html</a>
+                        </p>
+                    </div>
+
+                    <div class="privacy-footer">
+                        <p>
+                            Bu politika Türkiye Cumhuriyeti Kişisel Verilerin Korunması Kanunu (KVKK),
+                            Avrupa Birliği Genel Veri Koruma Yönetmeliği (GDPR) ve diğer ilgili veri koruma
+                            yasalarına uygun olarak hazırlanmıştır.
+                        </p>
+                        <p>
+                            <strong>Sürüm:</strong> 1.0 | <strong>Son Güncelleme:</strong> 24 Temmuz 2025
+                        </p>
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Ana Sayfaya Dön
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <%- include("partials/footer") %>
+        <script src="/js/script.js"></script>
+    </body>
+</html>

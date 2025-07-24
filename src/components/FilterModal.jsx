@@ -8,7 +8,9 @@ import {
     ScrollView,
     StyleSheet,
     FlatList,
+    Platform,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { categoryService } from '../services';
 
@@ -24,6 +26,10 @@ const FilterModal = ({
     const [categories, setCategories] = useState([]);
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+    const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
 
     useEffect(() => {
         if (visible) {
@@ -66,6 +72,61 @@ const FilterModal = ({
     const clearCategorySelection = () => {
         setSelectedCategory(null);
         setTempFilters(prev => ({ ...prev, category: '' }));
+    };
+
+    const formatDateToString = (date) => {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
+    const parseStringToDate = (dateString) => {
+        if (!dateString || !validateDateFormat(dateString)) return new Date();
+        const [day, month, year] = dateString.split('-');
+        return new Date(year, month - 1, day);
+    };
+
+    const handleStartDateChange = (event, selectedDate) => {
+        setShowStartDatePicker(Platform.OS === 'ios');
+        if (selectedDate) {
+            setStartDate(selectedDate);
+            const formattedDate = formatDateToString(selectedDate);
+            setTempFilters(prev => ({ ...prev, startDate: formattedDate }));
+        }
+    };
+
+    const handleEndDateChange = (event, selectedDate) => {
+        setShowEndDatePicker(Platform.OS === 'ios');
+        if (selectedDate) {
+            setEndDate(selectedDate);
+            const formattedDate = formatDateToString(selectedDate);
+            setTempFilters(prev => ({ ...prev, endDate: formattedDate }));
+        }
+    };
+
+    // Tarih picker'ı açmak için fonksiyonlar
+    const openStartDatePicker = () => {
+        if (tempFilters.startDate && validateDateFormat(tempFilters.startDate)) {
+            setStartDate(parseStringToDate(tempFilters.startDate));
+        }
+        setShowStartDatePicker(true);
+    };
+
+    const openEndDatePicker = () => {
+        if (tempFilters.endDate && validateDateFormat(tempFilters.endDate)) {
+            setEndDate(parseStringToDate(tempFilters.endDate));
+        }
+        setShowEndDatePicker(true);
+    };
+
+    // Hızlı tarih seçim fonksiyonları
+    const setQuickDate = (startDateObj, endDateObj) => {
+        setTempFilters(prev => ({
+            ...prev,
+            startDate: formatDateToString(startDateObj),
+            endDate: formatDateToString(endDateObj)
+        }));
     };
 
     const validateDateFormat = (dateString) => {
@@ -114,7 +175,7 @@ const FilterModal = ({
             justifyContent: 'flex-end',
         },
         modalContainer: {
-            maxHeight: '80%',
+            maxHeight: '85%',
             backgroundColor: colors.cardBackground,
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
@@ -302,6 +363,9 @@ const FilterModal = ({
             fontSize: 16,
             color: colors.text,
         },
+        datePlaceholder: {
+            color: colors.textSecondary,
+        },
         dateIcon: {
             paddingHorizontal: 12,
         },
@@ -450,42 +514,34 @@ const FilterModal = ({
 
                         <View style={styles.dateInputContainer}>
                             <Text style={styles.dateLabel}>Başlangıç Tarihi</Text>
-                            <View style={styles.dateInputWrapper}>
-                                <TextInput
-                                    style={[
-                                        styles.dateTextInput,
-                                        tempFilters.startDate && !validateDateFormat(tempFilters.startDate) && styles.invalidDate
-                                    ]}
-                                    value={tempFilters.startDate}
-                                    onChangeText={(text) => setTempFilters(prev => ({ ...prev, startDate: text }))}
-                                    placeholder={`Örn: ${getTodayString()}`}
-                                    placeholderTextColor={colors.textSecondary}
-                                />
+                            <TouchableOpacity
+                                style={styles.dateInputWrapper}
+                                onPress={openStartDatePicker}
+                            >
+                                <Text style={[
+                                    styles.dateTextInput,
+                                    !tempFilters.startDate && styles.datePlaceholder
+                                ]}>
+                                    {tempFilters.startDate || `Örn: ${getTodayString()}`}
+                                </Text>
                                 <Icon name="date-range" size={20} color={colors.textSecondary} style={styles.dateIcon} />
-                            </View>
-                            {tempFilters.startDate && !validateDateFormat(tempFilters.startDate) && (
-                                <Text style={styles.dateError}>Geçerli format: DD-MM-YYYY</Text>
-                            )}
+                            </TouchableOpacity>
                         </View>
 
                         <View style={styles.dateInputContainer}>
                             <Text style={styles.dateLabel}>Bitiş Tarihi</Text>
-                            <View style={styles.dateInputWrapper}>
-                                <TextInput
-                                    style={[
-                                        styles.dateTextInput,
-                                        tempFilters.endDate && !validateDateFormat(tempFilters.endDate) && styles.invalidDate
-                                    ]}
-                                    value={tempFilters.endDate}
-                                    onChangeText={(text) => setTempFilters(prev => ({ ...prev, endDate: text }))}
-                                    placeholder={`Örn: ${getTodayString()}`}
-                                    placeholderTextColor={colors.textSecondary}
-                                />
+                            <TouchableOpacity
+                                style={styles.dateInputWrapper}
+                                onPress={openEndDatePicker}
+                            >
+                                <Text style={[
+                                    styles.dateTextInput,
+                                    !tempFilters.endDate && styles.datePlaceholder
+                                ]}>
+                                    {tempFilters.endDate || `Örn: ${getTodayString()}`}
+                                </Text>
                                 <Icon name="date-range" size={20} color={colors.textSecondary} style={styles.dateIcon} />
-                            </View>
-                            {tempFilters.endDate && !validateDateFormat(tempFilters.endDate) && (
-                                <Text style={styles.dateError}>Geçerli format: DD-MM-YYYY</Text>
-                            )}
+                            </TouchableOpacity>
                         </View>
 
                         {/* Hızlı tarih seçenekleri */}
@@ -495,8 +551,8 @@ const FilterModal = ({
                                 <TouchableOpacity
                                     style={styles.quickDateButton}
                                     onPress={() => {
-                                        const today = getTodayString();
-                                        setTempFilters(prev => ({ ...prev, startDate: today, endDate: today }));
+                                        const today = new Date();
+                                        setQuickDate(today, today);
                                     }}
                                 >
                                     <Text style={styles.quickDateText}>Bugün</Text>
@@ -506,16 +562,24 @@ const FilterModal = ({
                                     style={styles.quickDateButton}
                                     onPress={() => {
                                         const today = new Date();
+                                        const dayOfWeek = today.getDay();
+                                        const mondayOffset = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+                                        const monday = new Date(today.getTime() - mondayOffset * 24 * 60 * 60 * 1000);
+                                        const sunday = new Date(monday.getTime() + 6 * 24 * 60 * 60 * 1000);
+
+                                        setQuickDate(monday, sunday);
+                                    }}
+                                >
+                                    <Text style={styles.quickDateText}>Bu Hafta</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.quickDateButton}
+                                    onPress={() => {
+                                        const today = new Date();
                                         const sevenDaysAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-                                        const todayFormatted = getTodayString();
-                                        const sevenDaysAgoFormatted = `${String(sevenDaysAgo.getDate()).padStart(2, '0')}-${String(sevenDaysAgo.getMonth() + 1).padStart(2, '0')}-${sevenDaysAgo.getFullYear()}`;
-
-                                        setTempFilters(prev => ({
-                                            ...prev,
-                                            startDate: sevenDaysAgoFormatted,
-                                            endDate: todayFormatted
-                                        }));
+                                        setQuickDate(sevenDaysAgo, today);
                                     }}
                                 >
                                     <Text style={styles.quickDateText}>Son 7 Gün</Text>
@@ -525,19 +589,37 @@ const FilterModal = ({
                                     style={styles.quickDateButton}
                                     onPress={() => {
                                         const today = new Date();
+                                        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                                        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+                                        setQuickDate(firstDayOfMonth, lastDayOfMonth);
+                                    }}
+                                >
+                                    <Text style={styles.quickDateText}>Bu Ay</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.quickDateButton}
+                                    onPress={() => {
+                                        const today = new Date();
                                         const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-
-                                        const todayFormatted = getTodayString();
-                                        const thirtyDaysAgoFormatted = `${String(thirtyDaysAgo.getDate()).padStart(2, '0')}-${String(thirtyDaysAgo.getMonth() + 1).padStart(2, '0')}-${thirtyDaysAgo.getFullYear()}`;
-
-                                        setTempFilters(prev => ({
-                                            ...prev,
-                                            startDate: thirtyDaysAgoFormatted,
-                                            endDate: todayFormatted
-                                        }));
+                                        setQuickDate(thirtyDaysAgo, today);
                                     }}
                                 >
                                     <Text style={styles.quickDateText}>Son 30 Gün</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.quickDateButton}
+                                    onPress={() => {
+                                        const today = new Date();
+                                        const firstDayOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+                                        const lastDayOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+
+                                        setQuickDate(firstDayOfLastMonth, lastDayOfLastMonth);
+                                    }}
+                                >
+                                    <Text style={styles.quickDateText}>Geçen Ay</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -599,6 +681,29 @@ const FilterModal = ({
                     </View>
                 </View>
             </Modal>
+
+            {/* DateTimePicker'lar */}
+            {showStartDatePicker && (
+                <DateTimePicker
+                    value={startDate}
+                    mode="date"
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    onChange={handleStartDateChange}
+                    minimumDate={new Date(2000, 0, 1)}
+                    maximumDate={new Date(2030, 11, 31)}
+                />
+            )}
+
+            {showEndDatePicker && (
+                <DateTimePicker
+                    value={endDate}
+                    mode="date"
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    onChange={handleEndDateChange}
+                    minimumDate={new Date(2000, 0, 1)}
+                    maximumDate={new Date(2030, 11, 31)}
+                />
+            )}
         </Modal>
     );
 };

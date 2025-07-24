@@ -10,7 +10,7 @@ const emailTexts = {
         admin: {
             subject: "🐛 [Monera] Yeni Sorun Bildirimi: ",
             newIssue: "🛠️ Yeni Sorun Bildirimi",
-            appName: "Monera Uygulaması",
+            appName: "Monera",
             issueDetails: "📋 Sorun Detayları",
             description: "📝 Açıklama:",
             userInfo: "👤 Kullanıcı Bilgileri",
@@ -49,7 +49,7 @@ const emailTexts = {
         admin: {
             subject: "🐛 [Monera] New Issue Report: ",
             newIssue: "🛠️ New Issue Report",
-            appName: "Monera Application",
+            appName: "Monera",
             issueDetails: "📋 Issue Details",
             description: "📝 Description:",
             userInfo: "👤 User Information",
@@ -121,7 +121,7 @@ router.post("/issue", async (req, res) => {
         const texts = emailTexts[selectedLanguage];
 
         const emailContent = {
-            from: `Support - Gider Takip <${process.env.MAIL_USER}>`,
+            from: `Support - Monera <${process.env.MAIL_USER}>`,
             to: "contact@vu4ll.com.tr",
             subject: `${texts.admin.subject}${title}`,
             html: `
@@ -192,7 +192,7 @@ router.post("/issue", async (req, res) => {
         await transporter.sendMail(emailContent);
 
         const confirmationEmail = {
-            from: `Support - Gider Takip <${process.env.MAIL_USER}>`,
+            from: `Support - Monera <${process.env.MAIL_USER}>`,
             to: email,
             subject: texts.user.subject,
             html: `

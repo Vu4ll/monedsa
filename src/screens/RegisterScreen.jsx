@@ -8,14 +8,14 @@ import {
     Alert,
     KeyboardAvoidingView,
     ScrollView,
-    Platform,
     SafeAreaView,
     StatusBar,
-    useColorScheme
+    Linking
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from "../contexts/ThemeContext";
 import { authService } from '../services';
+import { API_CONFIG } from '../constants/api';
 
 const RegisterScreen = ({ navigation }) => {
     const { isDarkMode, colors } = useTheme();
@@ -31,6 +31,7 @@ const RegisterScreen = ({ navigation }) => {
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
 
     // Refs for input navigation
     const emailRef = useRef(null);
@@ -93,6 +94,11 @@ const RegisterScreen = ({ navigation }) => {
             newErrors.confirmPassword = 'Parola tekrarı gerekli';
         } else if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = 'Parolalar eşleşmiyor';
+        }
+
+        // Privacy policy validation
+        if (!acceptPrivacyPolicy) {
+            newErrors.privacyPolicy = 'Gizlilik sözleşmesini kabul etmelisiniz';
         }
 
         setErrors(newErrors);
@@ -187,6 +193,13 @@ const RegisterScreen = ({ navigation }) => {
                 setErrors(prev => ({ ...prev, confirmPassword: 'Parolalar eşleşmiyor' }));
             }
         }
+    };
+
+    const openPrivacyPolicy = () => {
+        Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy`).catch((err) => {
+            console.error('Link açılamadı:', err);
+            Alert.alert('Hata', 'Gizlilik sözleşmesi açılamadı. Lütfen daha sonra tekrar deneyin.');
+        });
     };
 
     const styles = StyleSheet.create({
@@ -298,6 +311,36 @@ const RegisterScreen = ({ navigation }) => {
         linkHighlight: {
             color: colors.primary,
             fontWeight: '600',
+        },
+        privacyContainer: {
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            marginTop: 8,
+            marginBottom: 8,
+        },
+        checkbox: {
+            width: 20,
+            height: 20,
+            borderWidth: 2,
+            borderColor: colors.border,
+            borderRadius: 4,
+            marginRight: 12,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        checkboxChecked: {
+            backgroundColor: colors.primary,
+            borderColor: colors.primary,
+        },
+        privacyText: {
+            flex: 1,
+            fontSize: 14,
+            color: colors.textSecondary,
+            lineHeight: 20,
+        },
+        privacyLink: {
+            color: colors.primary,
+            textDecorationLine: 'underline',
         },
     });
 
@@ -437,10 +480,35 @@ const RegisterScreen = ({ navigation }) => {
                             {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
                         </View>
 
+                        {/* Gizlilik Sözleşmesi Onayı */}
+                        <View style={styles.privacyContainer}>
+                            <TouchableOpacity
+                                style={[styles.checkbox, acceptPrivacyPolicy && styles.checkboxChecked]}
+                                onPress={() => {
+                                    setAcceptPrivacyPolicy(!acceptPrivacyPolicy);
+                                    if (errors.privacyPolicy) {
+                                        setErrors(prev => ({ ...prev, privacyPolicy: null }));
+                                    }
+                                }}
+                                activeOpacity={0.7}
+                            >
+                                {acceptPrivacyPolicy && (
+                                    <Icon name="check" size={14} color={colors.white} />
+                                )}
+                            </TouchableOpacity>
+                            <Text style={styles.privacyText}>
+                                <Text onPress={openPrivacyPolicy} style={styles.privacyLink}>
+                                    Gizlilik Sözleşmesi
+                                </Text>
+                                'ni okudum ve kabul ediyorum.
+                            </Text>
+                        </View>
+                        {errors.privacyPolicy && <Text style={styles.errorText}>{errors.privacyPolicy}</Text>}
+
                         <TouchableOpacity
-                            style={[styles.button, loading && styles.buttonDisabled]}
+                            style={[styles.button, (loading || !acceptPrivacyPolicy) && styles.buttonDisabled]}
                             onPress={handleRegister}
-                            disabled={loading}
+                            disabled={loading || !acceptPrivacyPolicy}
                         >
                             <Text style={styles.buttonText}>
                                 {loading ? 'Kaydolunuyor...' : 'Kayıt Ol'}

@@ -9,9 +9,15 @@ const defaultCategoriesEn = [
     { name: "Transport", color: "#4ECDC4", type: "expense" },
     { name: "Entertainment", color: "#45B7D1", type: "expense" },
     { name: "Shopping", color: "#96CEB4", type: "expense" },
+    { name: "Health", color: "#FFB347", type: "expense" },
+    { name: "Education", color: "#7D5FFF", type: "expense" },
+    { name: "Bill", color: "#3C6382", type: "expense" },
+    { name: "Gift", color: "#F8A5C2", type: "expense" },
     { name: "Salary", color: "#FECA57", type: "income" },
     { name: "Freelance", color: "#FF9FF3", type: "income" },
-    { name: "Investment", color: "#54A0FF", type: "income" }
+    { name: "Investment", color: "#54A0FF", type: "income" },
+    { name: "Bonus", color: "#00B894", type: "income" },
+    { name: "Refund", color: "#636e72", type: "income" }
 ];
 
 const defaultCategoriesTr = [
@@ -19,9 +25,15 @@ const defaultCategoriesTr = [
     { name: "Ulaşım", color: "#4ECDC4", type: "expense" },
     { name: "Eğlence", color: "#45B7D1", type: "expense" },
     { name: "Alışveriş", color: "#96CEB4", type: "expense" },
+    { name: "Sağlık", color: "#FFB347", type: "expense" },
+    { name: "Eğitim", color: "#7D5FFF", type: "expense" },
+    { name: "Fatura", color: "#3C6382", type: "expense" },
+    { name: "Hediye", color: "#F8A5C2", type: "expense" },
     { name: "Maaş", color: "#FECA57", type: "income" },
     { name: "Freelance", color: "#FF9FF3", type: "income" },
-    { name: "Yatırım", color: "#54A0FF", type: "income" }
+    { name: "Yatırım", color: "#54A0FF", type: "income" },
+    { name: "Prim", color: "#00B894", type: "income" },
+    { name: "İade", color: "#636e72", type: "income" }
 ];
 
 async function seedCategoriesForUser(userId, language = "en") {

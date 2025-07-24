@@ -19,6 +19,7 @@ import { Header } from '../components';
 import { useTheme } from '../contexts/ThemeContext';
 import { API_CONFIG } from '../constants/api';
 import { authService } from '../services';
+import { version } from '../../package.json';
 
 const SettingsScreen = ({ navigation }) => {
     const { themeMode, isDarkMode, colors, changeTheme, getThemeDisplay } = useTheme();
@@ -75,7 +76,7 @@ const SettingsScreen = ({ navigation }) => {
     };
 
     const rateApp = () => {
-        const appId = 'com.client';
+        const appId = 'com.vu4ll.monera';
 
         if (Platform.OS === 'android') {
             const url = `market://details?id=${appId}`;
@@ -128,7 +129,7 @@ const SettingsScreen = ({ navigation }) => {
                     description: issueReport.description,
                     email: userMail,
                     platform: Platform.OS,
-                    version: '1.0.0',
+                    version: version,
                     timestamp: new Date().toISOString(),
                     // language: "en"
                 }),
@@ -449,8 +450,15 @@ const SettingsScreen = ({ navigation }) => {
 
                     <View style={styles.aboutRow}>
                         <Text style={styles.aboutLabel}>Versiyon</Text>
-                        <Text style={styles.aboutValue}>1.0</Text>
+                        <Text style={styles.aboutValue}>{version}</Text>
                     </View>
+
+                    <TouchableOpacity
+                        style={styles.aboutRow}
+                        onPress={() => Linking.openURL("https://monera.vu4ll.com.tr")}>
+                        <Text style={styles.aboutLabel}>Web Sitesi</Text>
+                        <Icon name="chevron-right" size={24} color={colors.textSecondary} />
+                    </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.aboutRow}
@@ -459,7 +467,9 @@ const SettingsScreen = ({ navigation }) => {
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.aboutRow, styles.lastAboutRow]}>
+                    <TouchableOpacity 
+                        style={[styles.aboutRow, styles.lastAboutRow]}
+                        onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy`)}>
                         <Text style={styles.aboutLabel}>Gizlilik Politikası</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
@@ -470,6 +480,13 @@ const SettingsScreen = ({ navigation }) => {
                         style={[styles.aboutRow, { paddingTop: 0 }]}
                         onPress={showIssuePicker}>
                         <Text style={styles.aboutLabel}>Sorun Bildirin</Text>
+                        <Icon name="chevron-right" size={24} color={colors.textSecondary} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.aboutRow}
+                        onPress={() => Linking.openURL("https://coff.ee/Vu4ll")}>
+                        <Text style={styles.aboutLabel}>Bağışta Bulunun</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
@@ -615,6 +632,25 @@ const SettingsScreen = ({ navigation }) => {
                             <View style={styles.themeOptionContent}>
                                 <Text style={styles.themeOptionTitle}>English</Text>
                                 <Text style={styles.themeOptionDescription}>Coming soon...</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[
+                                styles.themeOption,
+                                styles.themeOptionInactive,
+                                { opacity: 0.5 }
+                            ]}
+                            disabled={true}
+                        >
+                            <View style={[
+                                styles.radioButton,
+                                styles.radioButtonInactive
+                            ]}>
+                            </View>
+                            <View style={styles.themeOptionContent}>
+                                <Text style={styles.themeOptionTitle}>Nederlands</Text>
+                                <Text style={styles.themeOptionDescription}>Binnenkort beschikbaar...</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
