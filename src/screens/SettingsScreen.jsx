@@ -76,7 +76,7 @@ const SettingsScreen = ({ navigation }) => {
     };
 
     const rateApp = () => {
-        const appId = 'com.vu4ll.monera';
+        const appId = 'com.vu4ll.monedsa';
 
         if (Platform.OS === 'android') {
             const url = `market://details?id=${appId}`;
@@ -455,14 +455,14 @@ const SettingsScreen = ({ navigation }) => {
 
                     <TouchableOpacity
                         style={styles.aboutRow}
-                        onPress={() => Linking.openURL("https://monera.vu4ll.com.tr")}>
+                        onPress={() => Linking.openURL(API_CONFIG.BASE_URL)}>
                         <Text style={styles.aboutLabel}>Web Sitesi</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.aboutRow}
-                        onPress={() => Linking.openURL("https://github.com/Vu4ll/monera")}>
+                        onPress={() => Linking.openURL("https://github.com/Vu4ll/monedsa")}>
                         <Text style={styles.aboutLabel}>Kaynak Kod (Github)</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>

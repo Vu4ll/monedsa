@@ -221,7 +221,7 @@ const LoginScreen = ({ navigation, onLogin }) => {
                         style={{ flex: 1 }}
                     >
                         <View style={styles.formContainer}>
-                            <Text style={styles.title}>Monera</Text>
+                            <Text style={styles.title}>Monedsa</Text>
                             <Text style={styles.subtitle}>Hesabınıza giriş yapın</Text>
 
                             <View style={styles.inputContainer}>

@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity, StatusBar, Image } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { API_CONFIG } from '../constants/api';
+import { useTheme } from "../contexts/ThemeContext";
 
 export const Header = ({ colors, title, showLeftAction = false, leftActionIcon = "arrow-back", onLeftActionPress, showRightAction = false, rightActionIcon = "more-vert", rightIconColor = colors.text, onRightActionPress, showLogo = false }) => {
+  const { isDarkMode } = useTheme();
   const styles = StyleSheet.create({
     header: {
       flexDirection: "row",
@@ -63,17 +65,17 @@ export const Header = ({ colors, title, showLeftAction = false, leftActionIcon =
         {showLogo ? (
           <View style={styles.titleWithLogo}>
             <Image
-              source={{ uri: `${API_CONFIG.BASE_URL}/images/icon-trans-white.png` }}
+              source={{ uri: (isDarkMode ? `${API_CONFIG.BASE_URL}/images/icon-trans-white.png` : `${API_CONFIG.BASE_URL}/images/icon-trans.png`) }}
               style={styles.logo}
               resizeMode="contain"
             />
             <Text style={[styles.title, { color: colors.text }]}>
-              {title || "Monera"}
+              {title || "Monedsa"}
             </Text>
           </View>
         ) : (
           <Text style={[styles.title, { color: colors.text }]}>
-            {title || "Monera"}
+            {title || "Monedsa"}
           </Text>
         )}
       </View>

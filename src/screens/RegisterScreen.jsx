@@ -354,7 +354,7 @@ const RegisterScreen = ({ navigation }) => {
             >
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.title}>Monera</Text>
+                        <Text style={styles.title}>Monedsa</Text>
                         <Text style={styles.subtitle}>Yeni Hesap Oluştur</Text>
                     </View>
 

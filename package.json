@@ -1,6 +1,6 @@
 {
-  "name": "monera",
-  "displayName": "Monera",
+  "name": "monedsa",
+  "displayName": "Monedsa",
   "version": "1.0",
   "scripts": {
     "android": "react-native run-android",

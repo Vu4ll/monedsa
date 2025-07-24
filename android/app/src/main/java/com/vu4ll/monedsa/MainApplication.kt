@@ -1,4 +1,4 @@
-package com.vu4ll.monera
+package com.vu4ll.monedsa
 
 import android.app.Application
 import com.facebook.react.PackageList

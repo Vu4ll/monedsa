@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
-  package="com.vu4ll.monera">
+  package="com.vu4ll.monedsa">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

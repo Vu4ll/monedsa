@@ -83,9 +83,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.vu4ll.monera"
+    namespace "com.vu4ll.monedsa"
     defaultConfig {
-        applicationId "com.vu4ll.monera"
+        applicationId "com.vu4ll.monedsa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

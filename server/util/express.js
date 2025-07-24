@@ -13,7 +13,7 @@ app.set("views", path.join(__dirname, "..", "views"));
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 const appData = {
-    name: "Monera",
+    name: "Monedsa",
     tagline: "Gelir Gider Takip Uygulaması",
     description: "Android cihazlarınızda kolayca gelir ve giderlerinizi takip edin. Basit, hızlı ve güvenli.",
     features: [
@@ -43,7 +43,7 @@ const appData = {
         playStore: "#",
         apk: "#",
     },
-    githubUrl: "https://github.com/Vu4ll/monera",
+    githubUrl: "https://github.com/Vu4ll/monedsa",
     version: "1.0",
 };
 
