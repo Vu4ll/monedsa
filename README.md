@@ -16,7 +16,7 @@ Turkish | [English](README_EN.md) | [Dutch](README_NL.md)
 - Detaylı açıklamalar ve kategoriler ile işlemlerinizi organize edin
 - Gerçek zamanlı bakiye hesaplama
 
-### 📊 Kategori Sistemib
+### 📊 Kategori Sistemi
 - Özel kategoriler oluşturun
 - Renk kodlama sistemi ile kategorilerinizi ayırt edin
 - Gelir ve gider için ayrı kategori yönetimi
