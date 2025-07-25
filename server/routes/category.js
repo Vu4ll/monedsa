@@ -8,10 +8,6 @@ const Category = require("../models/category");
 const Transaction = require("../models/transaction");
 const mongoose = require("mongoose");
 
-router.get("/", async (req, res) => {
-    res.json({ message: "Category API is working!" });
-});
-
 router.get("/list", verifyToken, async (req, res) => {
     const { type } = req.query;
 

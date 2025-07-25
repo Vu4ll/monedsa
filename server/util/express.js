@@ -36,13 +36,13 @@ const appData = {
         {
             icon: "🔒",
             title: "Güvenli",
-            description: "Verileriniz güvenli bir şekilde cihazınızda saklanır",
+            description: "Verileriniz güvenli bir şekilde bulut veritabanında saklanır",
         },
     ],
     screenshots: ["/images/home-page.png", "/images/home-page-white.png", "/images/filter.png", "/images/add-transaction.png", "/images/categories.png", "/images/add-category.png", "/images/profile.png", "/images/settings.png"],
     downloadLinks: {
         playStore: "#",
-        apk: "#",
+        apk: "https://github.com/Vu4ll/monedsa/releases/download/1.1/monedsa1.1.apk",
     },
     githubUrl: "https://github.com/Vu4ll/monedsa",
     version

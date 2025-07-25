@@ -9,10 +9,6 @@ const Transaction = require("../models/transaction");
 const Category = require("../models/category");
 const mongoose = require("mongoose");
 
-router.get("/", async (req, res) => {
-    res.json({ message: "Transaction API is working!" });
-});
-
 router.post("/add", verifyToken, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 

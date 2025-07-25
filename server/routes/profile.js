@@ -9,10 +9,6 @@ const locale = require("../locales/en.json");
 const User = require("../models/user");
 const { emailRegex, usernameRegex, passwordRegex } = require("../config");
 
-router.get("/", async (req, res) => {
-    res.json({ message: "Profile API is working!" });
-});
-
 router.get("/me", verifyToken, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password -__v");
