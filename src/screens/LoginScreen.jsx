@@ -6,10 +6,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     Alert,
-    useColorScheme,
     KeyboardAvoidingView,
     ScrollView,
-    Platform,
     TouchableWithoutFeedback,
     Keyboard,
     SafeAreaView,
@@ -59,7 +57,7 @@ const LoginScreen = ({ navigation, onLogin }) => {
             } else {
                 const errorMessage = result.error || 'Giriş başarısız';
 
-                if (errorMessage.includes('User not found') || errorMessage.includes('Invalid credentials')) {
+                if (errorMessage.includes('User not found')) {
                     setErrors({ email: 'Kullanıcı bulunamadı veya hatalı bilgiler' });
                 } else if (errorMessage.includes('Invalid password')) {
                     setErrors({ password: 'Hatalı parola' });

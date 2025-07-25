@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-  BASE_URL: "http://192.168.1.105:3030",
+  BASE_URL: "https://monedsa.vu4ll.com.tr",
 
   ENDPOINTS: {
     TRANSACTION: {
