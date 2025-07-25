@@ -176,11 +176,14 @@ PUT  /api/profile/change-password # Şifre değiştirme
 
 ## 🌟 Ekran Görüntüleri
 
+| Ana Sayfa | Ana Sayfa (Beyaz Tema) | İşlem Ekleme (Beyaz Tema) | Kategoriler | Profil |
+|-----------|-----------|-----------|-----------|-----------|
+| <img src="server/public/images/home-page.png" width="200"/> | <img src="server/public/images/home-page-white.png" width="200"/> | <img src="server/public/images/add-transaction.png" width="200"/> | <img src="server/public/images/categories.png" width="200"/> | <img src="server/public/images/profile.png" width="200"/> |
+
 - Ana Sayfa: Bakiye özeti ve son işlemler
 - İşlem Ekleme: Yeni gelir/gider ekleme formu
 - Kategoriler: Kategori yönetimi ve renk seçimi
 - Profil: Kullanıcı bilgileri ve istatistikler
-- Ayarlar: Tema ve uygulama ayarları
 
 ## 🤝 Katkıda Bulunma
 

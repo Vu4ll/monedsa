@@ -176,11 +176,14 @@ PUT  /api/profile/change-password # Change password
 
 ## 🌟 Screenshots
 
+| Home Screen | Home Screen (White Thema) | Add Transaction (White Thema) | Categories | Profile |
+|-----------|-----------|-----------|-----------|-----------|
+| <img src="server/public/images/home-page.png" width="200"/> | <img src="server/public/images/home-page-white.png" width="200"/> | <img src="server/public/images/add-transaction.png" width="200"/> | <img src="server/public/images/categories.png" width="200"/> | <img src="server/public/images/profile.png" width="200"/> |
+
 - Home Screen: Balance summary and recent transactions
 - Add Transaction: New income/expense entry form
 - Categories: Category management and color selection
 - Profile: User information and statistics
-- Settings: Theme and application settings
 
 ## 🤝 Contributing
 

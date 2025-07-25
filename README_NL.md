@@ -176,11 +176,14 @@ PUT  /api/profile/change-password # Wachtwoord wijzigen
 
 ## 🌟 Screenshots
 
+| Startscherm | Startscherm (Wit Thema) | Transactie Toevoegen (Wit Thema) | Categorieën | Profiel |
+|-----------|-----------|-----------|-----------|-----------|
+| <img src="server/public/images/home-page.png" width="200"/> | <img src="server/public/images/home-page-white.png" width="200"/> | <img src="server/public/images/add-transaction.png" width="200"/> | <img src="server/public/images/categories.png" width="200"/> | <img src="server/public/images/profile.png" width="200"/> |
+
 - Startscherm: Balans overzicht en recente transacties
 - Transactie Toevoegen: Nieuw inkomsten/uitgaven invoerformulier
 - Categorieën: Categoriebeheer en kleurselectie
 - Profiel: Gebruikersinformatie en statistieken
-- Instellingen: Thema en applicatie-instellingen
 
 ## 🤝 Bijdragen
 

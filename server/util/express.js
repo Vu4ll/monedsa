@@ -38,7 +38,7 @@ const appData = {
             description: "Verileriniz güvenli bir şekilde cihazınızda saklanır",
         },
     ],
-    screenshots: ["/images/image.png", "/images/image.png", "/images/image.png"],
+    screenshots: ["/images/home-page.png", "/images/home-page-white.png", "/images/filter.png", "/images/add-transaction.png", "/images/categories.png", "/images/add-category.png", "/images/profile.png", "/images/settings   .png"],
     downloadLinks: {
         playStore: "#",
         apk: "#",
