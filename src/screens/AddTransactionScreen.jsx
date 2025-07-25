@@ -10,7 +10,6 @@ import {
     Modal,
     FlatList,
     KeyboardAvoidingView,
-    useColorScheme,
     ToastAndroid,
     Alert
 } from 'react-native';
@@ -123,12 +122,17 @@ const AddTransactionScreen = ({ navigation, route }) => {
             if (result.success) {
                 ToastAndroid.show(`İşlem başarıyla ${editingTransaction ? 'güncellendi' : 'eklendi'}`, ToastAndroid.SHORT);
 
-                navigation.navigate('MainApp', {
-                    screen: 'Home',
-                    params: { refresh: true }
-                });
+                if (route.params?.onRefresh) {
+                    route.params.onRefresh();
+                }
 
                 resetForm();
+
+                if (navigation.canGoBack()) {
+                    navigation.goBack();
+                } else {
+                    navigation.navigate('MainApp');
+                }
             } else {
                 ToastAndroid.show(`Hata: ${result.message || "İşlem başarısız"}`, ToastAndroid.SHORT);
             }
@@ -158,10 +162,15 @@ const AddTransactionScreen = ({ navigation, route }) => {
                             if (result.success) {
                                 ToastAndroid.show('İşlem başarıyla silindi', ToastAndroid.SHORT);
 
-                                navigation.navigate('MainApp', {
-                                    screen: 'Home',
-                                    params: { refresh: true }
-                                });
+                                if (route.params?.onRefresh) {
+                                    route.params.onRefresh();
+                                }
+
+                                if (navigation.canGoBack()) {
+                                    navigation.goBack();
+                                } else {
+                                    navigation.navigate('MainApp');
+                                }
                             } else {
                                 ToastAndroid.show(`Hata: ${result.message || "Silme başarısız"}`, ToastAndroid.SHORT);
                             }
@@ -371,7 +380,13 @@ const AddTransactionScreen = ({ navigation, route }) => {
                 colors={colors}
                 title={editingTransaction ? 'İşlemi Düzenle' : 'Yeni İşlem Ekle'}
                 showLeftAction={true}
-                onLeftActionPress={() => navigation.goBack()}
+                onLeftActionPress={() => {
+                    if (navigation.canGoBack()) {
+                        navigation.goBack();
+                    } else {
+                        navigation.navigate('MainApp');
+                    }
+                }}
                 showRightAction={!!editingTransaction}
                 rightActionIcon="delete"
                 rightIconColor={colors.softRed}

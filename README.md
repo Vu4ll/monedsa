@@ -1,6 +1,6 @@
 # Monedsa - Gelir Gider Takip Uygulaması
 
-![Version](https://img.shields.io/badge/version-1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
@@ -42,6 +42,7 @@ Turkish | [English](README_EN.md) | [Dutch](README_NL.md)
 
 - **Node.js** 18 veya üzeri
 - **React Native CLI** kurulu olmalı
+- **Android 7 (API 24)** ve üzeri cihaz
 - **Android Studio** (Android geliştirme için)
 - **MongoDB** veritabanı
 

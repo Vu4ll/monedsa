@@ -90,6 +90,21 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
           loading={loading}
           colors={colors}
           navigation={navigation}
+          onRefresh={() => onRefresh(filters)}
+          onFilterChange={(newFilters) => {
+            const filterParams = {
+              ...filters,
+              type: newFilters.type || '',
+              category: newFilters.category || ''
+            };
+
+            if (newFilters.type === '') {
+              filterParams.type = '';
+              filterParams.category = '';
+            }
+
+            fetchTransactions(filterParams);
+          }}
         />
       </ScrollView>
 

@@ -3,6 +3,7 @@ const app = express();
 const { PORT } = require("../config").env;
 const cors = require('cors');
 const path = require("path");
+const { version } = require("../../package.json");
 
 app.use(express.json());
 app.use(cors());
@@ -44,7 +45,7 @@ const appData = {
         apk: "#",
     },
     githubUrl: "https://github.com/Vu4ll/monedsa",
-    version: "1.0",
+    version
 };
 
 app.get("/", (req, res) => {

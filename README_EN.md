@@ -1,6 +1,6 @@
 # Monedsa - Income & Expense Tracker
 
-![Version](https://img.shields.io/badge/version-1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
@@ -42,6 +42,7 @@
 
 - **Node.js** 18 or higher
 - **React Native CLI** installed
+- **Android 7 (API 24)** or higher device
 - **Android Studio** (for Android development)
 - **MongoDB** database
 

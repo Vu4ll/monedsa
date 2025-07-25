@@ -1,11 +1,24 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TransactionCard } from "./TransactionCard";
 import { formatCurrency } from "../utils";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export const TransactionList = ({ transactions, loading, colors, navigation }) => {
+export const TransactionList = ({ transactions, loading, colors, navigation, onRefresh, onFilterChange }) => {
 
-  const handleEdit = (transaction) => navigation.navigate('AddTransactionStack', { transaction });
+  const handleEdit = (transaction) => navigation.navigate('AddTransactionStack', {
+    transaction,
+    onRefresh
+  });
+
+  const handleFilterByType = (type) => {
+    if (onFilterChange) {
+      if (type === 'all') {
+        onFilterChange({ type: '', category: '', sortBy: '', order: '' });
+      } else {
+        onFilterChange({ type, category: '', sortBy: '', order: '' });
+      }
+    }
+  };
 
   const renderEmptyState = () => (
     <View style={styles.emptyStateContainer}>
@@ -43,7 +56,11 @@ export const TransactionList = ({ transactions, loading, colors, navigation }) =
         <View style={[styles.summaryContainer, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
           <View style={styles.summaryGrid}>
             {/* Toplam Gelir */}
-            <View style={[styles.summaryItem, styles.incomeItem]}>
+            <TouchableOpacity
+              style={[styles.summaryItem, styles.incomeItem]}
+              onPress={() => handleFilterByType('income')}
+              activeOpacity={0.7}
+            >
               <View style={[styles.summaryIconContainer, { backgroundColor: colors.softGreen }]}>
                 <Text style={[styles.summaryIcon, { color: colors.white }]}>
                   <Icon name="trending-up" size={24} />
@@ -55,10 +72,14 @@ export const TransactionList = ({ transactions, loading, colors, navigation }) =
                   {formatCurrency(transactions.summary.totalIncome)}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
 
             {/* Toplam Gider */}
-            <View style={[styles.summaryItem, styles.expenseItem]}>
+            <TouchableOpacity
+              style={[styles.summaryItem, styles.expenseItem]}
+              onPress={() => handleFilterByType('expense')}
+              activeOpacity={0.7}
+            >
               <View style={[styles.summaryIconContainer, { backgroundColor: colors.softRed }]}>
                 <Text style={[styles.summaryIcon, { color: colors.white }]}>
                   <Icon name="trending-down" size={24} />
@@ -70,13 +91,17 @@ export const TransactionList = ({ transactions, loading, colors, navigation }) =
                   {formatCurrency(transactions.summary.totalExpense)}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
 
           {/* Bakiye */}
-          <View style={[styles.balanceContainer, {
-            backgroundColor: transactions.summary.balance >= 0 ? colors.transparentGreen : colors.transparentRed,
-          }]}>
+          <TouchableOpacity
+            style={[styles.balanceContainer, {
+              backgroundColor: transactions.summary.balance >= 0 ? colors.transparentGreen : colors.transparentRed,
+            }]}
+            onPress={() => handleFilterByType('all')}
+            activeOpacity={0.7}
+          >
             <View style={styles.balanceContent}>
               <Text style={[styles.balanceLabel, { color: colors.textSecondary }]}>Bakiye</Text>
               <Text style={[styles.balanceValue, {
@@ -85,7 +110,7 @@ export const TransactionList = ({ transactions, loading, colors, navigation }) =
                 {formatCurrency(transactions.summary.balance)}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       )}
 

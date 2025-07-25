@@ -117,7 +117,11 @@ function MainTabNavigator({ onLogout }) {
                                     if (currentRouteName === 'Category') {
                                         navigation.navigate('Category', { openAddModal: true });
                                     } else {
-                                        navigation.navigate('AddTransactionStack');
+                                        navigation.navigate('AddTransactionStack', {
+                                            onRefresh: () => {
+                                                navigation.navigate('Home', { refresh: true });
+                                            }
+                                        });
                                     }
                                 }} />);
                         };

@@ -175,7 +175,6 @@ const FilterModal = ({
             justifyContent: 'flex-end',
         },
         modalContainer: {
-            maxHeight: '85%',
             backgroundColor: colors.cardBackground,
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
@@ -258,7 +257,7 @@ const FilterModal = ({
         filterButtons: {
             flexDirection: 'row',
             gap: 12,
-            marginTop: 20,
+            marginTop: 8,
         },
         filterButton: {
             flex: 1,

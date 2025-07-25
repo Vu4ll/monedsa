@@ -364,7 +364,7 @@ const RegisterScreen = ({ navigation }) => {
                             <TextInput
                                 style={[styles.input, errors.username && styles.inputError]}
                                 value={formData.username}
-                                onChangeText={(text) => updateFormData('username', text)}
+                                onChangeText={(text) => updateFormData('username', text.toLowerCase())}
                                 placeholder="Kullanıcı adınızı girin"
                                 placeholderTextColor={colors.textSecondary}
                                 autoCapitalize="none"
