@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   summaryValue: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   balanceContainer: {

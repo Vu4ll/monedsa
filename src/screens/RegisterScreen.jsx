@@ -98,7 +98,7 @@ const RegisterScreen = ({ navigation }) => {
 
         // Privacy policy validation
         if (!acceptPrivacyPolicy) {
-            newErrors.privacyPolicy = 'Gizlilik sözleşmesini kabul etmelisiniz';
+            newErrors.privacyPolicy = 'Gizlilik politikasını kabul etmelisiniz';
         }
 
         setErrors(newErrors);
@@ -198,7 +198,7 @@ const RegisterScreen = ({ navigation }) => {
     const openPrivacyPolicy = () => {
         Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy`).catch((err) => {
             console.error('Link açılamadı:', err);
-            Alert.alert('Hata', 'Gizlilik sözleşmesi açılamadı. Lütfen daha sonra tekrar deneyin.');
+            Alert.alert('Hata', 'Gizlilik politikası açılamadı. Lütfen daha sonra tekrar deneyin.');
         });
     };
 
@@ -480,7 +480,7 @@ const RegisterScreen = ({ navigation }) => {
                             {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
                         </View>
 
-                        {/* Gizlilik Sözleşmesi Onayı */}
+                        {/* Gizlilik Politikası Onayı */}
                         <View style={styles.privacyContainer}>
                             <TouchableOpacity
                                 style={[styles.checkbox, acceptPrivacyPolicy && styles.checkboxChecked]}
@@ -498,7 +498,7 @@ const RegisterScreen = ({ navigation }) => {
                             </TouchableOpacity>
                             <Text style={styles.privacyText}>
                                 <Text onPress={openPrivacyPolicy} style={styles.privacyLink}>
-                                    Gizlilik Sözleşmesi
+                                    Gizlilik Politikası
                                 </Text>
                                 'ni okudum ve kabul ediyorum.
                             </Text>
