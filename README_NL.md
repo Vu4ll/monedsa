@@ -1,6 +1,6 @@
 # Monedsa - Inkomsten & Uitgaven Tracker
 
-![Version](https://img.shields.io/badge/version-1.1-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
