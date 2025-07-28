@@ -5,6 +5,8 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
+![Banner](/server/public/images/banner-en.png)
+
 [Turkish](README.md) | English | [Dutch](README_NL.md)
 
 **Monedsa** is a modern and user-friendly mobile application that allows you to easily track your income and expenses on Android devices. With its simple, fast, and secure structure, it helps you keep your financial situation under control.

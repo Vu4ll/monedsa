@@ -5,7 +5,9 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
-[Turkish](README.md) | [English](README_EN.md) | Nederlands
+![Banner](/server/public/images/banner-nl.png)
+
+[Turkse](README.md) | [Engels](README_EN.md) | Nederlands
 
 **Monedsa** is een moderne en gebruiksvriendelijke mobiele applicatie waarmee u eenvoudig uw inkomsten en uitgaven kunt bijhouden op Android-apparaten. Met zijn eenvoudige, snelle en veilige structuur helpt het u uw financiële situatie onder controle te houden.
 

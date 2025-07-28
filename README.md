@@ -5,7 +5,9 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
-Turkish | [English](README_EN.md) | [Dutch](README_NL.md)
+![Banner](/server/public/images/banner-tr.png)
+
+Türkçe | [English](README_EN.md) | [Dutch](README_NL.md)
 
 **Monedsa**, Android cihazlarınızda kolayca gelir ve giderlerinizi takip edebileceğiniz modern ve kullanıcı dostu bir mobil uygulamadır. Basit, hızlı ve güvenli yapısıyla finansal durumunuzu kontrol altında tutmanıza yardımcı olur.
 
