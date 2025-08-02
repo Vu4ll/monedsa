@@ -10,8 +10,9 @@ const { badRequest, serverError } = require("../util/functions");
 const User = require("../models/user");
 const locale = require("../locales/en.json");
 const { seedCategoriesForUser } = require("../seeds/categorySeed");
+const { authLimiter } = require("../util/rate-limits");
 
-router.post("/register", async (req, res) => {
+router.post("/register", authLimiter, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { email, password, username, name, language } = req.body;
@@ -73,7 +74,7 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", authLimiter, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { user, password } = req.body;

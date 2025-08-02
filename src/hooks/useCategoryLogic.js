@@ -121,7 +121,7 @@ export const useCategoryLogic = (route, navigation) => {
 
             if (existsCheck.exists) {
                 const typeText = formData.type === 'income' ? 'gelir' : 'gider';
-                errors.name = `Bu ${typeText} türünde ${formData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçin.`;
+                errors.name = `Bu ${typeText} türünde ${formData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçiniz.`;
             }
         }
 
@@ -154,10 +154,12 @@ export const useCategoryLogic = (route, navigation) => {
                     ToastAndroid.SHORT
                 );
             } else {
-                ToastAndroid.show(
-                    `Kategori ${editingCategory ? "güncellenemedi" : "eklenemedi"}`,
-                    ToastAndroid.SHORT
-                );
+                result.error ?
+                    ToastAndroid.show(result.error, ToastAndroid.SHORT) :
+                    ToastAndroid.show(
+                        `Kategori ${editingCategory ? "güncellenemedi" : "eklenemedi"}`,
+                        ToastAndroid.SHORT
+                    );
             }
         } catch (error) {
             ToastAndroid.show(`Kategori kaydedilirken bir hata oluştu`, ToastAndroid.SHORT);
@@ -184,7 +186,7 @@ export const useCategoryLogic = (route, navigation) => {
                                 }
                                 ToastAndroid.show("Kategori başarıyla silindi", ToastAndroid.SHORT);
                             } else {
-                                Alert.alert('Hata', result.error);
+                                ToastAndroid.show(result.error, ToastAndroid.SHORT);
                             }
                         } catch (error) {
                             ToastAndroid.show(`Kategori silinirken bir hata oluştu`, ToastAndroid.SHORT);

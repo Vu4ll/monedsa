@@ -168,8 +168,10 @@ class AuthService {
           errorMessage = data.message || 'Bu bilgiler zaten kayıtlı';
         } else if (response.status === 422) {
           errorMessage = data.message || 'Veri doğrulama hatası';
+        } else if (response.status === 429) {
+          errorMessage = data.message || "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.";
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
         }
 
         return { success: false, error: errorMessage };
@@ -201,6 +203,10 @@ class AuthService {
         body: JSON.stringify({ user, password }),
       });
       const data = await response.json();
+
+      if (response.status === 429) {
+        return { success: false, error: data.message };
+      }
       if (response.ok && data.token) {
         this.setToken(data.token, data.refreshToken);
         return { success: true, user: data.user };
@@ -239,7 +245,7 @@ class AuthService {
         console.log('Token süresi dolmuş, yenileme yapılıyor...');
         const newToken = await this.refreshAccessToken();
         if (!newToken) {
-          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapın' };
+          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapınız.' };
         }
       }
 
@@ -274,12 +280,12 @@ class AuthService {
               return { success: true, data: retryData.data };
             }
           }
-          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapın';
+          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapınız.';
           await this.clearToken();
         } else if (response.status === 403) {
           errorMessage = 'Bu işlem için yetkiniz yok';
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
         }
 
         return { success: false, error: errorMessage };
@@ -313,7 +319,7 @@ class AuthService {
         console.log('Token süresi dolmuş, yenileme yapılıyor...');
         const newToken = await this.refreshAccessToken();
         if (!newToken) {
-          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapın' };
+          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapınız.' };
         }
       }
 
@@ -347,12 +353,12 @@ class AuthService {
               return { success: true, data: retryData.data };
             }
           }
-          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapın';
+          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapınız.';
           await this.clearToken();
         } else if (response.status === 403) {
           errorMessage = 'Bu işlem için yetkiniz yok';
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
         }
 
         return { success: false, error: errorMessage };
@@ -387,7 +393,7 @@ class AuthService {
         console.log('Token süresi dolmuş, yenileme yapılıyor...');
         const newToken = await this.refreshAccessToken();
         if (!newToken) {
-          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapın' };
+          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapınız.' };
         }
       }
 
@@ -409,6 +415,8 @@ class AuthService {
 
         if (errorMessage.includes("No changes detected")) {
           errorMessage = "Herhangi bir değişiklik bulunmadığı için işlem iptal edildi."
+        } else if (errorMessage.includes("username is already taken")) {
+          errorMessage = "Bu kullanıcı adı zaten kullanımda. Lütfen farklı bir kullanıcı adı seçiniz."
         }
 
         if (response.status === 401) {
@@ -428,12 +436,14 @@ class AuthService {
               return { success: true, data: retryData.data };
             }
           }
-          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapın';
+          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapınız.';
           await this.clearToken();
         } else if (response.status === 403) {
           errorMessage = 'Bu işlem için yetkiniz yok';
+        } else if (response.status === 429) {
+          errorMessage = 'Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.';
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
         }
 
         return { success: false, error: errorMessage };
@@ -468,7 +478,7 @@ class AuthService {
         console.log('Token süresi dolmuş, yenileme yapılıyor...');
         const newToken = await this.refreshAccessToken();
         if (!newToken) {
-          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapın' };
+          return { success: false, error: 'Oturum süresi dolmuş, lütfen tekrar giriş yapınız.' };
         }
       }
 
@@ -507,12 +517,12 @@ class AuthService {
               return { success: true, message: retryData.message };
             }
           }
-          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapın';
+          errorMessage = 'Oturum süresi dolmuş, lütfen tekrar giriş yapınız.';
           await this.clearToken();
         } else if (response.status === 403) {
           errorMessage = 'Bu işlem için yetkiniz yok';
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
         }
 
         return { success: false, error: errorMessage };

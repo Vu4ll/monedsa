@@ -31,6 +31,12 @@ api.interceptors.response.use(
         await authService.clearToken();
       }
     }
+    if (error.response && error.response.status === 429) {
+      return Promise.reject({
+        ...error,
+        customMessage: "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz."
+      });
+    }
     return Promise.reject(error);
   }
 );
@@ -114,7 +120,9 @@ class CategoryService {
         return { success: false, error: data.message || 'Kategori eklenemedi' };
       }
     } catch (error) {
-      console.error('Kategori ekleme hatası:', error);
+      if (error.customMessage) {
+        return { success: false, error: error.customMessage };
+      }
 
       if (error.response && error.response.data) {
         const errorData = error.response.data;
@@ -125,7 +133,7 @@ class CategoryService {
             const typeText = categoryData.type === 'income' ? 'gelir' : 'gider';
             return {
               success: false,
-              error: `Bu ${typeText} türünde ${categoryData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçin.`
+              error: `Bu ${typeText} türünde ${categoryData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçiniz.`
             };
           }
 
@@ -157,7 +165,9 @@ class CategoryService {
         return { success: false, error: data.message || 'Kategori güncellenemedi' };
       }
     } catch (error) {
-      console.error('Kategori güncelleme hatası:', error);
+      if (error.customMessage) {
+        return { success: false, error: error.customMessage };
+      }
 
       if (error.response && error.response.data) {
         const errorData = error.response.data;
@@ -168,7 +178,7 @@ class CategoryService {
             const typeText = categoryData.type === 'income' ? 'gelir' : 'gider';
             return {
               success: false,
-              error: `Bu ${typeText} türünde ${categoryData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçin.`
+              error: `Bu ${typeText} türünde ${categoryData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçiniz.`
             };
           }
 
@@ -199,7 +209,9 @@ class CategoryService {
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        const errorData = error.response.data;
+        if (error.customMessage) {
+          return { success: false, error: error.customMessage };
+        }
 
         if (errorData.status === 400 && errorData.data && errorData.data.relatedTransactionsCount > 0) {
           const { categoryInfo, relatedTransactionsCount } = errorData.data;

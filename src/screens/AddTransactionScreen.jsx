@@ -85,7 +85,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
         if (!formData.amount.trim()) {
             errors.amount = 'Tutar gerekli';
         } else if (isNaN(parseFloat(formData.amount)) || parseFloat(formData.amount) <= 0) {
-            errors.amount = 'Geçerli bir tutar girin';
+            errors.amount = 'Geçerli bir tutar giriniz';
         }
 
         if (!formData.category) {
@@ -134,10 +134,10 @@ const AddTransactionScreen = ({ navigation, route }) => {
                     navigation.navigate('MainApp');
                 }
             } else {
-                ToastAndroid.show(`Hata: ${result.message || "İşlem başarısız"}`, ToastAndroid.SHORT);
+                ToastAndroid.show(result.error || "İşlem başarısız", ToastAndroid.SHORT);
             }
         } catch (error) {
-            ToastAndroid.show(`Hata: ${error.message || "İşlem sırasında bir hata oluştu"}`, ToastAndroid.SHORT);
+            ToastAndroid.show(error.error || "İşlem sırasında bir hata oluştu", ToastAndroid.SHORT);
         } finally {
             setLoading(false);
         }
@@ -172,10 +172,10 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                     navigation.navigate('MainApp');
                                 }
                             } else {
-                                ToastAndroid.show(`Hata: ${result.message || "Silme başarısız"}`, ToastAndroid.SHORT);
+                                ToastAndroid.show(result.message || "Silme başarısız", ToastAndroid.SHORT);
                             }
                         } catch (error) {
-                            ToastAndroid.show(`Hata: ${error.message || "İşlem silinirken bir hata oluştu"}`, ToastAndroid.SHORT);
+                            ToastAndroid.show(error.message || "İşlem silinirken bir hata oluştu", ToastAndroid.SHORT);
                         } finally {
                             setLoading(false);
                             setDeleting(false);
@@ -496,7 +496,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                 style={[styles.input, styles.descriptionInput]}
                                 value={formData.description}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, description: text }))}
-                                placeholder="Açıklama girin..."
+                                placeholder="Açıklama giriniz..."
                                 placeholderTextColor={colors.textSecondary}
                                 multiline
                                 numberOfLines={3}

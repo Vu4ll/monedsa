@@ -2,6 +2,7 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const router = express.Router();
 const { emailRegex } = require("../config");
+const { generalLimiter } = require("../util/rate-limits");
 const locale = require("../locales/en.json");
 require("dotenv").config();
 
@@ -96,7 +97,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-router.post("/issue", async (req, res) => {
+router.post("/issue", generalLimiter, async (req, res) => {
     try {
         const { title, description, email, platform, version, timestamp, language } = req.body;
 

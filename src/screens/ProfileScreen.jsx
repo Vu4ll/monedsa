@@ -23,6 +23,9 @@ const ProfileScreen = ({ navigation, onLogout }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [userStats, setUserStats] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [editFormData, setEditFormData] = useState({
@@ -221,7 +224,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 setEditModalVisible(false);
                 ToastAndroid.show('Profil başarıyla güncellendi', ToastAndroid.SHORT);
             } else {
-                setEditModalVisible(false);
+                if (result.error.includes("Herhangi bir değişiklik")) setEditModalVisible(false);
                 ToastAndroid.show(result.error, ToastAndroid.SHORT);
             }
         } catch (error) {
@@ -408,6 +411,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         },
         inputContainer: {
             marginBottom: 16,
+            position: 'relative',
         },
         inputLabel: {
             fontSize: 16,
@@ -449,6 +453,14 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             fontSize: 16,
             fontWeight: '600',
             color: colors.white,
+        },
+        passwordToggle: {
+            marginTop: 43,
+            position: 'absolute',
+            right: 6,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 40,
         },
     });
 
@@ -585,7 +597,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                                     ref={usernameRef}
                                     style={[styles.input, formErrors.username && styles.inputError]}
                                     value={editFormData.username}
-                                    onChangeText={(text) => setEditFormData(prev => ({ ...prev, username: text }))}
+                                    onChangeText={(text) => setEditFormData(prev => ({ ...prev, username: text.toLowerCase() }))}
                                     placeholder="Kullanıcı adınızı girin"
                                     placeholderTextColor={colors.textSecondary}
                                     returnKeyType="next"
@@ -652,10 +664,21 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                                     onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, currentPassword: text }))}
                                     placeholder="Mevcut parolanızı girin"
                                     placeholderTextColor={colors.textSecondary}
-                                    secureTextEntry
+                                    secureTextEntry={!showCurrentPassword}
                                     returnKeyType="next"
                                     onSubmitEditing={() => newPasswordRef.current?.focus()}
                                 />
+                                <TouchableOpacity
+                                    style={styles.passwordToggle}
+                                    onPress={() => setShowCurrentPassword(!showCurrentPassword)}
+                                    activeOpacity={0.7}
+                                >
+                                    <Icon
+                                        name={showCurrentPassword ? "visibility-off" : "visibility"}
+                                        size={20}
+                                        color={colors.textSecondary}
+                                    />
+                                </TouchableOpacity>
                                 {formErrors.currentPassword && <Text style={styles.errorText}>{formErrors.currentPassword}</Text>}
                             </View>
 
@@ -668,10 +691,21 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                                     onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, newPassword: text }))}
                                     placeholder="Yeni parolanızı girin"
                                     placeholderTextColor={colors.textSecondary}
-                                    secureTextEntry
+                                    secureTextEntry={!showNewPassword}
                                     returnKeyType="next"
                                     onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                                 />
+                                <TouchableOpacity
+                                    style={styles.passwordToggle}
+                                    onPress={() => setShowNewPassword(!showNewPassword)}
+                                    activeOpacity={0.7}
+                                >
+                                    <Icon
+                                        name={showNewPassword ? "visibility-off" : "visibility"}
+                                        size={20}
+                                        color={colors.textSecondary}
+                                    />
+                                </TouchableOpacity>
                                 {formErrors.newPassword && <Text style={styles.errorText}>{formErrors.newPassword}</Text>}
                             </View>
 
@@ -684,10 +718,21 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                                     onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, confirmPassword: text }))}
                                     placeholder="Yeni parolanızı tekrar girin"
                                     placeholderTextColor={colors.textSecondary}
-                                    secureTextEntry
+                                    secureTextEntry={!showConfirmNewPassword}
                                     returnKeyType="done"
                                     onSubmitEditing={handleSavePassword}
                                 />
+                                <TouchableOpacity
+                                    style={styles.passwordToggle}
+                                    onPress={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                                    activeOpacity={0.7}
+                                >
+                                    <Icon
+                                        name={showConfirmNewPassword ? "visibility-off" : "visibility"}
+                                        size={20}
+                                        color={colors.textSecondary}
+                                    />
+                                </TouchableOpacity>
                                 {formErrors.confirmPassword && <Text style={styles.errorText}>{formErrors.confirmPassword}</Text>}
                             </View>
 

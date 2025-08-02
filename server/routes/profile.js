@@ -8,6 +8,7 @@ const verifyToken = require("../middlewares/verifyToken");
 const locale = require("../locales/en.json");
 const User = require("../models/user");
 const { emailRegex, usernameRegex, passwordRegex } = require("../config");
+const { authLimiter } = require("../util/rate-limits");
 
 router.get("/me", verifyToken, async (req, res) => {
     try {
@@ -34,7 +35,7 @@ router.get("/me", verifyToken, async (req, res) => {
     }
 });
 
-router.put("/update", verifyToken, async (req, res) => {
+router.put("/update", authLimiter, verifyToken, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { username, email, name } = req.body;
@@ -106,7 +107,7 @@ router.put("/update", verifyToken, async (req, res) => {
     }
 });
 
-router.put("/change-password", verifyToken, async (req, res) => {
+router.put("/change-password", authLimiter, verifyToken, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { currentPassword, newPassword } = req.body;

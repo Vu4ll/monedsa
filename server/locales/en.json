@@ -206,5 +206,6 @@
                 "message": "Your problem report has been sent successfully."
             }
         }
-    }
+    },
+    "rateLimit": "You are making requests too quickly. Please wait a moment before trying again."
 }

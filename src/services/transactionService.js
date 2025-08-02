@@ -31,6 +31,12 @@ api.interceptors.response.use(
         await authService.clearToken();
       }
     }
+    if (error.response && error.response.status === 429) {
+      return Promise.reject({
+        ...error,
+        customMessage: "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz."
+      });
+    }
     return Promise.reject(error);
   }
 );
@@ -42,16 +48,16 @@ api.interceptors.response.use(
 export const transactionService = {
   async getTransaction(queryParams = {}) {
     const searchParams = new URLSearchParams();
-    
+
     Object.keys(queryParams).forEach(key => {
       if (queryParams[key] !== undefined && queryParams[key] !== null && queryParams[key] !== '') {
         searchParams.append(key, queryParams[key]);
       }
     });
-    
+
     const queryString = searchParams.toString();
     const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.LIST}${queryString ? '?' + queryString : ''}`;
-    
+
     const response = await api.get(url);
     return response.data ? response.data : "Veri yok";
   },
@@ -69,6 +75,10 @@ export const transactionService = {
       );
       return response.data;
     } catch (error) {
+      if (error.customMessage) {
+        return { success: false, error: error.customMessage };
+      }
+
       throw new Error(error.response?.data?.message || 'Transaction eklenirken bir hata oluştu');
     }
   },

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { badRequest, notFound, serverError, hexValidator } = require("../util/functions");
+const { generalLimiter } = require("../util/rate-limits");
 const verifyToken = require("../middlewares/verifyToken");
 const locale = require("../locales/en.json");
 const Category = require("../models/category");
@@ -57,7 +58,7 @@ router.get("/list", verifyToken, async (req, res) => {
     }
 });
 
-router.post("/add", verifyToken, async (req, res) => {
+router.post("/add", generalLimiter, verifyToken, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { name, color, type } = req.body;
@@ -102,7 +103,7 @@ router.put("/edit", verifyToken, (req, res) => {
     return badRequest(res, locale.category.fail.edit.idRequired);
 });
 
-router.put("/edit/:id", verifyToken, async (req, res) => {
+router.put("/edit/:id", generalLimiter, verifyToken, async (req, res) => {
     const { id } = req.params;
     if (!id) return badRequest(res, locale.category.fail.edit.idRequired);
 
@@ -179,7 +180,7 @@ router.put("/edit/:id", verifyToken, async (req, res) => {
     }
 });
 
-router.delete("/delete/:id", verifyToken, async (req, res) => {
+router.delete("/delete/:id", generalLimiter, verifyToken, async (req, res) => {
     const { id } = req.params;
     if (!id) return badRequest(res, locale.category.fail.delete.idRequired);
 

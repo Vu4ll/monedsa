@@ -10,7 +10,8 @@ import {
     ScrollView,
     SafeAreaView,
     StatusBar,
-    Linking
+    Linking,
+    ToastAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from "../contexts/ThemeContext";
@@ -137,9 +138,11 @@ const RegisterScreen = ({ navigation }) => {
                     setErrors(prev => ({ ...prev, email: 'Bu e-posta adresi zaten kayıtlı' }));
                 } else if (errorMessage.includes('User already exists')) {
                     displayMessage = 'Bu kullanıcı bilgileri zaten kayıtlı. Lütfen farklı bilgiler kullanın.';
+                } else if (errorMessage.includes('requests too quickly')) {
+                    displayMessage = 'Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.';
                 }
 
-                Alert.alert('Kayıt Hatası', displayMessage);
+                ToastAndroid.show(displayMessage, ToastAndroid.SHORT);
             }
         } catch (error) {
             console.error('Register error:', error);

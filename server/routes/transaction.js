@@ -3,13 +3,14 @@ const router = express.Router();
 require("dotenv").config();
 
 const { badRequest, notFound, serverError, getTransactionList } = require("../util/functions");
+const { generalLimiter } = require("../util/rate-limits");
 const verifyToken = require("../middlewares/verifyToken");
 const locale = require("../locales/en.json");
 const Transaction = require("../models/transaction");
 const Category = require("../models/category");
 const mongoose = require("mongoose");
 
-router.post("/add", verifyToken, async (req, res) => {
+router.post("/add", generalLimiter, verifyToken, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
 
     const { amount, description, category, type } = req.body;
@@ -77,7 +78,7 @@ router.delete("/delete", verifyToken, (req, res) => {
     return badRequest(res, locale.transaction.fail.delete.idRequired);
 });
 
-router.delete("/delete/:id", verifyToken, async (req, res) => {
+router.delete("/delete/:id", generalLimiter, verifyToken, async (req, res) => {
     const { id } = req.params;
     if (!id) return badRequest(res, locale.transaction.fail.delete.idRequired);
 
@@ -107,7 +108,7 @@ router.put("/edit", verifyToken, (req, res) => {
     return badRequest(res, locale.transaction.fail.edit.idRequired);
 });
 
-router.put("/edit/:id", verifyToken, async (req, res) => {
+router.put("/edit/:id", generalLimiter, verifyToken, async (req, res) => {
     const { id } = req.params;
     if (!id) return badRequest(res, locale.transaction.fail.edit.idRequired);
     if (!req.body) return badRequest(res, locale.body.empty);

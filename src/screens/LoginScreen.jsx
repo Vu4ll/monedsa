@@ -11,7 +11,8 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     SafeAreaView,
-    StatusBar
+    StatusBar,
+    ToastAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from "../contexts/ThemeContext";
@@ -62,7 +63,9 @@ const LoginScreen = ({ navigation, onLogin }) => {
                 } else if (errorMessage.includes('Invalid password')) {
                     setErrors({ password: 'Hatalı parola' });
                 } else if (errorMessage.includes('Network') || errorMessage.includes('connection')) {
-                    Alert.alert('Bağlantı Hatası', 'İnternet bağlantınızı kontrol edin');
+                    ToastAndroid.show('İnternet bağlantınızı kontrol edin', ToastAndroid.SHORT);
+                } else if (errorMessage.includes("requests too quickly")) {
+                    ToastAndroid.show("Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.", ToastAndroid.SHORT);
                 } else {
                     setErrors({ email: errorMessage });
                 }

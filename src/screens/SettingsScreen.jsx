@@ -12,7 +12,8 @@ import {
     TextInput,
     Alert,
     ActivityIndicator,
-    Platform
+    Platform,
+    ToastAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Header } from '../components';
@@ -58,7 +59,7 @@ const SettingsScreen = ({ navigation }) => {
             }
         } catch (error) {
             console.error('E-posta yüklenirken hata:', error);
-            Alert.alert('Hata', 'E-posta adresiniz yüklenirken bir hata oluştu, daha sonra tekrar deneyiniz');
+            ToastAndroid.show('E-posta adresiniz yüklenirken bir hata oluştu, daha sonra tekrar deneyiniz', ToastAndroid.SHORT);
         }
     };
 
@@ -104,15 +105,15 @@ const SettingsScreen = ({ navigation }) => {
 
     const handleIssueSubmit = async () => {
         if (!issueReport.title.trim()) {
-            Alert.alert('Hata', 'Lütfen başlık girin.');
+            Alert.alert('Hata', 'Lütfen başlık giriniz.');
             return;
         }
         if (!issueReport.description.trim()) {
-            Alert.alert('Hata', 'Lütfen açıklama girin.');
+            Alert.alert('Hata', 'Lütfen açıklama giriniz.');
             return;
         }
         if (!userMail || !userMail.trim()) {
-            Alert.alert('Hata', 'E-posta adresiniz yüklenemedi. Lütfen daha sonra tekrar deneyin.');
+            Alert.alert('Hata', 'E-posta adresiniz yüklenemedi. Lütfen daha sonra tekrar deneyiniz.');
             return;
         }
 
@@ -136,21 +137,17 @@ const SettingsScreen = ({ navigation }) => {
             });
 
             if (response.ok) {
-                Alert.alert(
-                    'Başarılı',
-                    'Sorun raporunuz başarıyla gönderildi. En kısa sürede yanıtlanacaktır.',
-                    [{
-                        text: 'Tamam', onPress: () => {
-                            setShowIssueModal(false);
-                            setIssueReport({ title: '', description: '', email: '' });
-                        }
-                    }]
-                );
+                setShowIssueModal(false);
+                setIssueReport({ title: '', description: '', email: '' });
+                ToastAndroid.show("Sorun raporunuz başarıyla gönderildi. En kısa sürede yanıtlanacaktır.", ToastAndroid.SHORT);
             } else {
+                if (response.status === 429) {
+                    return ToastAndroid.show(`Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.`, ToastAndroid.SHORT);
+                }
                 throw new Error('Sunucu hatası');
             }
         } catch (error) {
-            Alert.alert('Hata', 'Sorun raporu gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
+            ToastAndroid.show('Sorun raporu sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.', ToastAndroid.SHORT);
         } finally {
             setIsSubmitting(false);
         }
@@ -467,7 +464,7 @@ const SettingsScreen = ({ navigation }) => {
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         style={[styles.aboutRow, styles.lastAboutRow]}
                         onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy`)}>
                         <Text style={styles.aboutLabel}>Gizlilik Politikası</Text>
