@@ -42,7 +42,7 @@ const appData = {
     screenshots: ["/images/home-page.png", "/images/home-page-white.png", "/images/filter.png", "/images/add-transaction.png", "/images/categories.png", "/images/add-category.png", "/images/profile.png", "/images/settings.png"],
     downloadLinks: {
         playStore: "#",
-        apk: "https://github.com/Vu4ll/monedsa/releases/download/1.2/monedsa1.2.apk",
+        apk: "https://github.com/Vu4ll/monedsa/releases/download/v1.2/monedsa1.2.apk",
     },
     githubUrl: "https://github.com/Vu4ll/monedsa",
     version
