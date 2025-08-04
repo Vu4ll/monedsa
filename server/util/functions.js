@@ -1,7 +1,7 @@
 const express = require("express");
 const Transaction = require("../models/transaction");
 const Category = require("../models/category");
-const locale = require("../locales/en.json");
+const locale = require("../locales/api.json");
 
 /**
  * @description This function is used to send a 400 Bad Request response.

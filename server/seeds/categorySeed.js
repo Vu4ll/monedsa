@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Category = require("../models/category");
 const User = require("../models/user");
-const locale = require("../locales/en.json");
+const locale = require("../locales/api.json");
 require("dotenv").config();
 
 const defaultCategoriesEn = [

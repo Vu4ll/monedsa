@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 const { badRequest, notFound, serverError } = require("../util/functions");
 const verifyToken = require("../middlewares/verifyToken");
-const locale = require("../locales/en.json");
+const locale = require("../locales/api.json");
 const User = require("../models/user");
 const { emailRegex, usernameRegex, passwordRegex } = require("../config");
 const { authLimiter } = require("../util/rate-limits");

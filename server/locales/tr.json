@@ -1,0 +1,180 @@
+{
+    "header": {
+        "nav": {
+            "features": "Özellikler",
+            "screenshots": "Ekran Görüntüleri",
+            "download": "İndir"
+        }
+    },
+    "hero": {
+        "tagline": "Gelir Gider Takip Uygulaması",
+        "description": "Android cihazlarınızda kolayca gelir ve giderlerinizi takip edin. Basit, hızlı ve güvenli.",
+        "download": "Uygulamayı İndir",
+        "source": "Kaynak Kod",
+        "income": "Gelir",
+        "expense": "Gider",
+        "salary": "Maaş",
+        "market": "Market",
+        "rent": "Kira",
+        "mockData": {
+            "currency": "₺",
+            "balance": "19,350.00",
+            "totalIncome": "30,000",
+            "totalExpense": "10,650",
+            "transactions": {
+                "salary": "30,000",
+                "market": "650",
+                "rent": "10,000"
+            }
+        }
+    },
+    "featuresSection": {
+        "title": "Özellikler",
+        "list": [
+            {
+                "title": "Gelir Takibi",
+                "description": "Tüm gelirlerinizi kategorilere ayırarak takip edin"
+            },
+            {
+                "title": "Gider Analizi",
+                "description": "Harcamalarınızı analiz edin ve bütçenizi kontrol altında tutun"
+            },
+            {
+                "title": "Mobil Uyumlu",
+                "description": "Android cihazlarınızda sorunsuz çalışan modern arayüz"
+            },
+            {
+                "title": "Güvenli",
+                "description": "Verileriniz güvenli bir şekilde bulut veritabanında saklanır"
+            }
+        ]
+    },
+    "screenshotsSection": "Ekran Görüntüleri",
+    "downloadSection": {
+        "download": "İndir",
+        "downloadApp": "Uygulamayı İndir",
+        "description": "Android cihazınıza ücretsiz olarak indirin",
+        "googlePlay": "Google Play'den",
+        "directApk": "Direkt APK",
+        "version": "Versiyon"
+    },
+    "footer": {
+        "description": "Gelir gider takibinizi kolaylaştıran Android uygulaması",
+        "legal": "Yasal",
+        "privacy": "Gizlilik Politikası",
+        "openSource": "Açık Kaynak Lisansı",
+        "links": "Bağlantılar",
+        "reportIssue": "Sorun Bildir",
+        "versions": "Sürümler",
+        "developer": "Geliştirici",
+        "web": "Web Sitesi"
+    },
+    "privacyPolicy": {
+        "privacy": "Gizlilik Politikası",
+        "lastUpdated": "Son güncelleme: 24 Temmuz 2025",
+        "sections": {
+            "general": {
+                "title": "1. Genel Bilgiler",
+                "text": "Bu Gizlilik Politikası, Monedsa uygulamasını kullandığınızda kişisel bilgilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklar. Uygulamayı kullanarak bu politikayı kabul etmiş sayılırsınız."
+            },
+            "collectedData": {
+                "title": "2. Toplanan Veriler",
+                "text": "Monedsa uygulaması aşağıdaki verileri toplayabilir:",
+                "items": {
+                    "financial": "<strong>Finansal Veriler:</strong> Gelir-gider kayıtlarınız, işlem tutarları, açıklamalar ve tarih bilgileri.",
+                    "account": "<strong>Kullanıcı Hesap Bilgileri:</strong> E-posta, kullanıcı adı, şifre (şifrelenmiş).",
+                    "category": "<strong>Kategori Verileri:</strong> Oluşturduğunuz özel kategoriler ve renkleri.",
+                    "thema": "<strong>Tema Tercihleri:</strong> Açık/koyu görünüm tercihleriniz.",
+                    "device": "<strong>Cihaz Bilgileri (anonim):</strong> Android sürümü, uygulama versiyonu.",
+                    "network": "<strong>Ağ Durumu:</strong> İnternet bağlantı durumu (veritabanı bağlantısı için)"
+                }
+            },
+            "storage": {
+                "title": "3. Veri Saklama",
+                "text": "Monedsa hibrit bir veri saklama yaklaşımı kullanır:",
+                "items": {
+                    "cloud": "<strong>Bulut Veritabanı:</strong> Hesap oluşturduğunuzda verileriniz <a href=\"https://www.mongodb.com/products/platform/atlas-database\" target=\"_blank\">MongoDB Atlas</a> veritabanı üzerinde güvenli bir şekilde saklanır.",
+                    "local": "<strong>Yerel Veriler:</strong> Uygulamada bazı veriler sadece cihaz üzerinde AsyncStorage kullanılarak saklanır. Örneğin tema tercihleri ve JSON web token bilgileri.",
+                    "crossDevice": "<strong>Çapraz Cihaz Erişimi:</strong> Aynı hesapla farklı cihazlarda verilerinize erişebilirsiniz.",
+                    "jwt": "<strong>JWT Token Yönetimi:</strong> Oturumlar JSON Web Token ile güvenli şekilde yönetilir.",
+                    "backup": "<strong>Veri Yedekliliği:</strong> Verilerinizi korumak adına plansız aralıklarla veritabanı yedekleri alınmaktadır. Yedeklenen veritabanı verileri sunucumuz da güvenli bir şekilde saklanmaktadır."
+                }
+            },
+            "security": {
+                "title": "4. Veri Güvenliği",
+                "text": "Verilerinizin güvenliği için aşağıdaki önlemler alınmıştır:",
+                "items": {
+                    "localEncryption": "<strong>Yerel Şifreleme:</strong> AsyncStorage kullanılarak cihazda güvenli bir şekilde veriler saklanmaktadır.",
+                    "serverEncryption": "<strong>Sunucu Şifrelemesi:</strong> MongoDB veritabanında sunucu tarafında güvenli bir şekilde veriler saklanmaktadır.",
+                    "jwtSecurity": "<strong>JWT Güvenliği:</strong> Token tabanlı kimlik doğrulama ile kullanıcı oturum güvenliği sağlanmaktadır. (15 dakika erişim, 14 gün yenileme)",
+                    "https": "<strong>HTTPS Bağlantıları:</strong> Tüm sunucu iletişimi şifrelenmiş kanal üzerinden gerçekleştirilir.",
+                    "sharing": "<strong>Veri Paylaşımı:</strong> Verileriniz hiç bir şekilde üçüncü şahıslarla paylaşılmaz."
+                }
+            },
+            "thirdParty": {
+                "title": "5. Üçüncü Taraf Hizmetler ve Kütüphaneler",
+                "text": "Monedsa aşağıdaki üçüncü taraf hizmetleri ve kütüphaneleri kullanır:",
+                "items": {
+                    "reactNative": "<strong>React Native Ekosistemi:</strong> Uygulama geliştirme ortamında React Native kullanılır.",
+                    "asyncStorage": "<strong>AsyncStorage:</strong> Yerel veri saklama (@react-native-async-storage/async-storage)",
+                    "netInfo": "<strong>Network Info:</strong> İnternet bağlantı durumu kontrolü (@react-native-community/netinfo)",
+                    "axios": "<strong>Axios:</strong> HTTP istekleri yönetimi için.",
+                    "mongodb": "<strong>MongoDB:</strong> Sunucu tarafı veri saklamak için.",
+                    "nodemailer": "<strong>Nodemailer:</strong> E-posta gönderimi için. (destek talepleri)",
+                    "googlePlay": "<strong>Google Play Services:</strong> Uygulamanın Play Store üzerinden güncellenmesini ve analizlerini sağlar."
+                },
+                "note": "📌 Bu hizmetlerin kendi gizlilik politikaları geçerlidir ve kendi güvenlik standartlarına sahiptir."
+            },
+            "deletion": {
+                "title": "6. Veri Silme ve Hesap Yönetimi",
+                "text": "Verilerinizi silmek ve hesabınızı yönetmek için aşağıdaki seçenekleriniz bulunur:",
+                "items": {
+                    "removeApp": "<strong>Uygulama Kaldırma:</strong> Uygulamayı cihazınızdan kaldırarak yerel verileri silebilirsiniz.",
+                    "deleteAccount": "<strong>Hesap Silme:</strong> Hesabınızı silmek için destek ekibimizle <a href=\"#contact\">iletişime</a> geçebilirsiniz.",
+                    "serverDelete": "<strong>Sunucu Verilerini Silme:</strong> Hesap silme işlemi sunucudaki tüm verilerinizi kalıcı olarak siler.",
+                    "selectiveDelete": "<strong>Seçici Silme:</strong> Belirli işlemleri veya kategorileri tek tek silebilirsiniz."
+                },
+                "note": "📌 Hesap silme işlemi geri alınamaz ve tüm verileriniz kalıcı olarak silinir."
+            },
+            "support": {
+                "title": "7. Destek ve Sorun Bildirimi",
+                "text": "Uygulama içi destek sistemi kullanıldığında:",
+                "items": {
+                    "collected": "<strong>Toplanan Bilgiler:</strong> E-posta adresiniz, belirtilen sorun hakkında bilgiler.",
+                    "email": "<strong>E-posta Gönderimi:</strong> Nodemailer kullanılarak otomatik e-posta bildirimleri gönderilir.",
+                    "sharing": "<strong>Paylaşım:</strong> Destek verileri sadece teknik sorunları çözmek için kullanılır."
+                }
+            },
+            "changes": {
+                "title": "8. Politika Değişiklikleri",
+                "text": "Bu gizlilik politikası zaman zaman güncellenebilir. Güncel politikayı düzenli olarak kontrol etmenizi öneririz.",
+                "note": "📌 Değişiklikler bu sayfada yayınlandığı tarihte yürürlüğe girer."
+            },
+            "contact": {
+                "title": "9. İletişim",
+                "text": "Gizlilik politikası hakkında sorularınız için:",
+                "items": {
+                    "email": "<strong>E-posta:</strong> <a href=\"mailto:support@vu4ll.com.tr\">support@vu4ll.com.tr</a>",
+                    "inApp": "<strong>Uygulama İçi Destek:</strong> Ayarlar > Sorun Bildir menüsünden"
+                },
+                "note": "📌 Destek taleplerini ortalama 24-48 saat içerisinde yanıtlamaya çalışıyoruz."
+            },
+            "opensource": {
+                "title": "10. Açık Kaynaklar",
+                "text": "Monedsa, açık kaynaklı bir yazılım projesidir. Uygulamanın kaynak kodları ve geliştirici belgeleri herkesin erişimine açıktır.",
+                "items": {
+                    "repo": "<strong>Kod Deposu:</strong>",
+                    "license": "<strong>Lisans:</strong> Monedsa, GNU Genel Kamu Lisansı Sürüm 3 (GPL-3.0) altında lisanslanmıştır.",
+                    "rights": "<strong>Bu lisans kapsamında:</strong> Yazılımı kullanabilir, kopyalayabilir, dağıtabilir ve değiştirebilirsiniz. <br> Ancak değiştirilen veya türetilen sürümler de aynı lisansla (GPL-3.0) lisanslanmalıdır. <br> Yazılımın dağıtımı sırasında orijinal lisans metni ve telif hakkı bildirimleri korunmalı, ayrıca kaynak kod erişimi sağlanmalıdır.",
+                    "thirdParty": "<strong>Üçüncü Taraf Bileşenler:</strong> Monedsa, geliştirme sürecinde bazı açık kaynak kütüphaneler kullanmaktadır (örneğin React Native, Mongoose, Axios vb.). Bu bileşenlerin her biri kendi lisans koşullarına tabidir."
+                },
+                "note": "📌 GPL-3.0 hakkında daha fazla bilgi için: <br> 🔗 <a href=\"https://www.gnu.org/licenses/gpl-3.0.tr.html\">https://www.gnu.org/licenses/gpl-3.0.tr.html</a>"
+            },
+            "footer": {
+                "compliance": "Bu politika Türkiye Cumhuriyeti Kişisel Verilerin Korunması Kanunu (KVKK), Avrupa Birliği Genel Veri Koruma Yönetmeliği (GDPR) ve diğer ilgili veri koruma yasalarına uygun olarak hazırlanmıştır.",
+                "version": "<strong>Sürüm:</strong> {version} | <strong>Son Güncelleme:</strong> 24 Temmuz 2025",
+                "backToHome": "Ana Sayfaya Dön"
+            }
+        }
+    }
+}

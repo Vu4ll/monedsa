@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const router = express.Router();
 const { emailRegex } = require("../config");
 const { generalLimiter } = require("../util/rate-limits");
-const locale = require("../locales/en.json");
+const locale = require("../locales/api.json");
 require("dotenv").config();
 
 const emailTexts = {

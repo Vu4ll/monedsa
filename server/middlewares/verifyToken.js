@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const locale = require("../locales/en.json");
+const locale = require("../locales/api.json");
 
 module.exports = async (req, res, next) => {
     try {
@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
         }
 
         const token = authHeader.substring(7).trim();
-        
+
         // Token'ın boş veya undefined olup olmadığını kontrol et
         if (!token || token === 'null' || token === 'undefined') {
             return res.status(401).json({
@@ -40,7 +40,7 @@ module.exports = async (req, res, next) => {
         next();
     } catch (error) {
         console.error(`Token verification error: ${error.name}: ${error.message}`);
-        
+
         // Daha spesifik error handling
         if (error.name === 'JsonWebTokenError') {
             console.error('Malformed token received:', req.headers.authorization);
@@ -56,7 +56,7 @@ module.exports = async (req, res, next) => {
                 message: locale.verifyToken.tokenNotFound,
             });
         }
-        
+
         return res.status(401).json({
             status: res.statusCode,
             success: false,

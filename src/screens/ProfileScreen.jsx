@@ -411,7 +411,6 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         },
         inputContainer: {
             marginBottom: 16,
-            position: 'relative',
         },
         inputLabel: {
             fontSize: 16,
@@ -420,6 +419,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             marginBottom: 8,
         },
         input: {
+            flex: 1,
             borderWidth: 1,
             borderColor: colors.border,
             borderRadius: 8,
@@ -428,6 +428,22 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             fontSize: 16,
             color: colors.text,
             backgroundColor: colors.background,
+        },
+        passwordInputWrapper: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: colors.border,
+            borderRadius: 8,
+            backgroundColor: colors.background,
+        },
+        passwordInput: {
+            flex: 1,
+            paddingHorizontal: 12,
+            paddingVertical: 12,
+            fontSize: 16,
+            color: colors.text,
+            borderWidth: 0,
         },
         inputError: {
             borderColor: colors.danger,
@@ -455,12 +471,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             color: colors.white,
         },
         passwordToggle: {
-            marginTop: 43,
-            position: 'absolute',
-            right: 6,
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: 40,
+            padding: 12,
         },
     });
 
@@ -658,81 +669,87 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                         <ScrollView style={styles.modalContent}>
                             <View style={styles.inputContainer}>
                                 <Text style={styles.inputLabel}>Mevcut Parola</Text>
-                                <TextInput
-                                    style={[styles.input, formErrors.currentPassword && styles.inputError]}
-                                    value={passwordFormData.currentPassword}
-                                    onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, currentPassword: text }))}
-                                    placeholder="Mevcut parolanızı girin"
-                                    placeholderTextColor={colors.textSecondary}
-                                    secureTextEntry={!showCurrentPassword}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => newPasswordRef.current?.focus()}
-                                />
-                                <TouchableOpacity
-                                    style={styles.passwordToggle}
-                                    onPress={() => setShowCurrentPassword(!showCurrentPassword)}
-                                    activeOpacity={0.7}
-                                >
-                                    <Icon
-                                        name={showCurrentPassword ? "visibility-off" : "visibility"}
-                                        size={20}
-                                        color={colors.textSecondary}
+                                <View style={[styles.passwordInputWrapper, formErrors.currentPassword && styles.inputError]}>
+                                    <TextInput
+                                        style={styles.passwordInput}
+                                        value={passwordFormData.currentPassword}
+                                        onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, currentPassword: text }))}
+                                        placeholder="Mevcut parolanızı girin"
+                                        placeholderTextColor={colors.textSecondary}
+                                        secureTextEntry={!showCurrentPassword}
+                                        returnKeyType="next"
+                                        onSubmitEditing={() => newPasswordRef.current?.focus()}
                                     />
-                                </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.passwordToggle}
+                                        onPress={() => setShowCurrentPassword(!showCurrentPassword)}
+                                        activeOpacity={0.7}
+                                    >
+                                        <Icon
+                                            name={showCurrentPassword ? "visibility-off" : "visibility"}
+                                            size={20}
+                                            color={colors.textSecondary}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
                                 {formErrors.currentPassword && <Text style={styles.errorText}>{formErrors.currentPassword}</Text>}
                             </View>
 
                             <View style={styles.inputContainer}>
                                 <Text style={styles.inputLabel}>Yeni Parola</Text>
-                                <TextInput
-                                    ref={newPasswordRef}
-                                    style={[styles.input, formErrors.newPassword && styles.inputError]}
-                                    value={passwordFormData.newPassword}
-                                    onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, newPassword: text }))}
-                                    placeholder="Yeni parolanızı girin"
-                                    placeholderTextColor={colors.textSecondary}
-                                    secureTextEntry={!showNewPassword}
-                                    returnKeyType="next"
-                                    onSubmitEditing={() => confirmPasswordRef.current?.focus()}
-                                />
-                                <TouchableOpacity
-                                    style={styles.passwordToggle}
-                                    onPress={() => setShowNewPassword(!showNewPassword)}
-                                    activeOpacity={0.7}
-                                >
-                                    <Icon
-                                        name={showNewPassword ? "visibility-off" : "visibility"}
-                                        size={20}
-                                        color={colors.textSecondary}
+                                <View style={[styles.passwordInputWrapper, formErrors.newPassword && styles.inputError]}>
+                                    <TextInput
+                                        ref={newPasswordRef}
+                                        style={styles.passwordInput}
+                                        value={passwordFormData.newPassword}
+                                        onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, newPassword: text }))}
+                                        placeholder="Yeni parolanızı girin"
+                                        placeholderTextColor={colors.textSecondary}
+                                        secureTextEntry={!showNewPassword}
+                                        returnKeyType="next"
+                                        onSubmitEditing={() => confirmPasswordRef.current?.focus()}
                                     />
-                                </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.passwordToggle}
+                                        onPress={() => setShowNewPassword(!showNewPassword)}
+                                        activeOpacity={0.7}
+                                    >
+                                        <Icon
+                                            name={showNewPassword ? "visibility-off" : "visibility"}
+                                            size={20}
+                                            color={colors.textSecondary}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
                                 {formErrors.newPassword && <Text style={styles.errorText}>{formErrors.newPassword}</Text>}
                             </View>
 
                             <View style={styles.inputContainer}>
                                 <Text style={styles.inputLabel}>Yeni Parola Tekrar</Text>
-                                <TextInput
-                                    ref={confirmPasswordRef}
-                                    style={[styles.input, formErrors.confirmPassword && styles.inputError]}
-                                    value={passwordFormData.confirmPassword}
-                                    onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, confirmPassword: text }))}
-                                    placeholder="Yeni parolanızı tekrar girin"
-                                    placeholderTextColor={colors.textSecondary}
-                                    secureTextEntry={!showConfirmNewPassword}
-                                    returnKeyType="done"
-                                    onSubmitEditing={handleSavePassword}
-                                />
-                                <TouchableOpacity
-                                    style={styles.passwordToggle}
-                                    onPress={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
-                                    activeOpacity={0.7}
-                                >
-                                    <Icon
-                                        name={showConfirmNewPassword ? "visibility-off" : "visibility"}
-                                        size={20}
-                                        color={colors.textSecondary}
+                                <View style={[styles.passwordInputWrapper, formErrors.confirmPassword && styles.inputError]}>
+                                    <TextInput
+                                        ref={confirmPasswordRef}
+                                        style={styles.passwordInput}
+                                        value={passwordFormData.confirmPassword}
+                                        onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, confirmPassword: text }))}
+                                        placeholder="Yeni parolanızı tekrar girin"
+                                        placeholderTextColor={colors.textSecondary}
+                                        secureTextEntry={!showConfirmNewPassword}
+                                        returnKeyType="done"
+                                        onSubmitEditing={handleSavePassword}
                                     />
-                                </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.passwordToggle}
+                                        onPress={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                                        activeOpacity={0.7}
+                                    >
+                                        <Icon
+                                            name={showConfirmNewPassword ? "visibility-off" : "visibility"}
+                                            size={20}
+                                            color={colors.textSecondary}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
                                 {formErrors.confirmPassword && <Text style={styles.errorText}>{formErrors.confirmPassword}</Text>}
                             </View>
 

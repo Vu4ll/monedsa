@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="<%= currentLocale %>">
 
 <head>
     <meta charset="UTF-8">
@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <%- include("partials/header") %>
+    <%- include("partials/header", { originalUrl: "/" }) %>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -32,10 +32,10 @@
                     </p>
                     <div class="hero-buttons">
                         <a href="#download" class="btn btn-primary">
-                            <i class="fas fa-download"></i> Uygulamayı İndir
+                            <i class="fas fa-download"></i> <%= t("hero.download") %>
                         </a>
                         <a href="<%= app.githubUrl %>" target="_blank" class="btn btn-secondary">
-                            <i class="fab fa-github"></i> Kaynak Kod
+                            <i class="fab fa-github"></i> <%= t("hero.source") %>
                         </a>
                     </div>
                 </div>
@@ -46,30 +46,30 @@
                                 <div class="app-preview">
                                     <div class="app-header">
                                         <h3>Monedsa</h3>
-                                        <span class="balance">₺2,450.00</span>
+                                        <span class="balance"><%= t("hero.mockData.currency") %><%= t("hero.mockData.balance") %></span>
                                     </div>
                                     <div class="quick-stats">
                                         <div class="stat-item income">
-                                            <span class="label">Gelir</span>
-                                            <span class="amount">+₺3,200</span>
+                                            <span class="label"><%= t("hero.income") %></span>
+                                            <span class="amount">+<%= t("hero.mockData.currency") %><%= t("hero.mockData.totalIncome") %></span>
                                         </div>
                                         <div class="stat-item expense">
-                                            <span class="label">Gider</span>
-                                            <span class="amount">-₺750</span>
+                                            <span class="label"><%= t("hero.expense") %></span>
+                                            <span class="amount">-<%= t("hero.mockData.currency") %><%= t("hero.mockData.totalExpense") %></span>
                                         </div>
                                     </div>
                                     <div class="recent-transactions">
                                         <div class="transaction">
-                                            <span class="desc">Maaş</span>
-                                            <span class="amount positive">+₺3,000</span>
+                                            <span class="desc"><%= t("hero.salary") %></span>
+                                            <span class="amount positive">+<%= t("hero.mockData.currency") %><%= t("hero.mockData.transactions.salary") %></span>
                                         </div>
                                         <div class="transaction">
-                                            <span class="desc">Market</span>
-                                            <span class="amount negative">-₺150</span>
+                                            <span class="desc"><%= t("hero.market") %></span>
+                                            <span class="amount negative">-<%= t("hero.mockData.currency") %><%= t("hero.mockData.transactions.market") %></span>
                                         </div>
                                         <div class="transaction">
-                                            <span class="desc">Kira</span>
-                                            <span class="amount negative">-₺600</span>
+                                            <span class="desc"><%= t("hero.rent") %></span>
+                                            <span class="amount negative">-<%= t("hero.mockData.currency") %><%= t("hero.mockData.transactions.rent") %></span>
                                         </div>
                                     </div>
                                 </div>
@@ -84,7 +84,7 @@
     <!-- Features Section -->
     <section id="features" class="features">
         <div class="container">
-            <h2>Özellikler</h2>
+            <h2><%= t("featuresSection.title") %></h2>
             <div class="features-grid">
                 <% app.features.forEach(feature=> { %>
                     <div class="feature-card">
@@ -98,7 +98,7 @@
                             <%= feature.description %>
                         </p>
                     </div>
-                    <% }); %>
+                <% }); %>
             </div>
         </div>
     </section>
@@ -106,13 +106,13 @@
     <!-- Screenshots Section -->
     <section id="screenshots" class="screenshots">
         <div class="container">
-            <h2>Ekran Görüntüleri</h2>
+            <h2><%= t("screenshotsSection") %></h2>
             <div class="screenshots-grid">
                 <% app.screenshots.forEach((screenshot, index)=> { %>
                     <div class="screenshot-item">
                         <img src="<%= screenshot %>" alt="Screenshot <%= index + 1 %>">
                     </div>
-                    <% }); %>
+                <% }); %>
             </div>
         </div>
     </section>
@@ -120,26 +120,36 @@
     <!-- Download Section -->
     <section id="download" class="download">
         <div class="container">
-            <h2>Uygulamayı İndir</h2>
-            <p>Android cihazınıza ücretsiz olarak indirin</p>
+            <h2><%= t("downloadSection.downloadApp") %></h2>
+            <p><%= t("downloadSection.description") %></p>
             <div class="download-buttons">
                 <a href="<%= app.downloadLinks.playStore %>" class="download-btn play-store" target="_blank">
                     <i class="fab fa-google-play"></i>
                     <div>
-                        <span>Google Play'den</span>
-                        <strong>İndir</strong>
+                        <% if (currentLocale === "en" || currentLocale === "nl") { %>
+                            <span><%= t("downloadSection.download") %></span>
+                            <strong><%= t("downloadSection.googlePlay") %></strong>
+                        <% } else { %>
+                            <span><%= t("downloadSection.googlePlay") %></span>
+                            <strong><%= t("downloadSection.download") %></strong>
+                        <% } %>
                     </div>
                 </a>
                 <a href="<%= app.downloadLinks.apk %>" class="download-btn apk-download">
                     <i class="fas fa-download"></i>
                     <div>
-                        <span>Direkt APK</span>
-                        <strong>İndir</strong>
+                        <% if (currentLocale === "en" || currentLocale === "nl" ) { %>
+                            <span><%= t("downloadSection.download").split(" ")[0] %></span>
+                            <strong><%= t("downloadSection.directApk") %></strong>
+                        <% } else { %>
+                            <span><%= t("downloadSection.directApk") %></span>
+                            <strong><%= t("downloadSection.download") %></strong>
+                        <% } %>
                     </div>
                 </a>
             </div>
             <p class="version-info">
-                Sürüm: <%= app.version %>
+                <%= t("downloadSection.version") %>: <%= app.version %>
             </p>
         </div>
     </section>

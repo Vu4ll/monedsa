@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= currentLocale %>">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - <%= app.name %>
+    <title><%= t("privacyPolicy.privacy") %> - <%= app.name %>
     </title>
     <meta name="description" content="Monedsa app privacy policy and personal data protection information">
     <link rel="stylesheet" href="/css/style.css">
@@ -13,188 +13,105 @@
 </head>
 
 <body>
-    <%- include("partials/header") %>
+    <%- include("partials/header", { originalUrl: "/privacy-policy" }) %>
 
         <!-- Privacy Policy Content -->
         <main class="privacy-page">
             <div class="container">
                 <div class="privacy-content">
                     <div class="privacy-header">
-                        <h1>Privacy Policy</h1>
-                        <p class="languages">
-                            <a href="/privacy-policy/tr">Turkish</a> | English | <a href="/privacy-policy/nl">Dutch</a>
-                        </p>
-                        <p class="last-updated">Last updated: July 24, 2025</p>
+                        <h1><%= t("privacyPolicy.privacy") %></h1>
+                        <p class="last-updated"><%= t("privacyPolicy.lastUpdated") %></p>
                     </div>
 
                     <div class="privacy-section">
-                        <h2>1. General Information</h2>
-                        <p>
-                            This Privacy Policy explains how your personal information is collected, used, and protected
-                            when you use the Monedsa app. By using the app, you are deemed to have accepted this policy.
-                        </p>
+                        <h2><%= t("privacyPolicy.sections.general.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.general.text") %></p>
                     </div>
 
                     <div class="privacy-section">
-                        <h2>2. Collected Data</h2>
-                        <p>The Monedsa app may collect the following data:</p>
+                        <h2><%= t("privacyPolicy.sections.collectedData.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.collectedData.text") %></p>
                         <ul>
-                            <li>
-                                <strong>Financial Data:</strong> Income and expense records, transaction amounts,
-                                descriptions, and dates.
-                            </li>
-                            <li>
-                                <strong>User Account Information:</strong> Email, username, password (encrypted).
-                            </li>
-                            <li>
-                                <strong>Category Data:</strong> Custom categories you create and their colors.
-                            </li>
-                            <li>
-                                <strong>Theme Preferences:</strong> Your light/dark theme preferences.
-                            </li>
-                            <li>
-                                <strong>Device Info (anonymous):</strong> Android version, app version.
-                            </li>
-                            <li>
-                                <strong>Network Status:</strong> Internet connection status (for database sync).
-                            </li>
+                            <li><%- t("privacyPolicy.sections.collectedData.items.financial") %></li>
+                            <li><%- t("privacyPolicy.sections.collectedData.items.account") %></li>
+                            <li><%- t("privacyPolicy.sections.collectedData.items.category") %></li>
+                            <li><%- t("privacyPolicy.sections.collectedData.items.thema") %></li>
+                            <li><%- t("privacyPolicy.sections.collectedData.items.device") %></li>
+                            <li><%- t("privacyPolicy.sections.collectedData.items.network") %></li>
                         </ul>
                     </div>
 
                     <div class="privacy-section">
-                        <h2>3. Data Storage</h2>
-                        <p>Monedsa uses a hybrid data storage approach:</p>
+                        <h2><%= t("privacyPolicy.sections.storage.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.storage.text") %></p>
                         <ul>
-                            <li>
-                                <strong>Cloud Database:</strong> When you create an account, your data is securely
-                                stored on 
-                                <a href="https://www.mongodb.com/products/platform/atlas-database" target="_blank">MongoDB Atlas</a>.
-                            </li>
-                            <li>
-                                <strong>Local Data:</strong> Some data is stored only on the device using AsyncStorage.
-                                For example, theme preferences and JSON web token info.
-                            </li>
-                            <li>
-                                <strong>Cross-device Access:</strong> Access your data across different devices using
-                                the same account.
-                            </li>
-                            <li>
-                                <strong>JWT Token Management:</strong> Sessions are securely managed using JSON Web
-                                Tokens.
-                            </li>
-                            <li>
-                                <strong>Data Backup:</strong> To protect your data, backups are taken at irregular
-                                intervals and securely stored on our server.
-                            </li>
+                            <li><%- t("privacyPolicy.sections.storage.items.cloud") %></li>
+                            <li><%- t("privacyPolicy.sections.storage.items.local") %></li>
+                            <li><%- t("privacyPolicy.sections.storage.items.crossDevice") %></li>
+                            <li><%- t("privacyPolicy.sections.storage.items.jwt") %></li>
+                            <li><%- t("privacyPolicy.sections.storage.items.backup") %></li>
                         </ul>
                     </div>
 
                     <div class="privacy-section">
-                        <h2>4. Data Security</h2>
-                        <p>The following measures are taken to ensure the security of your data:</p>
+                        <h2><%= t("privacyPolicy.sections.security.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.security.text") %></p>
                         <ul>
-                            <li>
-                                <strong>Local Encryption:</strong> Data stored locally using AsyncStorage is securely encrypted.
-                            </li>
-                            <li>
-                                <strong>Server-side Encryption:</strong> Data on the MongoDB server is securely stored with encryption.
-                            </li>
-                            <li>
-                                <strong>JWT Security:</strong> Token-based authentication ensures secure sessions. (15
-                                minutes access, 14 days refresh)
-                            </li>
-                            <li>
-                                <strong>HTTPS Connections:</strong> All server communications are done over encrypted
-                                channels.
-                            </li>
+                            <li><%- t("privacyPolicy.sections.security.items.localEncryption") %></li>
+                            <li><%- t("privacyPolicy.sections.security.items.serverEncryption") %></li>
+                            <li><%- t("privacyPolicy.sections.security.items.jwtSecurity") %></li>
+                            <li><%- t("privacyPolicy.sections.security.items.https") %></li>
+                            <li><%- t("privacyPolicy.sections.security.items.sharing") %></li>
                         </ul>
                     </div>
 
                     <div class="privacy-section">
-                        <h2>5. Third-Party Services and Libraries</h2>
-                        <p>Monedsa uses the following third-party services and libraries:</p>
+                        <h2><%= t("privacyPolicy.sections.thirdParty.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.thirdParty.text") %></p>
                         <ul>
-                            <li>
-                                <strong>React Native Ecosystem:</strong> Used for app development.
-                            </li>
-                            <li>
-                                <strong>AsyncStorage:</strong> For local storage
-                                (@react-native-async-storage/async-storage)
-                            </li>
-                            <li>
-                                <strong>Network Info:</strong> For monitoring internet connection
-                                (@react-native-community/netinfo)
-                            </li>
-                            <li>
-                                <strong>Axios:</strong> For managing HTTP requests.
-                            </li>
-                            <li>
-                                <strong>MongoDB:</strong> For server-side data storage.
-                            </li>
-                            <li>
-                                <strong>Nodemailer:</strong> For email sending (support requests).
-                            </li>
-                            <li>
-                                <strong>Google Play Services:</strong> For updates and analytics via Play Store.
-                            </li>
+                            <li><%- t("privacyPolicy.sections.thirdParty.items.reactNative") %></li>
+                            <li><%- t("privacyPolicy.sections.thirdParty.items.asyncStorage") %></li>
+                            <li><%- t("privacyPolicy.sections.thirdParty.items.netInfo") %></li>
+                            <li><%- t("privacyPolicy.sections.thirdParty.items.axios") %></li>
+                            <li><%- t("privacyPolicy.sections.thirdParty.items.mongodb") %></li>
+                            <li><%- t("privacyPolicy.sections.thirdParty.items.nodemailer") %></li>
+                            <li><%- t("privacyPolicy.sections.thirdParty.items.googlePlay") %></li>
                         </ul>
-                        <p>
-                            📌 These services have their own privacy policies and security standards.
-                        </p>
+                        <p><%- t("privacyPolicy.sections.thirdParty.note") %></p>
                     </div>
 
                     <div class="privacy-section" id="delete-account">
-                        <h2>6. Data Deletion and Account Management</h2>
-                        <p>To delete your data or manage your account, you can:</p>
+                        <h2><%= t("privacyPolicy.sections.deletion.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.deletion.text") %></p>
                         <ul>
-                            <li>
-                                <strong>Uninstall the App:</strong> This will delete local data from your device.
-                            </li>
-                            <li>
-                                <strong>Account Deletion:</strong> <a href="#contact">Contact</a> our support team to delete your account.
-                            </li>
-                            <li>
-                                <strong>Server Data Deletion:</strong> Deleting your account will permanently delete
-                                your data from the server.
-                            </li>
-                            <li>
-                                <strong>Selective Deletion:</strong> You can delete specific transactions or categories
-                                individually.
-                            </li>
+                            <li><%- t("privacyPolicy.sections.deletion.items.removeApp") %></li>
+                            <li><%- t("privacyPolicy.sections.deletion.items.deleteAccount") %></li>
+                            <li><%- t("privacyPolicy.sections.deletion.items.serverDelete") %></li>
+                            <li><%- t("privacyPolicy.sections.deletion.items.selectiveDelete") %></li>
                         </ul>
-                        <p>
-                            📌 Account deletion is irreversible and all your data will be permanently removed.
-                        </p>
+                        <p><%- t("privacyPolicy.sections.deletion.note") %></p>
                     </div>
 
                     <div class="privacy-section">
-                        <h2>7. Support and Issue Reporting</h2>
-                        <p>When using the in-app support system:</p>
+                        <h2><%= t("privacyPolicy.sections.support.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.support.text") %></p>
                         <ul>
-                            <li>
-                                <strong>Collected Information:</strong> Your email address and details about the issue.
-                            </li>
-                            <li>
-                                <strong>Email Sending:</strong> Emails are sent automatically using Nodemailer.
-                            </li>
-                            <li>
-                                <strong>Usage:</strong> Support data is only used for resolving technical issues.
-                            </li>
+                            <li><%- t("privacyPolicy.sections.support.items.collected") %></li>
+                            <li><%- t("privacyPolicy.sections.support.items.email") %></li>
+                            <li><%- t("privacyPolicy.sections.support.items.sharing") %></li>
                         </ul>
                     </div>
 
                     <div class="privacy-section">
-                        <h2>8. Policy Changes</h2>
-                        <p>
-                            This privacy policy may be updated from time to time. We recommend checking the policy
-                            regularly.
-                        </p>
-                        <p>📌 Changes take effect from the date they are published on this page.</p>
+                        <h2><%= t("privacyPolicy.sections.changes.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.changes.text") %></p>
+                        <p><%= t("privacyPolicy.sections.changes.note") %></p>
                     </div>
 
                     <div class="privacy-section" id="contact">
-                        <h2>9. Contact</h2>
-                        <p>For any questions about this privacy policy:</p>
+                        <h2><%= t("privacyPolicy.sections.contact.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.contact.text") %></p>
                         <ul>
                             <li>
                                 <strong>GitHub Issues:</strong> 
@@ -202,59 +119,34 @@
                                     <%= app.githubUrl %>/issues
                                 </a>
                             </li>
-                            <li>
-                                <strong>Email:</strong> <a href="mailto:support@vu4ll.com.tr">support@vu4ll.com.tr</a>
-                            </li>
-                            <li>
-                                <strong>In-App Support:</strong> Go to Settings > Report an Issue
-                            </li>
+                            <li><%- t("privacyPolicy.sections.contact.items.email") %></li>
+                            <li><%- t("privacyPolicy.sections.contact.items.inApp") %></li>
                         </ul>
-                        <p>📌 We aim to respond to support requests within 24-48 hours.</p>
+                        <p><%- t("privacyPolicy.sections.contact.note") %></p>
                     </div>
 
                     <div class="privacy-section">
-                        <h2>10. Open Source</h2>
-                        <p>
-                            Monedsa is an open-source software project. The source code and developer documentation are
-                            publicly accessible.
-                        </p>
+                        <h2><%= t("privacyPolicy.sections.opensource.title") %></h2>
+                        <p><%= t("privacyPolicy.sections.opensource.text") %></p>
                         <ul>
                             <li>
-                                <strong>Code Repository:</strong> 
+                                <%- t("privacyPolicy.sections.opensource.items.repo") %>
                                 <a href="<%= app.githubUrl %>" target="_blank">
                                     <%= app.githubUrl %>
                                 </a>
                             </li>
-                            <li>
-                                <strong>License:</strong> Monedsa is licensed under the GNU General Public License
-                                version 3 (GPL-3.0).
-                            </li>
-                            <li>
-                                <strong>Under this license:</strong> You may use, copy, distribute, and modify the software.<br>
-                                However, modified or derivative versions must also be licensed under GPL-3.0.<br>
-                                When distributing the software, the original license and copyright notices must be
-                                preserved, and source code access must be provided.
-                            </li>
-                            <li>
-                                <strong>Third-Party Libraries:</strong> Monedsa uses some open-source libraries (e.g.
-                                React Native, Mongoose, Axios, etc.), each subject to their own license terms.
-                            </li>
+                            <li><%- t("privacyPolicy.sections.opensource.items.license") %></li>
+                            <li><%- t("privacyPolicy.sections.opensource.items.rights") %></li>
+                            <li><%- t("privacyPolicy.sections.opensource.items.thirdParty") %></li>
                         </ul>
-                        <p>
-                            📌 Learn more about GPL-3.0: <br>
-                            🔗 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">https://www.gnu.org/licenses/gpl-3.0.en.html</a>
-                        </p>
+                        <p><%- t("privacyPolicy.sections.opensource.note") %></p>
                     </div>
 
                     <div class="privacy-footer">
-                        <p>
-                            This policy is prepared in accordance with the Personal Data Protection Law of the Republic
-                            of Türkiye (KVKK), the EU General Data Protection Regulation (GDPR), and other applicable
-                            data protection laws.
-                        </p>
-                        <p><strong>Version:</strong> 1.0 | <strong>Last Updated:</strong> July 24, 2025</p>
+                        <p><%= t("privacyPolicy.sections.footer.compliance") %></p>
+                        <p><%- t("privacyPolicy.sections.footer.version").replace("{version}", app.version) %></p>
                         <a href="/" class="btn btn-primary">
-                            <i class="fas fa-arrow-left"></i> Back to Home
+                            <i class="fas fa-arrow-left"></i> <%= t("privacyPolicy.sections.footer.backToHome") %>
                         </a>
                     </div>
                 </div>

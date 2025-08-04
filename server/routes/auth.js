@@ -8,7 +8,7 @@ const config = require("../config");
 const { emailRegex, usernameRegex, passwordRegex } = config;
 const { badRequest, serverError } = require("../util/functions");
 const User = require("../models/user");
-const locale = require("../locales/en.json");
+const locale = require("../locales/api.json");
 const { seedCategoriesForUser } = require("../seeds/categorySeed");
 const { authLimiter } = require("../util/rate-limits");
 
@@ -97,7 +97,7 @@ router.post("/login", authLimiter, async (req, res) => {
             id: userData._id,
             email: userData.email,
             username: userData.username,
-        }, process.env.JWT_SECRET, { 
+        }, process.env.JWT_SECRET, {
             expiresIn: config.env.JWT_EXPIRATION,
             algorithm: 'HS256'
         });
@@ -105,7 +105,7 @@ router.post("/login", authLimiter, async (req, res) => {
         const refreshToken = jwt.sign({
             id: userData._id,
             type: "refresh"
-        }, process.env.JWT_REFRESH_SECRET, { 
+        }, process.env.JWT_REFRESH_SECRET, {
             expiresIn: config.env.JWT_REFRESH_EXPIRATION,
             algorithm: 'HS256'
         });
@@ -146,7 +146,7 @@ router.post("/refresh", async (req, res) => {
             id: userData._id,
             email: userData.email,
             username: userData.username,
-        }, process.env.JWT_SECRET, { 
+        }, process.env.JWT_SECRET, {
             expiresIn: config.env.JWT_EXPIRATION,
             algorithm: 'HS256'
         });
@@ -159,13 +159,13 @@ router.post("/refresh", async (req, res) => {
         });
     } catch (error) {
         console.error(`Refresh token error: \n${error.message}`);
-        
+
         if (error.name === 'JsonWebTokenError') {
             return badRequest(res, locale.refresh.fail.invalidToken);
         } else if (error.name === 'TokenExpiredError') {
             return badRequest(res, locale.refresh.fail.expiredToken);
         }
-        
+
         return badRequest(res, locale.refresh.fail.expiredToken);
     }
 });

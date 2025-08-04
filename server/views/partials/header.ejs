@@ -2,19 +2,41 @@
     <nav class="nav">
         <div class="nav-brand">
             <div class="brand-logo">
-                <div class="logo-icon">
-                    <img src="/images/icon-trans-white.png" height="40" width="40" />
-                </div>
-                <h1>Monedsa</h1>
+                <a href="/">
+                    <div class="logo-icon">
+                        <img src="/images/icon-trans-white.png" height="40" width="40" />
+                    </div>
+                    <h1>Monedsa</h1>
+                </a>
             </div>
         </div>
+
         <div class="nav-links">
-            <a href="/#features">Özellikler</a>
-            <a href="/#screenshots">Ekran Görüntüleri</a>
-            <a href="/#download">İndir</a>
+            <div class="language-selector">
+                <button class="language-btn" onclick="toggleLanguageDropdown()">
+                    <i class="fas fa-globe"></i>
+                    <%= localeNames[currentLocale] %>
+                        <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <% supportedLocales.forEach((lang) => { %>
+                        <% if (lang !== currentLocale) { %>
+                            <a href="?lang=<%= lang %>&redirect=<%= encodeURIComponent(originalUrl.split('?')[0]) %>" class="language-option">
+                                <%= localeNames[lang] %>
+                            </a>
+                        <% } %>
+                    <% }) %>
+                </div>
+            </div>
+
+            <a href="/#features"><%= t("header.nav.features") %></a>
+            <a href="/#screenshots"><%= t("header.nav.screenshots") %></a>
+            <a href="/#download"><%= t("header.nav.download") %></a>
             <a href="<%= app.githubUrl %>" target="_blank">
                 <i class="fab fa-github"></i> GitHub
             </a>
         </div>
     </nav>
 </header>
+
+<script src="/js/script.js"></script>

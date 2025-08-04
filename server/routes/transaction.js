@@ -5,7 +5,7 @@ require("dotenv").config();
 const { badRequest, notFound, serverError, getTransactionList } = require("../util/functions");
 const { generalLimiter } = require("../util/rate-limits");
 const verifyToken = require("../middlewares/verifyToken");
-const locale = require("../locales/en.json");
+const locale = require("../locales/api.json");
 const Transaction = require("../models/transaction");
 const Category = require("../models/category");
 const mongoose = require("mongoose");

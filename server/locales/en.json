@@ -1,211 +1,180 @@
 {
-    "body": {
-        "empty": "The request body cannot be empty."
-    },
-    "auth": {
-        "fail": {
-            "adminRequired": "Admin access required.",
-            "serverError": "Server error occurred."
+    "header": {
+        "nav": {
+            "features": "Features",
+            "screenshots": "Screenshots",
+            "download": "Download"
         }
     },
-    "register": {
-        "success": {
-            "message": "User registered successfully."
-        },
-        "fail": {
-            "emailField": "The email field is required.",
-            "passwordField": "The password field is required.",
-            "usernameField": "The username field is required.",
-            "nameField": "The name field is required.",
-            "invalidEmail": "Invalid email address format.",
-            "invalidUsername": "Username must be 2-16 characters long and contain only lowercase letters, numbers, underscores, and periods.",
-            "invalidPassword": "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
-            "existsEmail": "This email is already registered.",
-            "existsUsername": "This username is already taken.",
-            "serverError": "An unknown error occurred during registration."
-        }
-    },
-    "login": {
-        "success": {
-            "message": "User logged in successfully."
-        },
-        "fail": {
-            "alreadyLoggedIn": "User is already logged in. Please log out first before logging in again.",
-            "userField": "Email or username (user field) is required.",
-            "passwordField": "The password field is required.",
-            "userNotFound": "User not found.",
-            "invalidPassword": "Invalid password.",
-            "serverError": "An unknown error occurred during login."
-        }
-    },
-    "logout": {
-        "success": {
-            "message": "User logged out successfully."
-        },
-        "fail": {
-            "noToken": "Token is required to log out.",
-            "invalidToken": "The token was not found or has expired."
-        }
-    },
-    "refresh": {
-        "fail": {
-            "refreshField": "Refresh token is required.",
-            "invalidToken": "The provided refresh token is not valid.",
-            "userNotFound": "User not found.",
-            "expiredToken": "Invalid or expired refresh token."
-        },
-        "success": {
-            "message": "New access token generated successfully."
-        }
-    },
-    "verifyToken": {
-        "accessDenied": "Access denied. Token not provided.",
-        "tokenNotFound": "The token was not found or has expired.",
-        "invalidToken": "Invalid token."
-    },
-    "transaction": {
-        "fail": {
-            "add": {
-                "amountField": "The amount field is required.",
-                "typeField": "The type field is required.",
-                "invalidAmount": "The amount field must be a number.",
-                "invalidType": "The type field must be either 'expense' or 'income'.",
-                "categoryNotFound": "The specified category was not found.",
-                "categoryTypeMismatch": "The specified category cannot be used for this transaction type.",
-                "serverError": "An unknown error occurred while adding the transaction data."
-            },
-            "list": {
-                "noData": "No transactions found for the specified filters.",
-                "serverError": "An unknown error occurred while retrieving the transaction data."
-            },
-            "delete": {
-                "idRequired": "Transaction ID is required for deletion.",
-                "invalidId": "The provided ID is not a valid ID.",
-                "noData": "The transaction data was not found or was deleted."
-            },
-            "edit": {
-                "idRequired": "Transaction ID is required for editing.",
-                "invalidId": "The provided ID is not a valid ID.",
-                "invalidAmonut": "The amount field must be a positive number.",
-                "invalidType": "The type field must be either 'expense' or 'income'.",
-                "serverError": "An unknown error occurred while editing the transaction data."
-            },
-            "summary": {
-                "serverError": "An unknown error occurred while retrieving the transaction summary."
-            }
-        },
-        "success": {
-            "add": {
-                "added": "Transaction data added successfully."
-            },
-            "list": {
-                "dataRetrieved": "Transaction data was received successfully."
-            },
-            "delete": {
-                "deleted": "The transaction data was deleted successfully."
-            },
-            "edit": {
-                "edited": "The transaction data was edited successfully."
-            },
-            "summary": {
-                "retrieved": "Transaction summary retrieved successfully."
+    "hero": {
+        "tagline": "Income and Expense Tracking Application",
+        "description": "Easily track your income and expenses on your Android devices. Simple, fast, and secure.",
+        "download": "Download the App",
+        "source": "Source Code",
+        "income": "Income",
+        "expense": "Expense",
+        "salary": "Salary",
+        "market": "Market",
+        "rent": "Rent",
+        "mockData": {
+            "currency": "$",
+            "balance": "2,250.00",
+            "totalIncome": "3,000",
+            "totalExpense": "750",
+            "transactions": {
+                "salary": "3,000",
+                "market": "150",
+                "rent": "600"
             }
         }
     },
-    "category": {
-        "success": {
-            "list": {
-                "retrieved": "Categories retrieved successfully."
+    "featuresSection": {
+        "title": "Features",
+        "list": [
+            {
+                "title": "Income Tracking",
+                "description": "Track all your income by categorizing it"
             },
-            "add": {
-                "added": "Category added successfully."
+            {
+                "title": "Expense Analysis",
+                "description": "Analyze your expenses and keep your budget under control"
             },
-            "edit": {
-                "updated": "Category updated successfully."
+            {
+                "title": "Mobile Compatible",
+                "description": "Modern interface that works seamlessly on your Android devices"
             },
-            "delete": {
-                "deleted": "Category deleted successfully."
+            {
+                "title": "Secure",
+                "description": "Your data is stored securely in the cloud database"
             }
-        },
-        "fail": {
-            "list": {
-                "serverError": "Server error occurred while retrieving categories."
+        ]
+    },
+    "screenshotsSection": "Screenshots",
+    "downloadSection": {
+        "download": "Download from",
+        "downloadApp": "Download the App",
+        "description": "Download it for free on your Android device",
+        "googlePlay": "Google Play",
+        "directApk": "Direct APK",
+        "version": "Version"
+    },
+    "footer": {
+        "description": "Android application that makes it easier to track your income and expenses",
+        "legal": "Legal",
+        "privacy": "Privacy Policy",
+        "openSource": "Open Source License",
+        "links": "Links",
+        "reportIssue": "Report a Problem",
+        "versions": "Versions",
+        "developer": "Developer",
+        "web": "Website"
+    },
+    "privacyPolicy": {
+        "privacy": "Privacy Policy",
+        "lastUpdated": "Last updated: July 24, 2025",
+        "sections": {
+            "general": {
+                "title": "1. General Information",
+                "text": "This Privacy Policy explains how your personal information is collected, used, and protected when you use the Monedsa app. By using the app, you are deemed to have accepted this policy."
             },
-            "add": {
-                "nameRequired": "Category name is required.",
-                "typeRequired": "Category type is required.",
-                "invalidType": "Category type must be either 'expense' or 'income'.",
-                "invalidColor": "Invalid hex color format.",
-                "nameExists": "Category with this name already exists.",
-                "serverError": "Server error occurred while adding category."
+            "collectedData": {
+                "title": "2. Collected Data",
+                "text": "The Monedsa app may collect the following data:",
+                "items": {
+                    "financial": "<strong>Financial Data:</strong> Income and expense records, transaction amounts, descriptions, and dates.",
+                    "account": "<strong>User Account Information:</strong> Email, username, password (encrypted).",
+                    "category": "<strong>Category Data:</strong> Custom categories you create and their colors.",
+                    "thema": "<strong>Theme Preferences:</strong> Your light/dark theme preferences.",
+                    "device": "<strong>Device Info (anonymous):</strong> Android version, app version.",
+                    "network": "<strong>Network Status:</strong> Internet connection status (for database sync)."
+                }
             },
-            "edit": {
-                "idRequired": "Category ID is required.",
-                "invalidId": "Invalid category ID.",
-                "notFound": "Category not found or access denied.",
-                "invalidName": "Invalid category name.",
-                "invalidColor": "Invalid hex color format.",
-                "invalidType": "Category type must be either 'expense' or 'income'.",
-                "nameExists": "Category with this name already exists.",
-                "serverError": "Server error occurred while editing category.",
-                "noFieldsToUpdate": "At least one field (name, color, or type) must be provided for update."
+            "storage": {
+                "title": "3. Data Storage",
+                "text": "Monedsa uses a hybrid data storage approach:",
+                "items": {
+                    "cloud": "<strong>Cloud Database:</strong> When you create an account, your data is securely stored on <a href=\"https://www.mongodb.com/products/platform/atlas-database\" target=\"_blank\">MongoDB Atlas</a>.",
+                    "local": "<strong>Local Data:</strong> Some data is stored only on the device using AsyncStorage. For example, theme preferences and JSON web token info.",
+                    "crossDevice": "<strong>Cross-device Access:</strong> Access your data across different devices using the same account.",
+                    "jwt": "<strong>JWT Token Management:</strong> Sessions are securely managed using JSON Web Tokens.",
+                    "backup": "<strong>Data Backup:</strong> To protect your data, backups are taken at irregular intervals and securely stored on our server."
+                }
             },
-            "delete": {
-                "idRequired": "Category ID is required.",
-                "invalidId": "Invalid category ID.",
-                "notFound": "Category not found or access denied.",
-                "serverError": "Server error occurred while deleting category.",
-                "isRelated": "This category cannot be deleted because there are related transactions."
+            "security": {
+                "title": "4. Data Security",
+                "text": "The following measures are taken to ensure the security of your data:",
+                "items": {
+                    "localEncryption": "<strong>Local Encryption:</strong> Data stored locally using AsyncStorage is securely encrypted.",
+                    "serverEncryption": "<strong>Server-side Encryption:</strong> Data on the MongoDB server is securely stored with encryption.",
+                    "jwtSecurity": "<strong>JWT Security:</strong> Token-based authentication ensures secure sessions. (15 minutes access, 14 days refresh)",
+                    "https": "<strong>HTTPS Connections:</strong> All server communications are done over encrypted channels.",
+                    "sharing": "<strong>Data Sharing:</strong> Your data will not be shared with third parties in any way."
+                }
+            },
+            "thirdParty": {
+                "title": "5. Third-Party Services and Libraries",
+                "text": "Monedsa uses the following third-party services and libraries:",
+                "items": {
+                    "reactNative": "<strong>React Native Ecosystem:</strong> Used for app development.",
+                    "asyncStorage": "<strong>AsyncStorage:</strong> For local storage (@react-native-async-storage/async-storage)",
+                    "netInfo": "<strong>Network Info:</strong> For monitoring internet connection (@react-native-community/netinfo)",
+                    "axios": "<strong>Axios:</strong> For managing HTTP requests.",
+                    "mongodb": "<strong>MongoDB:</strong> For server-side data storage.",
+                    "nodemailer": "<strong>Nodemailer:</strong> For email sending (support requests).",
+                    "googlePlay": "<strong>Google Play Services:</strong> For updates and analytics via Play Store."
+                },
+                "note": "📌 These services have their own privacy policies and security standards."
+            },
+            "deletion": {
+                "title": "6. Data Deletion and Account Management",
+                "text": "To delete your data or manage your account, you can:",
+                "items": {
+                    "removeApp": "<strong>Uninstall the App:</strong> This will delete local data from your device.",
+                    "deleteAccount": "<strong>Account Deletion:</strong> <a href=\"#contact\">Contact</a> our support team to delete your account.",
+                    "serverDelete": "<strong>Server Data Deletion:</strong> Deleting your account will permanently delete your data from the server.",
+                    "selectiveDelete": "<strong>Selective Deletion:</strong> You can delete specific transactions or categories individually."
+                },
+                "note": "📌 Account deletion is irreversible and all your data will be permanently removed."
+            },
+            "support": {
+                "title": "7. Support and Issue Reporting",
+                "text": "When using the in-app support system:",
+                "items": {
+                    "collected": "<strong>Collected Information:</strong> Your email address and details about the issue.",
+                    "email": "<strong>Email Sending:</strong> Emails are sent automatically using Nodemailer.",
+                    "sharing": "<strong>Usage:</strong> Support data is only used for resolving technical issues."
+                }
+            },
+            "changes": {
+                "title": "8. Policy Changes",
+                "text": "This privacy policy may be updated from time to time. We recommend checking the policy regularly.",
+                "note": "📌 Changes take effect from the date they are published on this page."
+            },
+            "contact": {
+                "title": "9. Contact",
+                "text": "For any questions about this privacy policy:",
+                "items": {
+                    "email": "<strong>Email:</strong> <a href=\"mailto:support@vu4ll.com.tr\">support@vu4ll.com.tr</a>",
+                    "inApp": "<strong>In-App Support:</strong> Go to Settings > Report an Issue"
+                },
+                "note": "📌 We aim to respond to support requests within 24-48 hours."
+            },
+            "opensource": {
+                "title": "10. Open Source",
+                "text": "Monedsa is an open-source software project. The source code and developer documentation are publicly accessible.",
+                "items": {
+                    "repo": "<strong>Code Repository:</strong>",
+                    "license": "<strong>License:</strong> Monedsa is licensed under the GNU General Public License version 3 (GPL-3.0).",
+                    "rights": "<strong>Under this license:</strong> You may use, copy, distribute, and modify the software.<br> However, modified or derivative versions must also be licensed under GPL-3.0.<br> When distributing the software, the original license and copyright notices must be preserved, and source code access must be provided.",
+                    "thirdParty": "<strong>Third-Party Libraries:</strong> Monedsa uses some open-source libraries (e.g. React Native, Mongoose, Axios, etc.), each subject to their own license terms."
+                },
+                "note": "📌 Learn more about GPL-3.0: <br> 🔗 <a href=\"https://www.gnu.org/licenses/gpl-3.0.en.html\">https://www.gnu.org/licenses/gpl-3.0.en.html</a>"
+            },
+            "footer": {
+                "compliance": "This policy is prepared in accordance with the Personal Data Protection Law of the Republic of Türkiye (KVKK), the EU General Data Protection Regulation (GDPR), and other applicable data protection laws.",
+                "version": "<strong>Version:</strong> {version} | <strong>Last Updated:</strong> July 24, 2025",
+                "backToHome": "Back to Home"
             }
         }
-    },
-    "profile": {
-        "success": {
-            "infoRetrieved": "Profile information retrieved successfully.",
-            "updated": "Profile updated successfully.",
-            "passwordChanged": "Password changed successfully.",
-            "statsRetrieved": "Profile statistics retrieved successfully."
-        },
-        "fail": {
-            "userNotFound": "User not found.",
-            "noFieldsToUpdate": "At least one field (username, email, or name) must be provided for update.",
-            "invalidUsername": "Username must be between 2-16 characters.",
-            "invalidEmail": "Invalid email address format.",
-            "invalidName": "Name must be between 2-100 characters.",
-            "usernameExists": "This username is already taken.",
-            "emailExists": "This email is already registered.",
-            "noChanges": "No changes detected.",
-            "currentPasswordRequired": "Current password is required.",
-            "newPasswordRequired": "New password is required.",
-            "weakPassword": "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
-            "incorrectCurrentPassword": "Current password is incorrect.",
-            "samePassword": "New password cannot be the same as current password.",
-            "serverError": "Server error occurred."
-        }
-    },
-    "categorySeed": {
-        "fail": {
-            "noUsers": "No users found. Please create users first.",
-            "seedError": "Error seeding categories"
-        },
-        "success": {
-            "creating": "Found {length} users. Creating categories for each user...",
-            "createdUser": "Created category for user {id}: {name} ({type})",
-            "added": "Added {count} new categories for user: {username}",
-            "addedAll": "Categories seeded successfully for all users!"
-        }
-    },
-    "support": {
-        "issue": {
-            "fail": {
-                "missingFields": "Title, description and email fields are required.",
-                "invalidEmail": "Invalid email address format.",
-                "sendError": "An error occurred while sending the problem report."
-            },
-            "success": {
-                "message": "Your problem report has been sent successfully."
-            }
-        }
-    },
-    "rateLimit": "You are making requests too quickly. Please wait a moment before trying again."
+    }
 }

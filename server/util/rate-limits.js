@@ -1,6 +1,6 @@
 const rateLimit = require("express-rate-limit");
 const ms = require("ms");
-const locale = require("../locales/en.json");
+const locale = require("../locales/api.json");
 
 const authLimiter = rateLimit({
     windowMs: ms("15m"),

@@ -6,25 +6,25 @@
                 <h3>
                     <%= app.name %>
                 </h3>
-                <p>Gelir gider takibinizi kolaylaştıran Android uygulaması</p>
+                <p><%= t("footer.description") %></p>
             </div>
             <div class="footer-section">
-                <h4>Yasal</h4>
+                <h4><%= t("footer.legal") %></h4>
                 <ul>
-                    <li><a href="/privacy-policy">Gizlilik Politikası</a></li>
-                    <li><a href="<%= app.githubUrl %>/blob/main/LICENSE" target="_blank">Açık Kaynak Lisansı</a></li>
+                    <li><a href="/privacy-policy"><%= t("footer.privacy") %></a></li>
+                    <li><a href="<%= app.githubUrl %>/blob/main/LICENSE" target="_blank"><%= t("footer.openSource") %></a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>Bağlantılar</h4>
+                <h4><%= t("footer.links") %></h4>
                 <ul>
                     <li><a href="<%= app.githubUrl %>" target="_blank">GitHub</a></li>
-                    <li><a href="<%= app.githubUrl %>/issues" target="_blank">Sorun Bildir</a></li>
-                    <li><a href="<%= app.githubUrl %>/releases" target="_blank">Sürümler</a></li>
+                    <li><a href="<%= app.githubUrl %>/issues" target="_blank"><%= t("footer.reportIssue") %></a></li>
+                    <li><a href="<%= app.githubUrl %>/releases" target="_blank"><%= t("footer.versions") %></a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h4>Geliştirici</h4>
+                <h4><%= t("footer.developer") %></h4>
                 <p>
                     <a href="https://github.com/Vu4ll" target="_blank">
                         <i class="fab fa-github"></i> GitHub
@@ -32,7 +32,7 @@
                 </p>
                 <p>
                     <a href="https://vu4ll.com.tr/" target="_blank">
-                        <i class="fas fa-globe"></i> Web Sitesi
+                        <i class="fas fa-globe"></i> <%= t("footer.web") %>
                     </a>
                 </p>
             </div>

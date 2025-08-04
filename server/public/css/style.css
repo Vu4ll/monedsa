@@ -46,6 +46,13 @@ body {
     gap: 0.8rem;
 }
 
+.brand-logo a {
+    text-decoration: none;
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
 .logo-icon {
     width: 40px;
     height: 40px;
@@ -95,14 +102,62 @@ body {
     color: #BB86FC;
 }
 
-.languages {
-    padding: 0 0 16px;
+.language-selector {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
 }
 
-.languages a {
-    color: #BB86FC;
+.language-btn {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #a1a1aa;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.language-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(26, 26, 26, 0.95);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    margin-top: 4px;
+    text-align: center;
+}
+
+.language-dropdown.show {
+    display: block;
+}
+
+.language-option {
+    display: block;
+    padding: 10px 16px;
+    color: #333;
     text-decoration: none;
-    transition: color 0.3s;
+    transition: background-color 0.2s ease;
+}
+
+.language-option:first-child {
+    border-radius: 6px 6px 0 0;
+}
+
+.language-option:last-child {
+    border-radius: 0 0 6px 6px;
 }
 
 /* Privacy Page Styles */
@@ -509,6 +564,7 @@ body {
 .screenshot-item:hover {
     border-color: #BB86FC;
     transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(98, 0, 238, 0.1);
 }
 
 .screenshot-item img {

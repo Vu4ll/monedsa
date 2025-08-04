@@ -1,0 +1,211 @@
+{
+    "body": {
+        "empty": "The request body cannot be empty."
+    },
+    "auth": {
+        "fail": {
+            "adminRequired": "Admin access required.",
+            "serverError": "Server error occurred."
+        }
+    },
+    "register": {
+        "success": {
+            "message": "User registered successfully."
+        },
+        "fail": {
+            "emailField": "The email field is required.",
+            "passwordField": "The password field is required.",
+            "usernameField": "The username field is required.",
+            "nameField": "The name field is required.",
+            "invalidEmail": "Invalid email address format.",
+            "invalidUsername": "Username must be 2-16 characters long and contain only lowercase letters, numbers, underscores, and periods.",
+            "invalidPassword": "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
+            "existsEmail": "This email is already registered.",
+            "existsUsername": "This username is already taken.",
+            "serverError": "An unknown error occurred during registration."
+        }
+    },
+    "login": {
+        "success": {
+            "message": "User logged in successfully."
+        },
+        "fail": {
+            "alreadyLoggedIn": "User is already logged in. Please log out first before logging in again.",
+            "userField": "Email or username (user field) is required.",
+            "passwordField": "The password field is required.",
+            "userNotFound": "User not found.",
+            "invalidPassword": "Invalid password.",
+            "serverError": "An unknown error occurred during login."
+        }
+    },
+    "logout": {
+        "success": {
+            "message": "User logged out successfully."
+        },
+        "fail": {
+            "noToken": "Token is required to log out.",
+            "invalidToken": "The token was not found or has expired."
+        }
+    },
+    "refresh": {
+        "fail": {
+            "refreshField": "Refresh token is required.",
+            "invalidToken": "The provided refresh token is not valid.",
+            "userNotFound": "User not found.",
+            "expiredToken": "Invalid or expired refresh token."
+        },
+        "success": {
+            "message": "New access token generated successfully."
+        }
+    },
+    "verifyToken": {
+        "accessDenied": "Access denied. Token not provided.",
+        "tokenNotFound": "The token was not found or has expired.",
+        "invalidToken": "Invalid token."
+    },
+    "transaction": {
+        "fail": {
+            "add": {
+                "amountField": "The amount field is required.",
+                "typeField": "The type field is required.",
+                "invalidAmount": "The amount field must be a number.",
+                "invalidType": "The type field must be either 'expense' or 'income'.",
+                "categoryNotFound": "The specified category was not found.",
+                "categoryTypeMismatch": "The specified category cannot be used for this transaction type.",
+                "serverError": "An unknown error occurred while adding the transaction data."
+            },
+            "list": {
+                "noData": "No transactions found for the specified filters.",
+                "serverError": "An unknown error occurred while retrieving the transaction data."
+            },
+            "delete": {
+                "idRequired": "Transaction ID is required for deletion.",
+                "invalidId": "The provided ID is not a valid ID.",
+                "noData": "The transaction data was not found or was deleted."
+            },
+            "edit": {
+                "idRequired": "Transaction ID is required for editing.",
+                "invalidId": "The provided ID is not a valid ID.",
+                "invalidAmonut": "The amount field must be a positive number.",
+                "invalidType": "The type field must be either 'expense' or 'income'.",
+                "serverError": "An unknown error occurred while editing the transaction data."
+            },
+            "summary": {
+                "serverError": "An unknown error occurred while retrieving the transaction summary."
+            }
+        },
+        "success": {
+            "add": {
+                "added": "Transaction data added successfully."
+            },
+            "list": {
+                "dataRetrieved": "Transaction data was received successfully."
+            },
+            "delete": {
+                "deleted": "The transaction data was deleted successfully."
+            },
+            "edit": {
+                "edited": "The transaction data was edited successfully."
+            },
+            "summary": {
+                "retrieved": "Transaction summary retrieved successfully."
+            }
+        }
+    },
+    "category": {
+        "success": {
+            "list": {
+                "retrieved": "Categories retrieved successfully."
+            },
+            "add": {
+                "added": "Category added successfully."
+            },
+            "edit": {
+                "updated": "Category updated successfully."
+            },
+            "delete": {
+                "deleted": "Category deleted successfully."
+            }
+        },
+        "fail": {
+            "list": {
+                "serverError": "Server error occurred while retrieving categories."
+            },
+            "add": {
+                "nameRequired": "Category name is required.",
+                "typeRequired": "Category type is required.",
+                "invalidType": "Category type must be either 'expense' or 'income'.",
+                "invalidColor": "Invalid hex color format.",
+                "nameExists": "Category with this name already exists.",
+                "serverError": "Server error occurred while adding category."
+            },
+            "edit": {
+                "idRequired": "Category ID is required.",
+                "invalidId": "Invalid category ID.",
+                "notFound": "Category not found or access denied.",
+                "invalidName": "Invalid category name.",
+                "invalidColor": "Invalid hex color format.",
+                "invalidType": "Category type must be either 'expense' or 'income'.",
+                "nameExists": "Category with this name already exists.",
+                "serverError": "Server error occurred while editing category.",
+                "noFieldsToUpdate": "At least one field (name, color, or type) must be provided for update."
+            },
+            "delete": {
+                "idRequired": "Category ID is required.",
+                "invalidId": "Invalid category ID.",
+                "notFound": "Category not found or access denied.",
+                "serverError": "Server error occurred while deleting category.",
+                "isRelated": "This category cannot be deleted because there are related transactions."
+            }
+        }
+    },
+    "profile": {
+        "success": {
+            "infoRetrieved": "Profile information retrieved successfully.",
+            "updated": "Profile updated successfully.",
+            "passwordChanged": "Password changed successfully.",
+            "statsRetrieved": "Profile statistics retrieved successfully."
+        },
+        "fail": {
+            "userNotFound": "User not found.",
+            "noFieldsToUpdate": "At least one field (username, email, or name) must be provided for update.",
+            "invalidUsername": "Username must be between 2-16 characters.",
+            "invalidEmail": "Invalid email address format.",
+            "invalidName": "Name must be between 2-100 characters.",
+            "usernameExists": "This username is already taken.",
+            "emailExists": "This email is already registered.",
+            "noChanges": "No changes detected.",
+            "currentPasswordRequired": "Current password is required.",
+            "newPasswordRequired": "New password is required.",
+            "weakPassword": "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
+            "incorrectCurrentPassword": "Current password is incorrect.",
+            "samePassword": "New password cannot be the same as current password.",
+            "serverError": "Server error occurred."
+        }
+    },
+    "categorySeed": {
+        "fail": {
+            "noUsers": "No users found. Please create users first.",
+            "seedError": "Error seeding categories"
+        },
+        "success": {
+            "creating": "Found {length} users. Creating categories for each user...",
+            "createdUser": "Created category for user {id}: {name} ({type})",
+            "added": "Added {count} new categories for user: {username}",
+            "addedAll": "Categories seeded successfully for all users!"
+        }
+    },
+    "support": {
+        "issue": {
+            "fail": {
+                "missingFields": "Title, description and email fields are required.",
+                "invalidEmail": "Invalid email address format.",
+                "sendError": "An error occurred while sending the problem report."
+            },
+            "success": {
+                "message": "Your problem report has been sent successfully."
+            }
+        }
+    },
+    "rateLimit": "You are making requests too quickly. Please wait a moment before trying again."
+}

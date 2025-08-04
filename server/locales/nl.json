@@ -1,0 +1,180 @@
+{
+    "header": {
+        "nav": {
+            "features": "Functies",
+            "screenshots": "Schermafbeeldingen",
+            "download": "Download"
+        }
+    },
+    "hero": {
+        "tagline": "Applicatie voor het bijhouden van inkomsten en uitgaven",
+        "description": "Houd eenvoudig uw inkomsten en uitgaven bij op uw Android-apparaten. Eenvoudig, snel en veilig.",
+        "download": "Download de app",
+        "source": "Open source",
+        "income": "Inkomen",
+        "expense": "Uitgaven",
+        "salary": "Salaris",
+        "market": "Markt",
+        "rent": "Huur",
+        "mockData": {
+            "currency": "€",
+            "balance": "2.250,00",
+            "totalIncome": "3.000",
+            "totalExpense": "750",
+            "transactions": {
+                "salary": "3.000",
+                "market": "150",
+                "rent": "600"
+            }
+        }
+    },
+    "featuresSection": {
+        "title": "Functies",
+        "list": [
+            {
+                "title": "Inkomsten volgen",
+                "description": "Houd al uw inkomsten bij door ze te categoriseren"
+            },
+            {
+                "title": "Uitgavenanalyse",
+                "description": "Analyseer uw uitgaven en houd uw budget onder controle"
+            },
+            {
+                "title": "Mobiel compatibel",
+                "description": "Moderne interface die naadloos werkt op uw Android-apparaten"
+            },
+            {
+                "title": "Betrouwbaar",
+                "description": "Uw gegevens worden veilig opgeslagen in de clouddatabase"
+            }
+        ]
+    },
+    "screenshotsSection": "Schermafbeeldingen",
+    "downloadSection": {
+        "download": "Download van",
+        "downloadApp": "Download de app",
+        "description": "Download het gratis op uw Android-apparaat",
+        "googlePlay": "Google Play",
+        "directApk": "Directe APK",
+        "version": "Versie"
+    },
+    "footer": {
+        "description": "Android-applicatie waarmee u uw inkomsten en uitgaven gemakkelijker kunt bijhouden",
+        "legal": "Juridisch",
+        "privacy": "Privacybeleid",
+        "openSource": "Open Source-licentie",
+        "links": "Verbindingen",
+        "reportIssue": "Meld een probleem",
+        "versions": "Versies",
+        "developer": "Ontwikkelaar",
+        "web": "Website"
+    },
+    "privacyPolicy": {
+        "privacy": "Privacybeleid",
+        "lastUpdated": "Laatste update: 24 juli 2025",
+        "sections": {
+            "general": {
+                "title": "1. Algemene Informatie",
+                "text": "Dit privacybeleid legt uit hoe uw persoonlijke gegevens worden verzameld, gebruikt en beschermd wanneer u de Monedsa-app gebruikt. Door de app te gebruiken, gaat u akkoord met dit beleid."
+            },
+            "collectedData": {
+                "title": "2. Verzamelde Gegevens",
+                "text": "De Monedsa-app kan de volgende gegevens verzamelen:",
+                "items": {
+                    "financial": "<strong>Financiële Gegevens:</strong> Inkomsten en uitgavenregistraties, transacties, beschrijvingen en datums.",
+                    "account": "<strong>Gebruikersaccountgegevens:</strong> E-mail, gebruikersnaam, wachtwoord (versleuteld).",
+                    "category": "<strong>Categoriedata:</strong> Aangepaste categorieën en kleuren die u aanmaakt.",
+                    "thema": "<strong>Themapreferenties:</strong> Voorkeur voor licht/donker thema.",
+                    "device": "<strong>Apparaatgegevens (anoniem):</strong> Android-versie, app-versie.",
+                    "network": "<strong>Netwerkstatus:</strong> Internetverbindingstatus (voor databaseconnectie)."
+                }
+            },
+            "storage": {
+                "title": "3. Gegevensopslag",
+                "text": "Monedsa gebruikt een hybride opslagmethode:",
+                "items": {
+                    "cloud": "<strong>Cloud Database:</strong> Uw gegevens worden veilig opgeslagen in een <a href=\"https://www.mongodb.com/products/platform/atlas-database\" target=\"_blank\">MongoDB Atlas</a> database wanneer u een account aanmaakt.",
+                    "local": "<strong>Lokale Gegevens:</strong> Sommige gegevens, zoals thema-instellingen en tokens, worden lokaal opgeslagen met AsyncStorage.",
+                    "crossDevice": "<strong>Toegang via Meerdere Apparaten:</strong> U kunt gegevens openen vanaf verschillende apparaten met hetzelfde account.",
+                    "jwt": "<strong>JWT Tokenbeheer:</strong> Sessiebeheer gebeurt via JSON Web Tokens.",
+                    "backup": "<strong>Back-up:</strong> Onregelmatige databaseback-ups worden gemaakt en veilig opgeslagen op de server."
+                }
+            },
+            "security": {
+                "title": "4. Gegevensbeveiliging",
+                "text": "Wij nemen de volgende maatregelen om uw gegevens te beveiligen:",
+                "items": {
+                    "localEncryption": "<strong>Lokale Versleuteling:</strong> AsyncStorage zorgt voor veilige opslag op het apparaat.",
+                    "serverEncryption": "<strong>Serverversleuteling:</strong> MongoDB zorgt voor veilige opslag op de server.",
+                    "jwtSecurity": "<strong>JWT Veiligheid:</strong> Sessies worden beveiligd met tokens (15 minuten toegang, 14 dagen vernieuwing).",
+                    "https": "<strong>HTTPS-verbindingen:</strong> Alle communicatie vindt plaats via versleutelde kanalen.",
+                    "sharing": "<strong>Gegevensdeling:</strong> Uw gegevens worden op geen enkele manier gedeeld met derden."
+                }
+            },
+            "thirdParty": {
+                "title": "5. Externe Diensten en Bibliotheken",
+                "text": "Monedsa maakt gebruik van de volgende externe diensten en bibliotheken:",
+                "items": {
+                    "reactNative": "<strong>React Native Ecosysteem:</strong> React Native wordt gebruikt in de applicatie-ontwikkelomgeving.",
+                    "asyncStorage": "<strong>AsyncStorage:</strong> Lokale gegevensopslag (@react-native-async-storage/async-storage)",
+                    "netInfo": "<strong>Network Info:</strong> Controle van de internetverbindingsstatus (@react-native-community/netinfo)",
+                    "axios": "<strong>Axios:</strong> Voor het beheren van HTTP-verzoeken.",
+                    "mongodb": "<strong>MongoDB:</strong> Voor server-side gegevensopslag.",
+                    "nodemailer": "<strong>Nodemailer:</strong> Voor het versturen van e-mails. (ondersteuningsaanvragen)",
+                    "googlePlay": "<strong>Google Play Services:</strong> Het biedt updates en analyses van de applicatie via de Play Store."
+                },
+                "note": "📌 Deze diensten hebben hun eigen privacybeleid en beveiligingsnormen."
+            },
+            "deletion": {
+                "title": "6. Verwijderen van Gegevens en Accountbeheer",
+                "text": "U heeft de volgende opties om uw gegevens te verwijderen en uw account te beheren:",
+                "items": {
+                    "removeApp": "<strong>App Verwijderen:</strong> Verwijder de app om lokale gegevens te wissen.",
+                    "deleteAccount": "<strong>Account Verwijderen:</strong> Neem <a href=\"#contact\">contact</a> op met ons ondersteuningsteam.",
+                    "serverDelete": "<strong>Servergegevens Verwijderen:</strong> Accountverwijdering verwijdert alle servergegevens permanent.",
+                    "selectiveDelete": "<strong>Selectief Verwijderen:</strong> Verwijder afzonderlijke transacties of categorieën."
+                },
+                "note": "📌 Verwijdering van uw account is onomkeerbaar."
+            },
+            "support": {
+                "title": "7. Ondersteuning en Probleemrapportage",
+                "text": "Bij gebruik van het in-app-ondersteuningssysteem:",
+                "items": {
+                    "collected": "<strong>Verzamelde Gegevens:</strong> E-mailadres en probleemomschrijving.",
+                    "email": "<strong>E-mails:</strong> Automatisch verzonden via Nodemailer.",
+                    "sharing": "<strong>Gebruik:</strong> Alleen gebruikt voor technische ondersteuning."
+                }
+            },
+            "changes": {
+                "title": "8. Wijzigingen in dit Beleid",
+                "text": "Dit beleid kan af en toe worden bijgewerkt. Raadpleeg regelmatig deze pagina voor wijzigingen.",
+                "note": "📌 Wijzigingen worden van kracht vanaf de publicatiedatum op deze pagina."
+            },
+            "contact": {
+                "title": "9. Contact",
+                "text": "Voor vragen over het privacybeleid:",
+                "items": {
+                    "email": "<strong>E-mail:</strong> <a href=\"mailto:support@vu4ll.com.tr\">support@vu4ll.com.tr</a>",
+                    "inApp": "<strong>In-app Support:</strong> Menu Instellingen > Probleem Melden"
+                },
+                "note": "📌 We proberen verzoeken binnen 24-48 uur te beantwoorden."
+            },
+            "opensource": {
+                "title": "10. Open Source",
+                "text": "Monedsa is een open-source softwareproject. De broncode en ontwikkelaarsdocumentatie van de applicatie zijn openbaar beschikbaar.",
+                "items": {
+                    "repo": "<strong>Open source:</strong>",
+                    "license": "<strong>Licentie:</strong> Monedsa is gelicentieerd onder de GNU General Public License v3.0 (GPL-3.0).",
+                    "rights": "<strong>Onder deze licentie:</strong> U mag de software gebruiken, kopiëren, distribueren en wijzigen. <br> Gewijzigde of afgeleide versies moeten echter ook onder dezelfde licentie (GPL-3.0) vallen. <br> Bij het distribueren van software moeten de originele licentietekst en copyrightvermeldingen behouden blijven en moet toegang tot de broncode worden verleend.",
+                    "thirdParty": "<strong>Componenten van derden:</strong> Monedsa maakt tijdens het ontwikkelingsproces gebruik van verschillende open-sourcebibliotheken (bijv. React Native, Mongoose, Axios). Elk van deze componenten is onderworpen aan zijn eigen licentievoorwaarden."
+                },
+                "note": "📌 Meer info over GPL-3.0: <br> 🔗 <a href=\"https://www.gnu.org/licenses/gpl-3.0.nl.html\">https://www.gnu.org/licenses/gpl-3.0.nl.html</a>"
+            },
+            "footer": {
+                "compliance": "Dit beleid is opgesteld in overeenstemming met de Turkse wet op de bescherming van persoonsgegevens (KVKK), de Algemene Verordening Gegevensbescherming van de EU (AVG/GDPR) en andere relevante wetgeving.",
+                "version": "<strong>Versie:</strong> {version} | <strong>Laatste update:</strong> 24 juli 2025",
+                "backToHome": "Terug naar Startpagina"
+            }
+        }
+    }
+}
