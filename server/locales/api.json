@@ -38,13 +38,14 @@
             "serverError": "An unknown error occurred during login."
         }
     },
-    "logout": {
+    "googleLogin": {
         "success": {
-            "message": "User logged out successfully."
+            "message": "User logged in successfully via Google."
         },
         "fail": {
-            "noToken": "Token is required to log out.",
-            "invalidToken": "The token was not found or has expired."
+            "noToken": "Firebase ID token is required.",
+            "invalidToken": "Invalid Firebase ID token.",
+            "email": "Cannot get email from Google account."
         }
     },
     "refresh": {

@@ -1,4 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { getAuth, GoogleAuthProvider, signInWithCredential } from '@react-native-firebase/auth';
+import { GOOGLE_WEB_CLIENT_ID } from '@env';
 import { API_CONFIG } from '../constants';
 
 /**
@@ -8,6 +11,17 @@ class AuthService {
   constructor() {
     this.token = null;
     this.refreshToken = null;
+    this.configureGoogleSignIn();
+  }
+
+  /**
+   * @description Configures Google Sign-In
+   */
+  configureGoogleSignIn() {
+    GoogleSignin.configure({
+      webClientId: GOOGLE_WEB_CLIENT_ID,
+      offlineAccess: true,
+    })
   }
 
   /**
@@ -220,11 +234,54 @@ class AuthService {
   }
 
   /**
+   * @description Signs in user with Google using Firebase Auth
+   * @returns { Promise<{ success: boolean, user?: any, error?: string }> }
+   */
+  async googleLogin() {
+    try {
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+
+      const signInResult = await GoogleSignin.signIn();
+      const idToken = signInResult.data?.idToken;
+      const authInstance = getAuth();
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+      const firebaseUser = await signInWithCredential(authInstance, googleCredential);
+      const firebaseIdToken = await firebaseUser.user.getIdToken();
+
+      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH.GOOGLE}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          idToken: firebaseIdToken,
+          firebaseUid: firebaseUser.user.uid
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        this.setToken(data.token, data.refreshToken);
+        return { success: true, user: data.user };
+      } else {
+        return { success: false, error: data.message || 'Google ile giriş başarısız' };
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
    * @description Logs out the user by clearing the token.
    * @return { Promise<void> }
    */
   async logout() {
-    await this.clearToken();
+    try {
+      await auth().signOut();
+      await GoogleSignin.signOut();
+      await this.clearToken();
+    } catch (error) {
+      await this.clearToken();
+    }
   }
 
   /**

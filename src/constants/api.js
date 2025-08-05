@@ -13,6 +13,7 @@ export const API_CONFIG = {
 
     AUTH: {
       LOGIN: "/api/auth/login",
+      GOOGLE: "/api/auth/google",
       REGISTER: "/api/auth/register",
       REFRESH: "/api/auth/refresh"
     },

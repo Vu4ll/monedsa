@@ -78,6 +78,23 @@ const LoginScreen = ({ navigation, onLogin }) => {
         }
     };
 
+    const handleGoogleLogin = async () => {
+        setLoading(true);
+        try {
+            const result = await authService.googleLogin();
+
+            if (result.success) {
+                onLogin && onLogin();
+            } else {
+                Alert.alert('Hata', result.error);
+            }
+        } catch (error) {
+            Alert.alert('Hata', 'Google ile giriş yapılamadı');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const updateEmail = (value) => {
         setEmail(value);
         if (errors.email) {
@@ -203,6 +220,21 @@ const LoginScreen = ({ navigation, onLogin }) => {
             color: colors.primary,
             fontWeight: '600',
         },
+        googleButton: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#fff',
+            borderRadius: 12,
+            paddingVertical: 16,
+            elevation: 2,
+        },
+        googleButtonText: {
+            color: colors.background,
+            fontSize: 16,
+            fontWeight: '600',
+            marginLeft: 8,
+        },
     });
 
     return (
@@ -283,6 +315,14 @@ const LoginScreen = ({ navigation, onLogin }) => {
                                     <Text style={styles.loginButtonText}>
                                         {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
                                     </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={[styles.googleButton, loading && styles.buttonDisabled]}
+                                    onPress={handleGoogleLogin}
+                                    disabled={loading}
+                                >
+                                    <Text style={styles.googleButtonText}>Google ile Giriş Yap</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity

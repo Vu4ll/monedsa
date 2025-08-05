@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
+const admin = require("firebase-admin");
 require("dotenv").config();
 
 const config = require("../config");
@@ -11,6 +12,16 @@ const User = require("../models/user");
 const locale = require("../locales/api.json");
 const { seedCategoriesForUser } = require("../seeds/categorySeed");
 const { authLimiter } = require("../util/rate-limits");
+
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        }),
+    });
+}
 
 router.post("/register", authLimiter, async (req, res) => {
     if (!req.body) return badRequest(res, locale.body.empty);
@@ -167,6 +178,84 @@ router.post("/refresh", async (req, res) => {
         }
 
         return badRequest(res, locale.refresh.fail.expiredToken);
+    }
+});
+
+router.post("/google", async (req, res) => {
+    try {
+        const { idToken, firebaseUid } = req.body;
+        if (!idToken) return badRequest(res, locale.googleLogin.fail.noToken);
+
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+
+        if (!decodedToken || decodedToken.uid !== firebaseUid) {
+            return badRequest(res, locale.googleLogin.fail.invalidToken);
+        }
+
+        const { email, name, firebase } = decodedToken;
+
+        if (!email) return badRequest(res, locale.googleLogin.fail.email);
+
+        let user = await User.findOne({
+            $or: [{ email }, { firebaseUid }]
+        });
+
+        if (!user) {
+            const username = email.split("@")[0].toLowerCase() + Math.floor(Math.random() * 1000);
+
+            user = await User.create({
+                email,
+                name,
+                username,
+                firebaseUid,
+                isGoogleUser: true,
+                createdAt: Date.now()
+            });
+
+            try {
+                await seedCategoriesForUser(user._id, "tr"); // temprorily set to Turkish
+            } catch (error) {
+                console.error(`Error creating categories for Google user:`, error);
+            }
+        } else if (!user.firebaseUid) {
+            user.firebaseUid = firebaseUid;
+            user.isGoogleUser = true;
+            await user.save();
+        }
+
+        const token = jwt.sign({
+            id: user._id,
+            email: user.email,
+            username: user.username
+        }, process.env.JWT_SECRET, {
+            expiresIn: config.env.JWT_EXPIRATION,
+            algorithm: "HS256"
+        });
+
+        const refreshToken = jwt.sign({
+            id: user._id,
+            type: "refresh"
+        }, process.env.JWT_REFRESH_SECRET, {
+            expiresIn: config.env.JWT_REFRESH_EXPIRATION,
+            algorithm: "HS256"
+        });
+
+        res.status(200).json({
+            status: res.statusCode,
+            success: true,
+            message: locale.googleLogin.success.message,
+            user: {
+                id: user._id,
+                email: user.email,
+                username: user.username,
+                name: user.name
+            },
+            token,
+            refreshToken
+        });
+    } catch (error) {
+        console.error(`Google OAuth error: ${error.message}`);
+        return serverError(res, "Google ile giriş yapılamadı");
     }
 });
 
