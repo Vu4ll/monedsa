@@ -15,6 +15,7 @@ import {
     ToastAndroid
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Image } from 'react-native';
 import { useTheme } from "../contexts/ThemeContext";
 import { authService } from '../services';
 
@@ -235,6 +236,10 @@ const LoginScreen = ({ navigation, onLogin }) => {
             fontWeight: '600',
             marginLeft: 8,
         },
+        googleIcon: {
+            width: 20,
+            height: 20,
+        },
     });
 
     return (
@@ -322,6 +327,10 @@ const LoginScreen = ({ navigation, onLogin }) => {
                                     onPress={handleGoogleLogin}
                                     disabled={loading}
                                 >
+                                    <Image
+                                        source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png' }}
+                                        style={styles.googleIcon}
+                                    />
                                     <Text style={styles.googleButtonText}>Google ile Giriş Yap</Text>
                                 </TouchableOpacity>
 

@@ -1,13 +1,13 @@
 # Monedsa - Inkomsten & Uitgaven Tracker
 
-![Version](https://img.shields.io/badge/version-1.2-blue.svg)
+![Version](https://img.shields.io/badge/version-1.3-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
-![Banner](/server/public/images/banner-nl.png)
+[Turkse](README_TR.md) | [Engels](README.md) | Nederlands
 
-[Turkse](README.md) | [Engels](README_EN.md) | Nederlands
+![Banner](/server/public/images/banner-nl.png)
 
 **Monedsa** is een moderne en gebruiksvriendelijke mobiele applicatie waarmee u eenvoudig uw inkomsten en uitgaven kunt bijhouden op Android-apparaten. Met zijn eenvoudige, snelle en veilige structuur helpt het u uw financiële situatie onder controle te houden.
 

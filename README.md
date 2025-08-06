@@ -1,211 +1,211 @@
-# Monedsa - Gelir Gider Takip Uygulaması
+# Monedsa - Income & Expense Tracker
 
-![Version](https://img.shields.io/badge/version-1.2-blue.svg)
+![Version](https://img.shields.io/badge/version-1.3-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
-![Banner](/server/public/images/banner-tr.png)
+[Turkish](README_TR.md) | English | [Dutch](README_NL.md)
 
-Türkçe | [English](README_EN.md) | [Dutch](README_NL.md)
+![Banner](/server/public/images/banner-en.png)
 
-**Monedsa**, Android cihazlarınızda kolayca gelir ve giderlerinizi takip edebileceğiniz modern ve kullanıcı dostu bir mobil uygulamadır. Basit, hızlı ve güvenli yapısıyla finansal durumunuzu kontrol altında tutmanıza yardımcı olur.
+**Monedsa** is a modern and user-friendly mobile application that allows you to easily track your income and expenses on Android devices. With its simple, fast, and secure structure, it helps you keep your financial situation under control.
 
-## 📱 Özellikler
+## 📱 Features
 
-### 💰 Gelir ve Gider Yönetimi
-- Gelir ve giderlerinizi kolayca ekleyin, düzenleyin ve silin
-- Detaylı açıklamalar ve kategoriler ile işlemlerinizi organize edin
-- Gerçek zamanlı bakiye hesaplama
+### 💰 Income & Expense Management
+- Easily add, edit, and delete your income and expenses
+- Organize your transactions with detailed descriptions and categories
+- Real-time balance calculation
 
-### 📊 Kategori Sistemi
-- Özel kategoriler oluşturun
-- Renk kodlama sistemi ile kategorilerinizi ayırt edin
-- Gelir ve gider için ayrı kategori yönetimi
+### 📊 Category System
+- Create custom categories
+- Distinguish your categories with color coding system
+- Separate category management for income and expenses
 
-### 📈 Finansal Analiz
-- Toplam gelir, gider ve bakiye görünümü
-- İşlem geçmişi ve detaylı raporlama
-- Filtreleme ve sıralama özellikleri
+### 📈 Financial Analysis
+- Total income, expense, and balance overview
+- Transaction history and detailed reporting
+- Filtering and sorting features
 
-### 🔒 Güvenlik
-- Kullanıcı hesabı sistemi ile güvenli veri saklama
-- JWT token tabanlı kimlik doğrulama
-- Şifreli veri iletimi
+### 🔒 Security
+- Secure data storage with user account system
+- JWT token-based authentication
+- Encrypted data transmission
 
-### 🎨 Modern Arayüz
-- Karanlık ve aydınlık tema desteği
-- Responsive tasarım
-- Sezgisel kullanıcı deneyimi
+### 🎨 Modern Interface
+- Dark and light theme support
+- Responsive design
+- Intuitive user experience
 
-## 🚀 Hızlı Başlangıç
+## 🚀 Quick Start
 
-### Gereksinimler
+### Requirements
 
-- **Node.js** 18 veya üzeri
-- **React Native CLI** kurulu olmalı
-- **Android 7 (API 24)** ve üzeri cihaz
-- **Android Studio** (Android geliştirme için)
-- **MongoDB** veritabanı
+- **Node.js** 18 or higher
+- **React Native CLI** installed
+- **Android 7 (API 24)** or higher device
+- **Android Studio** (for Android development)
+- **MongoDB** database
 
-### Kurulum
+### Installation
 
-1. **Projeyi klonlayın:**
+1. **Clone the project:**
 ```bash
 git clone https://github.com/Vu4ll/monedsa.git
 cd monedsa
 ```
 
-2. **Backend kurulumu:**
+2. **Backend setup:**
 ```bash
 cd server
 npm install
 ```
 
-3. **Backend yapılandırması:**
+3. **Backend configuration:**
 ```bash
-# server dizininde .env dosyası oluşturun
+# Create .env file in server directory
 cp .env.example .env
-# Gerekli ortam değişkenlerini düzenleyin
+# Edit the required environment variables
 ```
 
-4. **Frontend kurulumu:**
+4. **Frontend setup:**
 ```bash
-# Ana dizine dönün
+# Return to main directory
 cd ..
 npm install
 ```
 
-5. **Android bağımlılıklarını yükleyin:**
+5. **Install Android dependencies:**
 ```bash
 cd android
 ./gradlew clean
 cd ..
 ```
 
-### Çalıştırma
+### Running
 
-1. **Backend sunucusunu başlatın:**
+1. **Start the backend server:**
 ```bash
 cd server
 npm start
-# veya geliştirme modu için
+# or for development mode
 npm run dev
 ```
 
-2. **React Native Metro sunucusunu başlatın:**
+2. **Start React Native Metro server:**
 ```bash
-# Ana dizinde
+# In main directory
 npm start
 ```
 
-3. **Android uygulamasını çalıştırın:**
+3. **Run Android application:**
 ```bash
 npm run android
 ```
 
-## 🏗️ Proje Yapısı
+## 🏗️ Project Structure
 
 ```
 monedsa/
-├── 📱 src/                    # React Native kaynak kodları
-│   ├── components/            # Yeniden kullanılabilir bileşenler
-│   ├── screens/              # Uygulama ekranları
-│   ├── services/             # API servis katmanı
-│   ├── hooks/                # Özel React hooks
-│   ├── contexts/             # React context'leri
-│   ├── utils/                # Yardımcı fonksiyonlar
-│   └── constants/            # Sabitler ve yapılandırmalar
+├── 📱 src/                    # React Native source code
+│   ├── components/            # Reusable components
+│   ├── screens/              # Application screens
+│   ├── services/             # API service layer
+│   ├── hooks/                # Custom React hooks
+│   ├── contexts/             # React contexts
+│   ├── utils/                # Utility functions
+│   └── constants/            # Constants and configurations
 ├── 🖥️ server/                 # Node.js backend
-│   ├── routes/               # API rotaları
-│   ├── models/               # MongoDB modelleri
+│   ├── routes/               # API routes
+│   ├── models/               # MongoDB models
 │   ├── middlewares/          # Express middlewares
-│   ├── utils/                # Backend yardımcı fonksiyonları
-│   ├── locales/              # Çok dil desteği
-│   └── public/               # Statik dosyalar
-└── 📂 android/               # Android native kodları
+│   ├── utils/                # Backend utility functions
+│   ├── locales/              # Multi-language support
+│   └── public/               # Static files
+└── 📂 android/               # Android native code
 ```
 
-## 🔧 Teknolojiler
+## 🔧 Technologies
 
 ### Frontend (Mobile)
 - **React Native** 0.80.1
-- **React Navigation** - Navigasyon sistemi
-- **Axios** - HTTP istemcisi
-- **AsyncStorage** - Yerel veri saklama
-- **Vector Icons** - İkon kütüphanesi
+- **React Navigation** - Navigation system
+- **Axios** - HTTP client
+- **AsyncStorage** - Local data storage
+- **Vector Icons** - Icon library
 
 ### Backend
-- **Node.js** & **Express** - Web sunucusu
-- **MongoDB** & **Mongoose** - Veritabanı
-- **JWT** - Kimlik doğrulama
-- **Argon2** - Şifre hashleme
-- **CORS** - Cross-origin kaynak paylaşımı
+- **Node.js** & **Express** - Web server
+- **MongoDB** & **Mongoose** - Database
+- **JWT** - Authentication
+- **Argon2** - Password hashing
+- **CORS** - Cross-origin resource sharing
 
 ## 📊 API Endpoints
 
-### Kimlik Doğrulama
+### Authentication
 ```
-POST /api/auth/login          # Kullanıcı girişi
-POST /api/auth/register       # Kullanıcı kaydı
-POST /api/auth/refresh        # Token yenileme
-```
-
-### İşlemler
-```
-GET    /api/transaction/list     # İşlem listesi
-POST   /api/transaction/add      # Yeni işlem ekleme
-PUT    /api/transaction/edit/:id # İşlem güncelleme
-DELETE /api/transaction/delete/:id # İşlem silme
-GET    /api/transaction/expenses # Sadece giderler
-GET    /api/transaction/incomes  # Sadece gelirler
+POST /api/auth/login          # User login
+POST /api/auth/register       # User registration
+POST /api/auth/refresh        # Token refresh
 ```
 
-### Kategoriler
+### Transactions
 ```
-GET    /api/category/list        # Kategori listesi
-POST   /api/category/add         # Yeni kategori
-PUT    /api/category/edit/:id    # Kategori güncelleme
-DELETE /api/category/delete/:id  # Kategori silme
-```
-
-### Profil
-```
-GET  /api/profile/me             # Kullanıcı bilgileri
-GET  /api/profile/stats          # İstatistikler
-PUT  /api/profile/update         # Profil güncelleme
-PUT  /api/profile/change-password # Şifre değiştirme
+GET    /api/transaction/list     # Transaction list
+POST   /api/transaction/add      # Add new transaction
+PUT    /api/transaction/edit/:id # Update transaction
+DELETE /api/transaction/delete/:id # Delete transaction
+GET    /api/transaction/expenses # Expenses only
+GET    /api/transaction/incomes  # Incomes only
 ```
 
-## 🌟 Ekran Görüntüleri
+### Categories
+```
+GET    /api/category/list        # Category list
+POST   /api/category/add         # New category
+PUT    /api/category/edit/:id    # Update category
+DELETE /api/category/delete/:id  # Delete category
+```
 
-| Ana Sayfa | Ana Sayfa (Beyaz Tema) | İşlem Ekleme (Beyaz Tema) | Kategoriler | Profil |
+### Profile
+```
+GET  /api/profile/me             # User information
+GET  /api/profile/stats          # Statistics
+PUT  /api/profile/update         # Update profile
+PUT  /api/profile/change-password # Change password
+```
+
+## 🌟 Screenshots
+
+| Home Screen | Home Screen (White Thema) | Add Transaction (White Thema) | Categories | Profile |
 |-----------|-----------|-----------|-----------|-----------|
 | <img src="server/public/images/home-page.png" width="200"/> | <img src="server/public/images/home-page-white.png" width="200"/> | <img src="server/public/images/add-transaction.png" width="200"/> | <img src="server/public/images/categories.png" width="200"/> | <img src="server/public/images/profile.png" width="200"/> |
 
-- Ana Sayfa: Bakiye özeti ve son işlemler
-- İşlem Ekleme: Yeni gelir/gider ekleme formu
-- Kategoriler: Kategori yönetimi ve renk seçimi
-- Profil: Kullanıcı bilgileri ve istatistikler
+- Home Screen: Balance summary and recent transactions
+- Add Transaction: New income/expense entry form
+- Categories: Category management and color selection
+- Profile: User information and statistics
 
-## 🤝 Katkıda Bulunma
+## 🤝 Contributing
 
-1. Bu projeyi fork edin
-2. Yeni bir feature branch oluşturun (`git checkout -b feature/new-feat`)
-3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik eklendi'`)
-4. Branch'inizi push edin (`git push origin feature/new-feat`)
-5. Pull Request oluşturun
+1. Fork this project
+2. Create a new feature branch (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push your branch (`git push origin feature/new-feature`)
+5. Create a Pull Request
 
-## 📝 Lisans
+## 📝 License
 
-- Bu proje GPL3 lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasını inceleyin.
-- **Gizlilik politikası**: [monedsa.vu4ll.com.tr/privacy-policy](https://monedsa.vu4ll.com.tr/privacy-policy/tr)
+- This project is licensed under the GPL3 License. See the [LICENSE](LICENSE) file for details.
+- **Privacy Policy**: [monedsa.vu4ll.com.tr/privacy-policy](https://monedsa.vu4ll.com.tr/privacy-policy)
 
-## 📞 İletişim
+## 📞 Contact
 
-- **Web sitesi:** [vu4ll.com.tr](https://vu4ll.com.tr)
-- **E-posta:** [contact@vu4ll.com.tr](mailto:contact@vu4ll.com.tr)
+- **Website:** [vu4ll.com.tr](https://vu4ll.com.tr)
+- **E-mail:** [contact@vu4ll.com.tr](mailto:contact@vu4ll.com.tr)
 
 ---
 
-**Monedsa** ile finansal durumunuzu kolayca takip edin ve bütçenizi kontrol altında tutun! 💰📊
+**Monedsa** - Easily track your financial situation and keep your budget under control! 💰📊
