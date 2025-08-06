@@ -19,7 +19,7 @@ const loadTranslations = () => {
 
 const translations = loadTranslations();
 const supportedLocales = Object.keys(translations);
-const defaultLocale = "tr";
+const defaultLocale = "en";
 
 module.exports = function i18nMiddleware(req, res, next) {
     let locale = req.cookies.locale || req.query.lang || defaultLocale;
