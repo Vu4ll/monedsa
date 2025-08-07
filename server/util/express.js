@@ -12,6 +12,7 @@ app.use(cookieParser());
 app.use(i18nMiddleware);
 app.use(express.urlencoded({ extended: true }));
 app.use("/", require("../routes"));
+app.set("trust proxy", true);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
 app.use(express.static(path.join(__dirname, "..", "public")));
