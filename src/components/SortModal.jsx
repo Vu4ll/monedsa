@@ -7,6 +7,7 @@ import {
     StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from 'react-i18next';
 
 const SortModal = ({ 
     visible, 
@@ -16,34 +17,35 @@ const SortModal = ({
     currentSortBy = 'date',
     currentSortOrder = 'desc'
 }) => {
+    const { t, i18n } = useTranslation();
     const sortOptions = [
         {
             key: 'date-desc',
             sortBy: 'date',
             sortOrder: 'desc',
             icon: 'schedule',
-            title: 'Tarihe göre (Yeni → Eski)'
+            title: t("homeScreen.sortModal.date-desc")
         },
         {
             key: 'date-asc',
             sortBy: 'date',
             sortOrder: 'asc',
             icon: 'schedule',
-            title: 'Tarihe göre (Eski → Yeni)'
+            title: t("homeScreen.sortModal.date-asc")
         },
         {
             key: 'amount-desc',
             sortBy: 'amount',
             sortOrder: 'desc',
             icon: 'trending-down',
-            title: 'Tutara göre (Yüksek → Düşük)'
+            title: t("homeScreen.sortModal.amount-desc")
         },
         {
             key: 'amount-asc',
             sortBy: 'amount',
             sortOrder: 'asc',
             icon: 'trending-up',
-            title: 'Tutara göre (Düşük → Yüksek)'
+            title: t("homeScreen.sortModal.amount-asc")
         }
     ];
 
@@ -123,14 +125,14 @@ const SortModal = ({
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>Sıralama</Text>
+                        <Text style={styles.modalTitle}>{t("homeScreen.sortModal.title")}</Text>
                         <TouchableOpacity onPress={onClose}>
                             <Icon name="close" size={24} color={colors.textSecondary} />
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.modalContent}>
-                        <Text style={styles.sectionTitle}>Sıralama Kriteri</Text>
+                        <Text style={styles.sectionTitle}>{t("homeScreen.sortModal.sectionTitle")}</Text>
 
                         {sortOptions.map((option) => {
                             const isSelected = option.sortBy === currentSortBy && option.sortOrder === currentSortOrder;

@@ -8,6 +8,7 @@ import { useAuth, useNetworkStatus } from './src/hooks';
 import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
 import '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
+import './src/i18n';
 
 const Stack = createStackNavigator();
 

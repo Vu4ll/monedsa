@@ -1,0 +1,97 @@
+{
+    "homeScreen": {
+        "sortModal": {
+            "date-desc": "Tarihe göre (Yeni → Eski)",
+            "date-asc": "Tarihe göre (Eski → Yeni)",
+            "amount-desc": "Tutara göre (Yüksek → Düşük)",
+            "amount-asc": "Tutara göre (Düşük → Yüksek)",
+            "title": "Sıralama",
+            "sectionTitle": "Sıralama kriteri"
+        },
+        "transactionList": {
+            "empty": {
+                "title": "Henüz işlem bulunmuyor",
+                "description": "Gezinme çubuğundaki + tuşuna basarak\nilk işleminizi ekleyebilirsiniz."
+            },
+            "loading": "Veriler yükleniyor...",
+            "summary": {
+                "income": "Toplam Gelir",
+                "expense": "Toplam Gider",
+                "balance": "Bakiye"
+            }
+        }
+    },
+    "settingsScreen": {
+        "header": "Ayarlar",
+        "display": "Görünüm",
+        "theme": {
+            "title": "Tema",
+            "description": "Uygulama temasını seçiniz",
+            "system": "Sistem Teması",
+            "light": "Açık Tema",
+            "dark": "Koyu Tema",
+            "modal": {
+                "title": "Tema Seçiniz",
+                "system": {
+                    "title": "Sistem Teması",
+                    "description": "Cihazın tema ayarını kullanır"
+                },
+                "light": {
+                    "title": "Açık Tema",
+                    "description": "Her zaman açık tema kullanır"
+                },
+                "dark": {
+                    "title": "Koyu Tema",
+                    "description": "Her zaman koyu tema kullanır"
+                }
+            }
+        },
+        "lang": {
+            "title": "Dil",
+            "description": "Tercih ettiğiniz dili seçiniz",
+            "display": "Türkçe",
+            "modal": {
+                "title": "Dilinizi Seçiniz",
+                "selected": "Şu anda seçili",
+                "en": {
+                    "description": "İngilizce"
+                },
+                "nl": {
+                    "description": "Felemenkçe"
+                }
+            }
+        },
+        "about": {
+            "title": "Uygulama hakkında",
+            "version": "Versiyon",
+            "web": "Web sitesi",
+            "source": "Kaynak kod (Github)",
+            "privacy": "Gizlilik politikası"
+        },
+        "other": {
+            "reportIssue": {
+                "title": "Sorun bildirin",
+                "modal": {
+                    "title": "Sorun bildirin",
+                    "issue": {
+                        "title": "Başlık *",
+                        "placeholder": "Sorunun kısa bir özeti"
+                    },
+                    "description": {
+                        "title": "Açıklama *",
+                        "placeholder": "Sorunun detaylı açıklaması, hangi adımlarda oluştuğu ve beklediğiniz davranış"
+                    },
+                    "email": "E-posta adresiniz"
+                }
+            },
+            "donate": "Bağışta bulunun",
+            "rateApp": "Uygulamayı değerlendirin"
+        }
+    },
+    "navigation": {
+        "home": "Ana Sayfa",
+        "category": "Kategoriler",
+        "profile": "Profil",
+        "settings": "Ayarlar"
+    }
+}

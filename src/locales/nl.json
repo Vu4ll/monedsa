@@ -1,0 +1,97 @@
+{
+    "homeScreen": {
+        "sortModal": {
+            "date-desc": "Op datum (Nieuw → Oud)",
+            "date-asc": "Op datum (Oud → Nieuw)",
+            "amount-desc": "Op bedrag (Hoog → Laag)",
+            "amount-asc": "Op bedrag (Laag → Hoog)",
+            "title": "Rangschikking",
+            "sectionTitle": "Rangschikkings criterium"
+        },
+        "transactionList": {
+            "empty": {
+                "title": "Er zijn nog geen transacties",
+                "description": "U kunt uw eerste actie toevoegen door op\nde + knop in de navigatiebalk te drukken."
+            },
+            "loading": "Gegevens worden geladen...",
+            "summary": {
+                "income": "Totaal inkomen",
+                "expense": "Totaal uitgaven",
+                "balance": "Saldo"
+            }
+        }
+    },
+    "settingsScreen": {
+        "header": "Instellingen",
+        "display": "Weergave",
+        "theme": {
+            "title": "Thema",
+            "description": "Selecteer het applicatiethema",
+            "system": "Systeemthema",
+            "light": "Licht Thema",
+            "dark": "Donker Thema",
+            "modal": {
+                "title": "Kies een thema",
+                "system": {
+                    "title": "Systeemthema",
+                    "description": "Gebruikt de thema-instelling van de apparaat"
+                },
+                "light": {
+                    "title": "Licht Thema",
+                    "description": "Gebruikt altijd het lichte thema"
+                },
+                "dark": {
+                    "title": "Donker Thema",
+                    "description": "Gebruikt altijd het donkere thema"
+                }
+            }
+        },
+        "lang": {
+            "title": "Taal",
+            "description": "Selecteer uw voorkeurstaal",
+            "display": "Nederlands",
+            "modal": {
+                "title": "Kies uw taal",
+                "selected": "Momenteel geselecteerd",
+                "tr": {
+                    "description": "Turkse"
+                },
+                "en": {
+                    "description": "Engels"
+                }
+            }
+        },
+        "about": {
+            "title": "Over de applicatie",
+            "version": "Versie",
+            "web": "Website",
+            "source": "Broncode (Github)",
+            "privacy": "Privacybeleid"
+        },
+        "other": {
+            "reportIssue": {
+                "title": "Meld een probleem",
+                "modal": {
+                    "title": "Meld een probleem",
+                    "issue": {
+                        "title": "Titel *",
+                        "placeholder": "Korte samenvatting van het probleem"
+                    },
+                    "description": {
+                        "title": "Beschrijving *",
+                        "placeholder": "Gedetailleerde beschrijving van het probleem, in welke stappen het zich voordoet en wat u verwacht"
+                    },
+                    "email": "Uw e-mailadres"
+                }
+            },
+            "donate": "Doneer",
+            "rateApp": "Beoordeel de app"
+        }
+    },
+    "navigation": {
+        "home": "Home",
+        "category": "Categorieën",
+        "profile": "Profiel",
+        "settings": "Instellingen"
+    }
+}

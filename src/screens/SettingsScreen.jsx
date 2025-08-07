@@ -10,7 +10,6 @@ import {
     Linking,
     Modal,
     TextInput,
-    Alert,
     ActivityIndicator,
     Platform,
     ToastAndroid
@@ -21,8 +20,10 @@ import { useTheme } from '../contexts/ThemeContext';
 import { API_CONFIG } from '../constants/api';
 import { authService } from '../services';
 import { version } from '../../package.json';
+import { useTranslation } from 'react-i18next';
 
 const SettingsScreen = ({ navigation }) => {
+    const { t, i18n } = useTranslation();
     const { themeMode, isDarkMode, colors, changeTheme, getThemeDisplay } = useTheme();
     const [showThemeModal, setShowThemeModal] = useState(false);
     const [showLanguageModal, setShowLanguageModal] = useState(false);
@@ -55,7 +56,7 @@ const SettingsScreen = ({ navigation }) => {
                 setIssueReport(prev => ({ ...prev, email: userEmail }));
             } else {
                 console.error('Auth service error:', result.error);
-                Alert.alert('Hata', result.error || 'Profil bilgileri yüklenemedi');
+                ToastAndroid.show(result.error || 'Profil bilgileri yüklenemedi', ToastAndroid.SHORT);
             }
         } catch (error) {
             console.error('E-posta yüklenirken hata:', error);
@@ -74,6 +75,11 @@ const SettingsScreen = ({ navigation }) => {
     const handleThemeSelect = (selectedTheme) => {
         changeTheme(selectedTheme);
         setShowThemeModal(false);
+    };
+
+    const changeLanguage = async (lng) => {
+        i18n.changeLanguage(lng);
+        setShowLanguageModal(false);
     };
 
     const rateApp = () => {
@@ -105,15 +111,15 @@ const SettingsScreen = ({ navigation }) => {
 
     const handleIssueSubmit = async () => {
         if (!issueReport.title.trim()) {
-            Alert.alert('Hata', 'Lütfen başlık giriniz.');
+            ToastAndroid.show('Lütfen başlık giriniz.', ToastAndroid.SHORT);
             return;
         }
         if (!issueReport.description.trim()) {
-            Alert.alert('Hata', 'Lütfen açıklama giriniz.');
+            ToastAndroid.show('Lütfen açıklama giriniz.', ToastAndroid.SHORT);
             return;
         }
         if (!userMail || !userMail.trim()) {
-            Alert.alert('Hata', 'E-posta adresiniz yüklenemedi. Lütfen daha sonra tekrar deneyiniz.');
+            ToastAndroid.show('E-posta adresiniz yüklenemedi. Lütfen daha sonra tekrar deneyiniz.', ToastAndroid.SHORT);
             return;
         }
 
@@ -402,14 +408,14 @@ const SettingsScreen = ({ navigation }) => {
 
             <Header
                 colors={colors}
-                title="Ayarlar"
+                title={t("settingsScreen.header")}
                 showLeftAction={true}
                 onLeftActionPress={() => navigation.goBack()}
             />
 
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.settingSection}>
-                    <Text style={styles.sectionTitle}>Görünüm</Text>
+                    <Text style={styles.sectionTitle}>{t("settingsScreen.display")}</Text>
 
                     <TouchableOpacity
                         style={[styles.settingRow, { paddingTop: 8 }]}
@@ -417,8 +423,8 @@ const SettingsScreen = ({ navigation }) => {
                     >
                         <Icon name="palette" size={24} color={colors.textSecondary} style={styles.settingIcon} />
                         <View style={styles.settingContent}>
-                            <Text style={styles.settingTitle}>Tema</Text>
-                            <Text style={styles.settingDescription}>Görünüm temasını seçin</Text>
+                            <Text style={styles.settingTitle}>{t("settingsScreen.theme.title")}</Text>
+                            <Text style={styles.settingDescription}>{t("settingsScreen.theme.description")}</Text>
                         </View>
                         <View style={styles.settingAction}>
                             <Text style={styles.settingValue}>{getThemeDisplay()}</Text>
@@ -432,42 +438,42 @@ const SettingsScreen = ({ navigation }) => {
                     >
                         <Icon name="language" size={24} color={colors.textSecondary} style={styles.settingIcon} />
                         <View style={styles.settingContent}>
-                            <Text style={styles.settingTitle}>Dil</Text>
-                            <Text style={styles.settingDescription}>Uygulama dilini seçin</Text>
+                            <Text style={styles.settingTitle}>{t("settingsScreen.lang.title")}</Text>
+                            <Text style={styles.settingDescription}>{t("settingsScreen.lang.description")}</Text>
                         </View>
                         <View style={styles.settingAction}>
-                            <Text style={styles.settingValue}>Türkçe</Text>
+                            <Text style={styles.settingValue}>{t("settingsScreen.lang.display")}</Text>
                             <Icon name="chevron-right" size={20} color={colors.textSecondary} style={{ marginLeft: 8 }} />
                         </View>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.aboutSection}>
-                    <Text style={styles.sectionTitle}>Uygulama Hakkında</Text>
+                    <Text style={styles.sectionTitle}>{t("settingsScreen.about.title")}</Text>
 
                     <View style={styles.aboutRow}>
-                        <Text style={styles.aboutLabel}>Versiyon</Text>
+                        <Text style={styles.aboutLabel}>{t("settingsScreen.about.version")}</Text>
                         <Text style={styles.aboutValue}>{version}</Text>
                     </View>
 
                     <TouchableOpacity
                         style={styles.aboutRow}
                         onPress={() => Linking.openURL(API_CONFIG.BASE_URL)}>
-                        <Text style={styles.aboutLabel}>Web Sitesi</Text>
+                        <Text style={styles.aboutLabel}>{t("settingsScreen.about.web")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.aboutRow}
                         onPress={() => Linking.openURL("https://github.com/Vu4ll/monedsa")}>
-                        <Text style={styles.aboutLabel}>Kaynak Kod (Github)</Text>
+                        <Text style={styles.aboutLabel}>{t("settingsScreen.about.source")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.aboutRow, styles.lastAboutRow]}
                         onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy`)}>
-                        <Text style={styles.aboutLabel}>Gizlilik Politikası</Text>
+                        <Text style={styles.aboutLabel}>{t("settingsScreen.about.privacy")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
                 </View>
@@ -476,21 +482,21 @@ const SettingsScreen = ({ navigation }) => {
                     <TouchableOpacity
                         style={[styles.aboutRow, { paddingTop: 0 }]}
                         onPress={showIssuePicker}>
-                        <Text style={styles.aboutLabel}>Sorun Bildirin</Text>
+                        <Text style={styles.aboutLabel}>{t("settingsScreen.other.reportIssue.title")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.aboutRow}
                         onPress={() => Linking.openURL("https://coff.ee/Vu4ll")}>
-                        <Text style={styles.aboutLabel}>Bağışta Bulunun</Text>
+                        <Text style={styles.aboutLabel}>{t("settingsScreen.other.donate")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.aboutRow, styles.lastAboutRow]}
                         onPress={rateApp}>
-                        <Text style={styles.aboutLabel}>Uygulamayı Değerlendirin</Text>
+                        <Text style={styles.aboutLabel}>{t("settingsScreen.other.rateApp")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
                 </View>
@@ -506,7 +512,7 @@ const SettingsScreen = ({ navigation }) => {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Tema Seçin</Text>
+                            <Text style={styles.modalTitle}>{t("settingsScreen.theme.modal.title")}</Text>
                             <TouchableOpacity
                                 style={styles.closeButton}
                                 onPress={() => setShowThemeModal(false)}
@@ -529,8 +535,8 @@ const SettingsScreen = ({ navigation }) => {
                                 {themeMode === 'system' && <View style={styles.radioButtonInner} />}
                             </View>
                             <View style={styles.themeOptionContent}>
-                                <Text style={styles.themeOptionTitle}>Sistem Teması</Text>
-                                <Text style={styles.themeOptionDescription}>Cihazın tema ayarını takip eder</Text>
+                                <Text style={styles.themeOptionTitle}>{t("settingsScreen.theme.modal.system.title")}</Text>
+                                <Text style={styles.themeOptionDescription}>{t("settingsScreen.theme.modal.system.description")}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -548,8 +554,8 @@ const SettingsScreen = ({ navigation }) => {
                                 {themeMode === 'light' && <View style={styles.radioButtonInner} />}
                             </View>
                             <View style={styles.themeOptionContent}>
-                                <Text style={styles.themeOptionTitle}>Açık Tema</Text>
-                                <Text style={styles.themeOptionDescription}>Her zaman açık tema kullanır</Text>
+                                <Text style={styles.themeOptionTitle}>{t("settingsScreen.theme.modal.light.title")}</Text>
+                                <Text style={styles.themeOptionDescription}>{t("settingsScreen.theme.modal.light.description")}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -567,8 +573,8 @@ const SettingsScreen = ({ navigation }) => {
                                 {themeMode === 'dark' && <View style={styles.radioButtonInner} />}
                             </View>
                             <View style={styles.themeOptionContent}>
-                                <Text style={styles.themeOptionTitle}>Koyu Tema</Text>
-                                <Text style={styles.themeOptionDescription}>Her zaman koyu tema kullanır</Text>
+                                <Text style={styles.themeOptionTitle}>{t("settingsScreen.theme.modal.dark.title")}</Text>
+                                <Text style={styles.themeOptionDescription}>{t("settingsScreen.theme.modal.dark.description")}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -585,7 +591,7 @@ const SettingsScreen = ({ navigation }) => {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Dil Seçin</Text>
+                            <Text style={styles.modalTitle}>{t("settingsScreen.lang.modal.title")}</Text>
                             <TouchableOpacity
                                 style={styles.closeButton}
                                 onPress={() => setShowLanguageModal(false)}
@@ -597,57 +603,62 @@ const SettingsScreen = ({ navigation }) => {
                         <TouchableOpacity
                             style={[
                                 styles.themeOption,
-                                styles.themeOptionActive
+                                i18n.language === "en" ? styles.themeOptionActive : styles.themeOptionInactive,
                             ]}
-                            disabled={true}
+                            onPress={() => changeLanguage("en")}
                         >
                             <View style={[
                                 styles.radioButton,
-                                styles.radioButtonActive
+                                i18n.language === "en" ? styles.radioButtonActive : styles.radioButtonInactive
                             ]}>
-                                <View style={styles.radioButtonInner} />
-                            </View>
-                            <View style={styles.themeOptionContent}>
-                                <Text style={styles.themeOptionTitle}>Türkçe</Text>
-                                <Text style={styles.themeOptionDescription}>Varsayılan dil</Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={[
-                                styles.themeOption,
-                                styles.themeOptionInactive,
-                                { opacity: 0.5 }
-                            ]}
-                            disabled={true}
-                        >
-                            <View style={[
-                                styles.radioButton,
-                                styles.radioButtonInactive
-                            ]}>
+                                {i18n.language === "en" && <View style={styles.radioButtonInner} />}
                             </View>
                             <View style={styles.themeOptionContent}>
                                 <Text style={styles.themeOptionTitle}>English</Text>
-                                <Text style={styles.themeOptionDescription}>Coming soon...</Text>
+                                <Text style={styles.themeOptionDescription}>
+                                    {i18n.language === "en" ? t("settingsScreen.lang.modal.selected") : t("settingsScreen.lang.modal.en.description")}
+                                </Text>
                             </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={[
                                 styles.themeOption,
-                                styles.themeOptionInactive,
-                                { opacity: 0.5 }
+                                i18n.language === "tr" ? styles.themeOptionActive : styles.themeOptionInactive,
                             ]}
-                            disabled={true}
+                            onPress={() => changeLanguage("tr")}
                         >
                             <View style={[
                                 styles.radioButton,
-                                styles.radioButtonInactive
+                                i18n.language === "tr" ? styles.radioButtonActive : styles.radioButtonInactive
                             ]}>
+                                {i18n.language === "tr" && <View style={styles.radioButtonInner} />}
+                            </View>
+                            <View style={styles.themeOptionContent}>
+                                <Text style={styles.themeOptionTitle}>Türkçe</Text>
+                                <Text style={styles.themeOptionDescription}>
+                                    {i18n.language === "tr" ? t("settingsScreen.lang.modal.selected") : t("settingsScreen.lang.modal.tr.description")}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={[styles.themeOption,
+                            i18n.language === "nl" ? styles.themeOptionActive : styles.themeOptionInactive,
+                            ]}
+                            onPress={() => changeLanguage("nl")}
+                        >
+                            <View style={[
+                                styles.radioButton,
+                                i18n.language === "nl" ? styles.radioButtonActive : styles.radioButtonInactive
+                            ]}>
+                                {i18n.language === "nl" && <View style={styles.radioButtonInner} />}
                             </View>
                             <View style={styles.themeOptionContent}>
                                 <Text style={styles.themeOptionTitle}>Nederlands</Text>
-                                <Text style={styles.themeOptionDescription}>Binnenkort beschikbaar...</Text>
+                                <Text style={styles.themeOptionDescription}>
+                                    {i18n.language === "nl" ? t("settingsScreen.lang.modal.selected") : t("settingsScreen.lang.modal.nl.description")}
+                                </Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -664,7 +675,7 @@ const SettingsScreen = ({ navigation }) => {
                 <View style={styles.modalOverlay}>
                     <View style={styles.issueModalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Sorun Bildirin</Text>
+                            <Text style={styles.modalTitle}>{t("settingsScreen.other.reportIssue.modal.title")}</Text>
                             <TouchableOpacity
                                 style={styles.closeButton}
                                 onPress={closeIssueModal}
@@ -674,20 +685,20 @@ const SettingsScreen = ({ navigation }) => {
                         </View>
 
                         <ScrollView showsVerticalScrollIndicator={false}>
-                            <Text style={styles.issueLabel}>Başlık *</Text>
+                            <Text style={styles.issueLabel}>{t("settingsScreen.other.reportIssue.modal.issue.title")}</Text>
                             <TextInput
                                 style={styles.issueInput}
-                                placeholder="Sorunun kısa bir özeti"
+                                placeholder={t("settingsScreen.other.reportIssue.modal.issue.placeholder")}
                                 placeholderTextColor={colors.textSecondary}
                                 value={issueReport.title}
                                 onChangeText={(text) => setIssueReport(prev => ({ ...prev, title: text }))}
                                 editable={!isSubmitting}
                             />
 
-                            <Text style={styles.issueLabel}>Açıklama *</Text>
+                            <Text style={styles.issueLabel}>{t("settingsScreen.other.reportIssue.modal.description.title")}</Text>
                             <TextInput
                                 style={styles.issueTextArea}
-                                placeholder="Sorunun detaylı açıklaması, hangi adımlarda oluştuğu ve beklediğiniz davranış"
+                                placeholder={t("settingsScreen.other.reportIssue.modal.description.placeholder")}
                                 placeholderTextColor={colors.textSecondary}
                                 multiline={true}
                                 value={issueReport.description}
@@ -695,7 +706,7 @@ const SettingsScreen = ({ navigation }) => {
                                 editable={!isSubmitting}
                             />
 
-                            <Text style={styles.issueLabel}>E-posta Adresiniz</Text>
+                            <Text style={styles.issueLabel}>{t("settingsScreen.other.reportIssue.modal.email")}</Text>
                             <TextInput
                                 style={[styles.issueInput, { backgroundColor: colors.border + '30' }]}
                                 value={userMail || 'E-posta yükleniyor...'}

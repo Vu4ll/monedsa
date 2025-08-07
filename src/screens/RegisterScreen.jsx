@@ -174,7 +174,7 @@ const RegisterScreen = ({ navigation }) => {
                         <AuthLink
                             text="Zaten hesabınız var mı?"
                             highlightText="Giriş yapın"
-                            onPress={() => navigation.navigate('Login')}
+                            onPress={() => navigation.goBack()}
                         />
                     </View>
                 </ScrollView>

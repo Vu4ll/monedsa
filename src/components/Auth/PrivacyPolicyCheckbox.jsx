@@ -60,7 +60,7 @@ const PrivacyPolicyCheckbox = ({ acceptPrivacyPolicy, setAcceptPrivacyPolicy, op
                     <Text onPress={openPrivacyPolicy} style={styles.privacyLink}>
                         Gizlilik Politikası
                     </Text>
-                    'ni okudum ve kabul ediyorum.
+                    'nı okudum ve kabul ediyorum.
                 </Text>
             </View>
             {error && <Text style={styles.errorText}>{error}</Text>}

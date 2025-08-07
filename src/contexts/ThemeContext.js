@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getColors } from '../constants';
+import { useTranslation } from 'react-i18next';
 
 const ThemeContext = createContext();
 
@@ -14,6 +15,7 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
+    const { t, i18n } = useTranslation();
     const systemColorScheme = useColorScheme();
     const [themeMode, setThemeMode] = useState('system'); // 'system', 'light', 'dark'
 
@@ -53,9 +55,9 @@ export const ThemeProvider = ({ children }) => {
 
     const getThemeDisplay = () => {
         switch (themeMode) {
-            case 'light': return 'Açık Tema';
-            case 'dark': return 'Koyu Tema';
-            default: return 'Sistem Teması';
+            case 'light': return t("settingsScreen.theme.light");
+            case 'dark': return t("settingsScreen.theme.dark");
+            default: return t("settingsScreen.theme.system");
         }
     };
 

@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { HomeScreen, CategoryScreen } from "../screens";
 import { useNavigationState } from '@react-navigation/native';
 import { useTheme } from "../contexts/ThemeContext";
+import { useTranslation } from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,6 +15,7 @@ function EmptyComponent() {
 }
 
 function MainTabNavigator({ onLogout }) {
+    const { t, i18n } = useTranslation();
     const { isDarkMode, colors } = useTheme();
     const insets = useSafeAreaInsets();
 
@@ -65,7 +67,7 @@ function MainTabNavigator({ onLogout }) {
             <Tab.Screen
                 name="Home"
                 options={{
-                    tabBarLabel: 'Ana Sayfa'
+                    tabBarLabel: t("navigation.home")
                 }}>
                 {(props) => <HomeScreen {...props} onLogout={onLogout} />}
             </Tab.Screen>
@@ -74,7 +76,7 @@ function MainTabNavigator({ onLogout }) {
                 name="Category"
                 component={CategoryScreen}
                 options={{
-                    tabBarLabel: 'Kategoriler'
+                    tabBarLabel: t("navigation.category")
                 }} />
 
             <Tab.Screen
@@ -133,7 +135,7 @@ function MainTabNavigator({ onLogout }) {
                 name="Profile"
                 component={EmptyComponent}
                 options={({ navigation }) => ({
-                    tabBarLabel: 'Profil',
+                    tabBarLabel: t("navigation.profile"),
                     tabBarButton: (props) => (<TouchableOpacity
                         {...props}
                         onPress={() => navigation.navigate('ProfileStack')} />)
@@ -143,7 +145,7 @@ function MainTabNavigator({ onLogout }) {
                 name="Settings"
                 component={EmptyComponent}
                 options={({ navigation }) => ({
-                    tabBarLabel: 'Ayarlar',
+                    tabBarLabel: t("navigation.settings"),
                     tabBarButton: (props) => (<TouchableOpacity
                         {...props}
                         onPress={() => navigation.navigate('SettingsStack')} />)

@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TransactionCard } from "./TransactionCard";
 import { formatCurrency } from "../utils";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from 'react-i18next';
 
 export const TransactionList = ({ transactions, loading, colors, navigation, onRefresh, onFilterChange }) => {
-
+  const { t, i18n } = useTranslation();
   const handleEdit = (transaction) => navigation.navigate('AddTransactionStack', {
     transaction,
     onRefresh
@@ -23,9 +24,9 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
   const renderEmptyState = () => (
     <View style={styles.emptyStateContainer}>
       <Icon name="receipt-long" size={80} color={colors.textSecondary} />
-      <Text style={[styles.emptyStateTitle, { color: colors.text }]}>Henüz işlem bulunmuyor</Text>
+      <Text style={[styles.emptyStateTitle, { color: colors.text }]}>{t("homeScreen.transactionList.empty.title")}</Text>
       <Text style={[styles.emptyStateSubtitle, { color: colors.textSecondary }]}>
-        Gezinme çubuğundaki + tuşuna basarak{'\n'}ilk işleminizi ekleyebilirsiniz.
+        {t("homeScreen.transactionList.empty.description")}
       </Text>
     </View>
   );
@@ -33,7 +34,7 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
   const renderLoadingState = () => (
     <View style={styles.loadingContainer}>
       <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
-        Veriler yükleniyor...
+        {t("homeScreen.transactionList.loading")}
       </Text>
     </View>
   );
@@ -55,7 +56,7 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
       {transactions.summary && (
         <View style={[styles.summaryContainer, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
           <View style={styles.summaryGrid}>
-            {/* Toplam Gelir */}
+            {/* Total Income */}
             <TouchableOpacity
               style={[styles.summaryItem, styles.incomeItem]}
               onPress={() => handleFilterByType('income')}
@@ -67,14 +68,16 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
                 </Text>
               </View>
               <View style={styles.summaryTextContainer}>
-                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Toplam Gelir</Text>
+                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
+                  {t("homeScreen.transactionList.summary.income")}
+                </Text>
                 <Text style={[styles.summaryValue, { color: colors.success }]}>
                   {formatCurrency(transactions.summary.totalIncome)}
                 </Text>
               </View>
             </TouchableOpacity>
 
-            {/* Toplam Gider */}
+            {/* Total Expense */}
             <TouchableOpacity
               style={[styles.summaryItem, styles.expenseItem]}
               onPress={() => handleFilterByType('expense')}
@@ -86,7 +89,9 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
                 </Text>
               </View>
               <View style={styles.summaryTextContainer}>
-                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Toplam Gider</Text>
+                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
+                  {t("homeScreen.transactionList.summary.expense")}
+                </Text>
                 <Text style={[styles.summaryValue, { color: colors.error }]}>
                   {formatCurrency(transactions.summary.totalExpense)}
                 </Text>
@@ -94,7 +99,7 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
             </TouchableOpacity>
           </View>
 
-          {/* Bakiye */}
+          {/* Balance */}
           <TouchableOpacity
             style={[styles.balanceContainer, {
               backgroundColor: transactions.summary.balance >= 0 ? colors.transparentGreen : colors.transparentRed,
@@ -103,7 +108,9 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
             activeOpacity={0.7}
           >
             <View style={styles.balanceContent}>
-              <Text style={[styles.balanceLabel, { color: colors.textSecondary }]}>Bakiye</Text>
+              <Text style={[styles.balanceLabel, { color: colors.textSecondary }]}>
+                {t("homeScreen.transactionList.summary.balance")}
+              </Text>
               <Text style={[styles.balanceValue, {
                 color: transactions.summary.balance >= 0 ? colors.success : colors.error
               }]}>

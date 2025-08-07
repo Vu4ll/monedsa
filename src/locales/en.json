@@ -1,0 +1,97 @@
+{
+    "homeScreen": {
+        "sortModal": {
+            "date-desc": "By date (New → Old)",
+            "date-asc": "By date (Old → New)",
+            "amount-desc": "By amount (High → Low)",
+            "amount-asc": "By amount (Low → High)",
+            "title": "Ranking",
+            "sectionTitle": "Ranking criteria"
+        },
+        "transactionList": {
+            "empty": {
+                "title": "No transactions found yet",
+                "description": "You can add your first task by pressing\nthe + button on the navigation bar."
+            },
+            "loading": "Loading data...",
+            "summary": {
+                "income": "Total Income",
+                "expense": "Total Expenses",
+                "balance": "Balance"
+            }
+        }
+    },
+    "settingsScreen": {
+        "header": "Settings",
+        "display": "Display",
+        "theme": {
+            "title": "Theme",
+            "description": "Select the application theme",
+            "system": "System Theme",
+            "light": "Light Theme",
+            "dark": "Dark Theme",
+            "modal": {
+                "title": "Select Theme",
+                "system": {
+                    "title": "System Theme",
+                    "description": "Uses the device's theme settings"
+                },
+                "light": {
+                    "title": "Light Theme",
+                    "description": "Always uses the light theme"
+                },
+                "dark": {
+                    "title": "Dark Theme",
+                    "description": "Always uses the dark theme"
+                }
+            }
+        },
+        "lang": {
+            "title": "Language",
+            "description": "Select your preferred language",
+            "display": "English",
+            "modal": {
+                "title": "Select Your Language",
+                "selected": "Currently selected",
+                "tr": {
+                    "description": "Turkish"
+                },
+                "nl": {
+                    "description": "Dutch"
+                }
+            }
+        },
+        "about": {
+            "title": "About the application",
+            "version": "Version",
+            "web": "Website",
+            "source": "Source Code (Github)",
+            "privacy": "Privacy Policy"
+        },
+        "other": {
+            "reportIssue": {
+                "title": "Report an issue",
+                "modal": {
+                    "title": "Report an issue",
+                    "issue": {
+                        "title": "Title *",
+                        "placeholder": "A brief summary of the issue"
+                    },
+                    "description": {
+                        "title": "Description *",
+                        "placeholder": "A detailed description of the issue, the steps that led to it, and the expected behavior"
+                    },
+                    "email": "Your email address"
+                }
+            },
+            "donate": "Make a donation",
+            "rateApp": "Rate the app"
+        }
+    },
+    "navigation": {
+        "home": "Home",
+        "category": "Categories",
+        "profile": "Profile",
+        "settings": "Settings"
+    }
+}
