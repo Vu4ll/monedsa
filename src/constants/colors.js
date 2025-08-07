@@ -2,6 +2,7 @@ export const getColors = (isDarkMode) => ({
   /* Syntax
   name: isDarkMode ? dark thema color : white thema color */
   background: isDarkMode ? "#121212" : "#FFFFFF",
+  secondaryBg: isDarkMode ? "#F5F5F5" : "#121212",
   cardBackground: isDarkMode ? "#1E1E1E" : "#F5F5F5",
   headerBackgroud: isDarkMode ? "#1f1f1f" : "#F9F9F9",
   text: isDarkMode ? "#FFFFFF" : "#000000",

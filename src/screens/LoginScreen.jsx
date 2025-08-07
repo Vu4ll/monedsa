@@ -225,7 +225,7 @@ const LoginScreen = ({ navigation, onLogin }) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#fff',
+            backgroundColor: colors.secondaryBg,
             borderRadius: 12,
             paddingVertical: 16,
             elevation: 2,
