@@ -6,6 +6,7 @@ import { LoginScreen, RegisterScreen, ProfileScreen, SettingsScreen, AddTransact
 import { MainTabNavigator } from './src/components';
 import { useAuth, useNetworkStatus } from './src/hooks';
 import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
+import { CurrencyProvider } from './src/contexts/CurrencyContext';
 import '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import './src/i18n';
@@ -27,39 +28,41 @@ function AppContent() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {isAuthenticated ? (
-            <>
-              <Stack.Screen name="MainApp">
-                {(props) => <MainTabNavigator {...props} onLogout={logout} />}
-              </Stack.Screen>
+      <CurrencyProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {isAuthenticated ? (
+              <>
+                <Stack.Screen name="MainApp">
+                  {(props) => <MainTabNavigator {...props} onLogout={logout} />}
+                </Stack.Screen>
 
-              <Stack.Screen name="ProfileStack">
-                {(props) => <ProfileScreen {...props} onLogout={logout} />}
-              </Stack.Screen>
+                <Stack.Screen name="ProfileStack">
+                  {(props) => <ProfileScreen {...props} onLogout={logout} />}
+                </Stack.Screen>
 
-              <Stack.Screen name="AddTransactionStack">
-                {(props) => <AddTransactionScreen {...props} onLogout={logout} />}
-              </Stack.Screen>
+                <Stack.Screen name="AddTransactionStack">
+                  {(props) => <AddTransactionScreen {...props} onLogout={logout} />}
+                </Stack.Screen>
 
-              <Stack.Screen name="SettingsStack" component={SettingsScreen} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen
-                name="Login"
-                options={{ gestureEnabled: false }}
-              >
-                {(props) => <LoginScreen {...props} onLogin={login} />}
-              </Stack.Screen>
-              <Stack.Screen name="Register">
-                {(props) => <RegisterScreen {...props} onLogin={login} />}
-              </Stack.Screen>
-            </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+                <Stack.Screen name="SettingsStack" component={SettingsScreen} />
+              </>
+            ) : (
+              <>
+                <Stack.Screen
+                  name="Login"
+                  options={{ gestureEnabled: false }}
+                >
+                  {(props) => <LoginScreen {...props} onLogin={login} />}
+                </Stack.Screen>
+                <Stack.Screen name="Register">
+                  {(props) => <RegisterScreen {...props} onLogin={login} />}
+                </Stack.Screen>
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </CurrencyProvider>
     </SafeAreaProvider>
   );
 }

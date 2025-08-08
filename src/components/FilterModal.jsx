@@ -13,6 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { categoryService } from '../services';
+import { useTranslation } from 'react-i18next';
 
 const FilterModal = ({
     visible,
@@ -23,6 +24,7 @@ const FilterModal = ({
     onClearFilters,
     colors
 }) => {
+    const { t, i18n } = useTranslation();
     const [categories, setCategories] = useState([]);
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -105,7 +107,6 @@ const FilterModal = ({
         }
     };
 
-    // Tarih picker'ı açmak için fonksiyonlar
     const openStartDatePicker = () => {
         if (tempFilters.startDate && validateDateFormat(tempFilters.startDate)) {
             setStartDate(parseStringToDate(tempFilters.startDate));
@@ -120,7 +121,6 @@ const FilterModal = ({
         setShowEndDatePicker(true);
     };
 
-    // Hızlı tarih seçim fonksiyonları
     const setQuickDate = (startDateObj, endDateObj) => {
         setTempFilters(prev => ({
             ...prev,
@@ -147,18 +147,6 @@ const FilterModal = ({
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const year = today.getFullYear();
         return `${day}-${month}-${year}`;
-    };
-
-    const convertServerDateToUI = (serverDate) => {
-        if (!serverDate) return '';
-        const [year, month, day] = serverDate.split('-');
-        return `${day}-${month}-${year}`;
-    };
-
-    const convertUIDateToServer = (uiDate) => {
-        if (!uiDate || !validateDateFormat(uiDate)) return '';
-        const [day, month, year] = uiDate.split('-');
-        return `${year}-${month}-${day}`;
     };
 
     const getFilteredCategories = () => {
@@ -416,15 +404,15 @@ const FilterModal = ({
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>Filtreler</Text>
+                        <Text style={styles.modalTitle}>{t("homeScreen.filterModal.filter")}</Text>
                         <TouchableOpacity onPress={onClose}>
                             <Icon name="close" size={24} color={colors.textSecondary} />
                         </TouchableOpacity>
                     </View>
 
                     <ScrollView style={styles.modalContent}>
-                        {/* Tip Filtresi */}
-                        <Text style={styles.sectionTitle}>İşlem Tipi</Text>
+                        {/* Type Filter */}
+                        <Text style={styles.sectionTitle}>{t("homeScreen.filterModal.type")}</Text>
                         <View style={styles.typeContainer}>
                             <TouchableOpacity
                                 style={[
@@ -440,7 +428,9 @@ const FilterModal = ({
                                     type: prev.type === 'income' ? '' : 'income'
                                 }))}
                             >
-                                <Text style={[styles.typeText, tempFilters.type === 'income' && { color: colors.white }]}>Gelir</Text>
+                                <Text style={[styles.typeText, tempFilters.type === 'income' && { color: colors.white }]}>
+                                    {t("homeScreen.filterModal.income")}
+                                </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
@@ -457,12 +447,14 @@ const FilterModal = ({
                                     type: prev.type === 'expense' ? '' : 'expense'
                                 }))}
                             >
-                                <Text style={[styles.typeText, tempFilters.type === 'expense' && { color: colors.white }]}>Gider</Text>
+                                <Text style={[styles.typeText, tempFilters.type === 'expense' && { color: colors.white }]}>
+                                    {t("homeScreen.filterModal.expense")}
+                                </Text>
                             </TouchableOpacity>
                         </View>
 
-                        {/* Kategori Filtresi */}
-                        <Text style={styles.sectionTitle}>Kategori</Text>
+                        {/* Category Filter */}
+                        <Text style={styles.sectionTitle}>{t("homeScreen.filterModal.category")}</Text>
                         <TouchableOpacity
                             style={styles.categorySelector}
                             onPress={() => setShowCategoryModal(true)}
@@ -480,20 +472,22 @@ const FilterModal = ({
                                         </TouchableOpacity>
                                     </>
                                 ) : (
-                                    <Text style={styles.categoryPlaceholder}>Kategori seçin</Text>
+                                    <Text style={styles.categoryPlaceholder}>
+                                        {t("homeScreen.filterModal.selectCategory")}
+                                    </Text>
                                 )}
                                 <Icon name="keyboard-arrow-down" size={24} color={colors.textSecondary} />
                             </View>
                         </TouchableOpacity>
 
-                        {/* Tutar Filtresi */}
-                        <Text style={styles.sectionTitle}>Tutar Aralığı</Text>
+                        {/* Amount Filter */}
+                        <Text style={styles.sectionTitle}>{t("homeScreen.filterModal.amount")}</Text>
                         <View style={styles.amountContainer}>
                             <TextInput
                                 style={styles.amountInput}
                                 value={tempFilters.minAmount}
                                 onChangeText={(text) => setTempFilters(prev => ({ ...prev, minAmount: text }))}
-                                placeholder="Min tutar"
+                                placeholder={t("homeScreen.filterModal.minAmount")}
                                 placeholderTextColor={colors.textSecondary}
                                 keyboardType="numeric"
                             />
@@ -502,17 +496,17 @@ const FilterModal = ({
                                 style={styles.amountInput}
                                 value={tempFilters.maxAmount}
                                 onChangeText={(text) => setTempFilters(prev => ({ ...prev, maxAmount: text }))}
-                                placeholder="Max tutar"
+                                placeholder={t("homeScreen.filterModal.maxAmount")}
                                 placeholderTextColor={colors.textSecondary}
                                 keyboardType="numeric"
                             />
                         </View>
 
-                        {/* Tarih Filtresi */}
-                        <Text style={styles.sectionTitle}>Tarih Aralığı</Text>
+                        {/* Date Filter */}
+                        <Text style={styles.sectionTitle}>{t("homeScreen.filterModal.date")}</Text>
 
                         <View style={styles.dateInputContainer}>
-                            <Text style={styles.dateLabel}>Başlangıç Tarihi</Text>
+                            <Text style={styles.dateLabel}>{t("homeScreen.filterModal.startDate")}</Text>
                             <TouchableOpacity
                                 style={styles.dateInputWrapper}
                                 onPress={openStartDatePicker}
@@ -521,14 +515,14 @@ const FilterModal = ({
                                     styles.dateTextInput,
                                     !tempFilters.startDate && styles.datePlaceholder
                                 ]}>
-                                    {tempFilters.startDate || `Örn: ${getTodayString()}`}
+                                    {tempFilters.startDate || t("homeScreen.filterModal.eg", { date: getTodayString() })}
                                 </Text>
                                 <Icon name="date-range" size={20} color={colors.textSecondary} style={styles.dateIcon} />
                             </TouchableOpacity>
                         </View>
 
                         <View style={styles.dateInputContainer}>
-                            <Text style={styles.dateLabel}>Bitiş Tarihi</Text>
+                            <Text style={styles.dateLabel}>{t("homeScreen.filterModal.endDate")}</Text>
                             <TouchableOpacity
                                 style={styles.dateInputWrapper}
                                 onPress={openEndDatePicker}
@@ -537,15 +531,15 @@ const FilterModal = ({
                                     styles.dateTextInput,
                                     !tempFilters.endDate && styles.datePlaceholder
                                 ]}>
-                                    {tempFilters.endDate || `Örn: ${getTodayString()}`}
+                                    {tempFilters.endDate || t("homeScreen.filterModal.eg", { date: getTodayString() })}
                                 </Text>
                                 <Icon name="date-range" size={20} color={colors.textSecondary} style={styles.dateIcon} />
                             </TouchableOpacity>
                         </View>
 
-                        {/* Hızlı tarih seçenekleri */}
+                        {/* Quick Date Filters */}
                         <View style={styles.quickDateContainer}>
-                            <Text style={styles.quickDateLabel}>Hızlı Seçim:</Text>
+                            <Text style={styles.quickDateLabel}>{t("homeScreen.filterModal.quick.title")}</Text>
                             <View style={styles.quickDateButtons}>
                                 <TouchableOpacity
                                     style={styles.quickDateButton}
@@ -554,7 +548,7 @@ const FilterModal = ({
                                         setQuickDate(today, today);
                                     }}
                                 >
-                                    <Text style={styles.quickDateText}>Bugün</Text>
+                                    <Text style={styles.quickDateText}>{t("homeScreen.filterModal.quick.today")}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -570,7 +564,7 @@ const FilterModal = ({
                                         setQuickDate(monday, sunday);
                                     }}
                                 >
-                                    <Text style={styles.quickDateText}>Bu Hafta</Text>
+                                    <Text style={styles.quickDateText}>{t("homeScreen.filterModal.quick.thisWeek")}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -581,7 +575,7 @@ const FilterModal = ({
                                         setQuickDate(sevenDaysAgo, today);
                                     }}
                                 >
-                                    <Text style={styles.quickDateText}>Son 7 Gün</Text>
+                                    <Text style={styles.quickDateText}>{t("homeScreen.filterModal.quick.last7day")}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -594,7 +588,7 @@ const FilterModal = ({
                                         setQuickDate(firstDayOfMonth, lastDayOfMonth);
                                     }}
                                 >
-                                    <Text style={styles.quickDateText}>Bu Ay</Text>
+                                    <Text style={styles.quickDateText}>{t("homeScreen.filterModal.quick.thisMonth")}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -605,7 +599,7 @@ const FilterModal = ({
                                         setQuickDate(thirtyDaysAgo, today);
                                     }}
                                 >
-                                    <Text style={styles.quickDateText}>Son 30 Gün</Text>
+                                    <Text style={styles.quickDateText}>{t("homeScreen.filterModal.quick.last30day")}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -618,32 +612,32 @@ const FilterModal = ({
                                         setQuickDate(firstDayOfLastMonth, lastDayOfLastMonth);
                                     }}
                                 >
-                                    <Text style={styles.quickDateText}>Geçen Ay</Text>
+                                    <Text style={styles.quickDateText}>{t("homeScreen.filterModal.quick.lastMonth")}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
 
-                        {/* Butonlar */}
+                        {/* Buttons */}
                         <View style={styles.filterButtons}>
                             <TouchableOpacity
                                 style={[styles.filterButton, styles.applyButton]}
                                 onPress={onApplyFilters}
                             >
-                                <Text style={[styles.filterButtonText, styles.applyButtonText]}>Uygula</Text>
+                                <Text style={[styles.filterButtonText, styles.applyButtonText]}>{t("homeScreen.filterModal.buttons.apply")}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={[styles.filterButton, styles.clearButton]}
                                 onPress={onClearFilters}
                             >
-                                <Text style={[styles.filterButtonText, styles.clearButtonText]}>Temizle</Text>
+                                <Text style={[styles.filterButtonText, styles.clearButtonText]}>{t("homeScreen.filterModal.buttons.clear")}</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
                 </View>
             </View>
 
-            {/* Kategori Seçimi Modal */}
+            {/* Select Category Modal */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -653,7 +647,7 @@ const FilterModal = ({
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Kategori Seç</Text>
+                            <Text style={styles.modalTitle}>{t("homeScreen.filterModal.categoryModal")}</Text>
                             <TouchableOpacity
                                 onPress={() => setShowCategoryModal(false)}
                             >
@@ -670,7 +664,7 @@ const FilterModal = ({
                                     <View style={[styles.categoryColor, { backgroundColor: item.color }]} />
                                     <Text style={styles.categoryModalName}>{item.name}</Text>
                                     <Text style={styles.categoryType}>
-                                        {item.type === 'income' ? 'Gelir' : 'Gider'}
+                                        {item.type === 'income' ? t("homeScreen.filterModal.income") : t("homeScreen.filterModal.expense")}
                                     </Text>
                                 </TouchableOpacity>
                             )}
@@ -681,7 +675,7 @@ const FilterModal = ({
                 </View>
             </Modal>
 
-            {/* DateTimePicker'lar */}
+            {/* DateTimePicker's */}
             {showStartDatePicker && (
                 <DateTimePicker
                     value={startDate}

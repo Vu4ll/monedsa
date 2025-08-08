@@ -17,6 +17,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Header } from '../components';
 import { useTheme } from '../contexts/ThemeContext';
+import { useCurrency } from '../contexts/CurrencyContext';
 import { API_CONFIG } from '../constants/api';
 import { authService } from '../services';
 import { version } from '../../package.json';
@@ -24,9 +25,17 @@ import { useTranslation } from 'react-i18next';
 
 const SettingsScreen = ({ navigation }) => {
     const { t, i18n } = useTranslation();
+    const currencyLabels = {
+        USD: { title: "USD ($)", description: t("settingsScreen.currency.modal.USD") },
+        EUR: { title: "EUR (€)", description: t("settingsScreen.currency.modal.EUR") },
+        GBP: { title: "GBP (£)", description: t("settingsScreen.currency.modal.GBP") },
+        TRY: { title: "TRY (₺)", description: t("settingsScreen.currency.modal.TRY") }
+    };
     const { themeMode, isDarkMode, colors, changeTheme, getThemeDisplay } = useTheme();
+    const { currency, changeCurrency } = useCurrency();
     const [showThemeModal, setShowThemeModal] = useState(false);
     const [showLanguageModal, setShowLanguageModal] = useState(false);
+    const [showCurrencyModal, setShowCurrencyModal] = useState(false);
     const [showIssueModal, setShowIssueModal] = useState(false);
     const [userMail, setUserMail] = useState(null);
     const [issueReport, setIssueReport] = useState({
@@ -40,13 +49,6 @@ const SettingsScreen = ({ navigation }) => {
         loadUserMail();
     }, []);
 
-    const toggleSetting = (key) => {
-        setSettings(prev => ({
-            ...prev,
-            [key]: !prev[key]
-        }));
-    };
-
     const loadUserMail = async () => {
         try {
             const result = await authService.getProfile();
@@ -56,11 +58,11 @@ const SettingsScreen = ({ navigation }) => {
                 setIssueReport(prev => ({ ...prev, email: userEmail }));
             } else {
                 console.error('Auth service error:', result.error);
-                ToastAndroid.show(result.error || 'Profil bilgileri yüklenemedi', ToastAndroid.SHORT);
+                ToastAndroid.show(t("settingsScreen.other.loadUserMail.profileData"), ToastAndroid.SHORT);
             }
         } catch (error) {
             console.error('E-posta yüklenirken hata:', error);
-            ToastAndroid.show('E-posta adresiniz yüklenirken bir hata oluştu, daha sonra tekrar deneyiniz', ToastAndroid.SHORT);
+            ToastAndroid.show(t("settingsScreen.other.loadUserMail.emailData"), ToastAndroid.SHORT);
         }
     };
 
@@ -72,9 +74,18 @@ const SettingsScreen = ({ navigation }) => {
         setShowLanguageModal(true);
     };
 
+    const showCurrencyPicker = () => {
+        setShowCurrencyModal(true);
+    };
+
     const handleThemeSelect = (selectedTheme) => {
         changeTheme(selectedTheme);
         setShowThemeModal(false);
+    };
+
+    const currencyChangeHandler = async (newCurrency) => {
+        await changeCurrency(newCurrency);
+        setShowCurrencyModal(false);
     };
 
     const changeLanguage = async (lng) => {
@@ -111,15 +122,15 @@ const SettingsScreen = ({ navigation }) => {
 
     const handleIssueSubmit = async () => {
         if (!issueReport.title.trim()) {
-            ToastAndroid.show('Lütfen başlık giriniz.', ToastAndroid.SHORT);
+            ToastAndroid.show(t("settingsScreen.other.handleIssueSubmit.title"), ToastAndroid.SHORT);
             return;
         }
         if (!issueReport.description.trim()) {
-            ToastAndroid.show('Lütfen açıklama giriniz.', ToastAndroid.SHORT);
+            ToastAndroid.show(t("settingsScreen.other.handleIssueSubmit.description"), ToastAndroid.SHORT);
             return;
         }
         if (!userMail || !userMail.trim()) {
-            ToastAndroid.show('E-posta adresiniz yüklenemedi. Lütfen daha sonra tekrar deneyiniz.', ToastAndroid.SHORT);
+            ToastAndroid.show(t("settingsScreen.other.handleIssueSubmit.email"), ToastAndroid.SHORT);
             return;
         }
 
@@ -138,22 +149,22 @@ const SettingsScreen = ({ navigation }) => {
                     platform: Platform.OS,
                     version: version,
                     timestamp: new Date().toISOString(),
-                    // language: "en"
+                    // language: i18n.language
                 }),
             });
 
             if (response.ok) {
                 setShowIssueModal(false);
                 setIssueReport({ title: '', description: '', email: '' });
-                ToastAndroid.show("Sorun raporunuz başarıyla gönderildi. En kısa sürede yanıtlanacaktır.", ToastAndroid.SHORT);
+                ToastAndroid.show(t("settingsScreen.other.handleIssueSubmit.success"), ToastAndroid.SHORT);
             } else {
                 if (response.status === 429) {
-                    return ToastAndroid.show(`Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.`, ToastAndroid.SHORT);
+                    return ToastAndroid.show(t("settingsScreen.other.handleIssueSubmit.ratelimit"), ToastAndroid.SHORT);
                 }
                 throw new Error('Sunucu hatası');
             }
         } catch (error) {
-            ToastAndroid.show('Sorun raporu sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.', ToastAndroid.SHORT);
+            ToastAndroid.show(t("settingsScreen.other.handleIssueSubmit.fail"), ToastAndroid.SHORT);
         } finally {
             setIsSubmitting(false);
         }
@@ -433,7 +444,7 @@ const SettingsScreen = ({ navigation }) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={[styles.settingRow, styles.lastSettingRow]}
+                        style={styles.settingRow}
                         onPress={showLanguagePicker}
                     >
                         <Icon name="language" size={24} color={colors.textSecondary} style={styles.settingIcon} />
@@ -443,6 +454,21 @@ const SettingsScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.settingAction}>
                             <Text style={styles.settingValue}>{t("settingsScreen.lang.display")}</Text>
+                            <Icon name="chevron-right" size={20} color={colors.textSecondary} style={{ marginLeft: 8 }} />
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[styles.settingRow, styles.lastSettingRow]}
+                        onPress={showCurrencyPicker}
+                    >
+                        <Icon name="attach-money" size={24} color={colors.textSecondary} style={styles.settingIcon} />
+                        <View style={styles.settingContent}>
+                            <Text style={styles.settingTitle}>{t("settingsScreen.currency.title")}</Text>
+                            <Text style={styles.settingDescription}>{t("settingsScreen.currency.description")}</Text>
+                        </View>
+                        <View style={styles.settingAction}>
+                            <Text style={styles.settingValue}>{currencyLabels[currency].title}</Text>
                             <Icon name="chevron-right" size={20} color={colors.textSecondary} style={{ marginLeft: 8 }} />
                         </View>
                     </TouchableOpacity>
@@ -458,7 +484,7 @@ const SettingsScreen = ({ navigation }) => {
 
                     <TouchableOpacity
                         style={styles.aboutRow}
-                        onPress={() => Linking.openURL(API_CONFIG.BASE_URL)}>
+                        onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}?lang=${i18n.language}`)}>
                         <Text style={styles.aboutLabel}>{t("settingsScreen.about.web")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
@@ -472,7 +498,7 @@ const SettingsScreen = ({ navigation }) => {
 
                     <TouchableOpacity
                         style={[styles.aboutRow, styles.lastAboutRow]}
-                        onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy`)}>
+                        onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy?lang=${i18n.language}`)}>
                         <Text style={styles.aboutLabel}>{t("settingsScreen.about.privacy")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
@@ -661,6 +687,50 @@ const SettingsScreen = ({ navigation }) => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* Currency Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showCurrencyModal}
+                onRequestClose={() => setShowCurrencyModal(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalHeader}>
+                            <Text style={styles.modalTitle}>{t("settingsScreen.currency.modal.title")}</Text>
+                            <TouchableOpacity
+                                style={styles.closeButton}
+                                onPress={() => setShowCurrencyModal(false)}
+                            >
+                                <Icon name="close" size={24} color={colors.textSecondary} />
+                            </TouchableOpacity>
+                        </View>
+
+                        {["USD", "EUR", "GBP", "TRY"].map(cur => (
+                            <TouchableOpacity
+                                key={cur}
+                                style={[
+                                    styles.themeOption,
+                                    currency === cur ? styles.themeOptionActive : styles.themeOptionInactive,
+                                ]}
+                                onPress={() => currencyChangeHandler(cur)}
+                            >
+                                <View style={[
+                                    styles.radioButton,
+                                    currency === cur ? styles.radioButtonActive : styles.radioButtonInactive
+                                ]}>
+                                    {currency === cur && <View style={styles.radioButtonInner} />}
+                                </View>
+                                <View style={styles.themeOptionContent}>
+                                    <Text style={styles.themeOptionTitle}>{currencyLabels[cur].title}</Text>
+                                    <Text style={styles.themeOptionDescription}>{currencyLabels[cur].description}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))}
                     </View>
                 </View>
             </Modal>

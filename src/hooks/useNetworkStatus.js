@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
+import { useTranslation } from 'react-i18next';
 
 export const useNetworkStatus = () => {
+    const { t, i18n } = useTranslation();
     const [isConnected, setIsConnected] = useState(true);
     const [hasShownOfflineAlert, setHasShownOfflineAlert] = useState(false);
 
@@ -14,10 +16,10 @@ export const useNetworkStatus = () => {
             if (!state.isConnected && !hasShownOfflineAlert) {
                 setHasShownOfflineAlert(true);
                 Alert.alert(
-                    'İnternet Bağlantısı Yok',
-                    'Lütfen internet bağlantınızı kontrol edin.',
+                    t("network.notConnected"),
+                    t("network.check"),
                     [{
-                        text: 'Tamam',
+                        text: t("network.ok"),
                         onPress: () => setHasShownOfflineAlert(false)
                     }]
                 );

@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { TransactionCard } from "./TransactionCard";
 import { formatCurrency } from "../utils";
+import { useCurrency } from "../contexts";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 
 export const TransactionList = ({ transactions, loading, colors, navigation, onRefresh, onFilterChange }) => {
   const { t, i18n } = useTranslation();
+  const { currency } = useCurrency();
   const handleEdit = (transaction) => navigation.navigate('AddTransactionStack', {
     transaction,
     onRefresh
@@ -72,7 +74,7 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
                   {t("homeScreen.transactionList.summary.income")}
                 </Text>
                 <Text style={[styles.summaryValue, { color: colors.success }]}>
-                  {formatCurrency(transactions.summary.totalIncome)}
+                  {formatCurrency(transactions.summary.totalIncome, currency)}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -93,7 +95,7 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
                   {t("homeScreen.transactionList.summary.expense")}
                 </Text>
                 <Text style={[styles.summaryValue, { color: colors.error }]}>
-                  {formatCurrency(transactions.summary.totalExpense)}
+                  {formatCurrency(transactions.summary.totalExpense, currency)}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -114,7 +116,7 @@ export const TransactionList = ({ transactions, loading, colors, navigation, onR
               <Text style={[styles.balanceValue, {
                 color: transactions.summary.balance >= 0 ? colors.success : colors.error
               }]}>
-                {formatCurrency(transactions.summary.balance)}
+                {formatCurrency(transactions.summary.balance, currency)}
               </Text>
             </View>
           </TouchableOpacity>

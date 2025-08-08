@@ -8,6 +8,48 @@
             "title": "Rangschikking",
             "sectionTitle": "Rangschikkings criterium"
         },
+        "filterModal": {
+            "filter": "Filters",
+            "type": "Transactietype",
+            "income": "Inkomsten",
+            "expense": "Uitgaven",
+            "category": "Categorie",
+            "selectCategory": "Selecteer categorie",
+            "amount": "Bedragbereik",
+            "minAmount": "Minimum bedrag",
+            "maxAmount": "Maximum bedrag",
+            "date": "Datumbereik",
+            "startDate": "Startdatum",
+            "endDate": "Einddatum",
+            "eg": "Bijv.: {{date}}",
+            "quick": {
+                "title": "Snelle selectie:",
+                "today": "Vandaag",
+                "thisWeek": "Deze week",
+                "last7day": "Laatste 7 dagen",
+                "thisMonth": "Deze maand",
+                "last30day": "Laatste 30 dagen",
+                "lastMonth": "Vorige maand"
+            },
+            "buttons": {
+                "apply": "Toepassen",
+                "clear": "Wissen"
+            },
+            "categoryModal": "Categorie selecteren",
+            "applySorting": {
+                "amount": "Bedrag",
+                "date": "Datum",
+                "asc": "oplopend",
+                "desc": "aflopend",
+                "final": "{{type}} gesorteerd op {{order}}"
+            },
+            "applyFilters": {
+                "applyed": "Filters toegepast"
+            },
+            "clearFilters": {
+                "cleared": "Filters gewist"
+            }
+        },
         "transactionList": {
             "empty": {
                 "title": "Er zijn nog geen transacties",
@@ -19,6 +61,9 @@
                 "expense": "Totaal uitgaven",
                 "balance": "Saldo"
             }
+        },
+        "transactionCard": {
+            "noDescription": "Geen beschrijving beschikbaar"
         }
     },
     "settingsScreen": {
@@ -61,6 +106,17 @@
                 }
             }
         },
+        "currency": {
+            "title": "Valuta",
+            "description": "Kies de gewenste valuta",
+            "modal": {
+                "title": "Kies uw valuta",
+                "USD": "Amerikaanse Dollar",
+                "EUR": "Euro",
+                "GBP": "Britse Pond",
+                "TRY": "Turkse Lira"
+            }
+        },
         "about": {
             "title": "Over de applicatie",
             "version": "Versie",
@@ -69,6 +125,18 @@
             "privacy": "Privacybeleid"
         },
         "other": {
+            "loadUserMail": {
+                "profileData": "Profielgegevens kunnen niet worden geladen",
+                "emailData": "Er is een fout opgetreden tijdens het laden van uw e-mailadres. Probeer het later opnieuw"
+            },
+            "handleIssueSubmit": {
+                "title": "Voer een titel in",
+                "description": "Voer een beschrijving in",
+                "email": "Uw e-mailadres kan niet worden geladen. Probeer het later opnieuw.",
+                "success": "Uw probleemrapport is succesvol verzonden. U ontvangt zo snel mogelijk een reactie.",
+                "ratelimit": "U hebt te veel pogingen gedaan, probeer het later opnieuw.",
+                "fail": "Er is een fout opgetreden tijdens het rapporteren van het probleem. Probeer het later opnieuw."
+            },
             "reportIssue": {
                 "title": "Meld een probleem",
                 "modal": {
@@ -93,5 +161,10 @@
         "category": "Categorieën",
         "profile": "Profiel",
         "settings": "Instellingen"
+    },
+    "network": {
+        "notConnected": "Geen internetverbinding",
+        "check": "Controleer uw internetverbinding.",
+        "ok": "Oké"
     }
 }

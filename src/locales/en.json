@@ -8,6 +8,48 @@
             "title": "Ranking",
             "sectionTitle": "Ranking criteria"
         },
+        "filterModal": {
+            "filter": "Filters",
+            "type": "Transaction type",
+            "income": "Income",
+            "expense": "Expense",
+            "category": "Category",
+            "selectCategory": "Select category",
+            "amount": "Amount range",
+            "minAmount": "Minimum amount",
+            "maxAmount": "Maximum amount",
+            "date": "Date range",
+            "startDate": "Start date",
+            "endDate": "End date",
+            "eg": "e.g.: {{date}}",
+            "quick": {
+                "title": "Quick selection:",
+                "today": "Today",
+                "thisWeek": "This week",
+                "last7day": "Last 7 Days",
+                "thisMonth": "This month",
+                "last30day": "Last 30 days",
+                "lastMonth": "Last month"
+            },
+            "buttons": {
+                "apply": "Apply",
+                "clear": "Clear"
+            },
+            "categoryModal": "Select category",
+            "applySorting": {
+                "amount": "amount",
+                "date": "date",
+                "asc": "ascending",
+                "desc": "descending",
+                "final": "Sorted by {{type}} in {{order}}"
+            },
+            "applyFilters": {
+                "applyed": "Filters applied"
+            },
+            "clearFilters": {
+                "cleared": "Filters cleared"
+            }
+        },
         "transactionList": {
             "empty": {
                 "title": "No transactions found yet",
@@ -15,10 +57,13 @@
             },
             "loading": "Loading data...",
             "summary": {
-                "income": "Total Income",
-                "expense": "Total Expenses",
+                "income": "Total income",
+                "expense": "Total expenses",
                 "balance": "Balance"
             }
+        },
+        "transactionCard": {
+            "noDescription": "No description available"
         }
     },
     "settingsScreen": {
@@ -61,6 +106,17 @@
                 }
             }
         },
+        "currency": {
+            "title": "Currency",
+            "description": "Select your preferred currency",
+            "modal": {
+                "title": "Select your currency",
+                "USD": "US Dollar",
+                "EUR": "Euro",
+                "GBP": "British Pound",
+                "TRY": "Turkish Lira"
+            }
+        },
         "about": {
             "title": "About the application",
             "version": "Version",
@@ -69,6 +125,18 @@
             "privacy": "Privacy Policy"
         },
         "other": {
+            "loadUserMail": {
+                "profileData": "Profile information could not be loaded",
+                "emailData": "An error occurred while loading your email address. Please try again later."
+            },
+            "handleIssueSubmit": {
+                "title": "Please enter a title",
+                "description": "Please enter a description",
+                "email": "Your email address could not be loaded. Please try again later.",
+                "success": "Your issue report was successfully submitted. It will be responded to as soon as possible.",
+                "ratelimit": "You have made too many attempts. Please try again later.",
+                "fail": "An error occurred while submitting the issue report. Please try again later."
+            },
             "reportIssue": {
                 "title": "Report an issue",
                 "modal": {
@@ -93,5 +161,10 @@
         "category": "Categories",
         "profile": "Profile",
         "settings": "Settings"
+    },
+    "network": {
+        "notConnected": "No internet connection",
+        "check": "Please check your internet connection.",
+        "ok": "OK"
     }
 }

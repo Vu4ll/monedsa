@@ -10,9 +10,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useTransactions, useFilters } from "../hooks";
 import { Header, TransactionList, SortModal, FilterModal } from "../components";
 import { useTheme } from "../contexts/ThemeContext";
+import { useCurrency } from "../contexts/CurrencyContext";
 
 export const HomeScreen = ({ onLogout, navigation, route }) => {
   const { isDarkMode, colors } = useTheme();
+  const { currency } = useCurrency();
 
   const {
     filters,
@@ -50,6 +52,12 @@ export const HomeScreen = ({ onLogout, navigation, route }) => {
       navigation.setParams({ refresh: undefined });
     }
   }, [route?.params?.refresh]);
+
+  useEffect(() => {
+    if (transactions) {
+      onRefresh(filters);
+    }
+  }, [currency]);
 
   useFocusEffect(
     React.useCallback(() => {

@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react';
 import { ToastAndroid } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export const useFilters = () => {
+    const { t, i18n } = useTranslation();
     const [filters, setFilters] = useState({});
     const [sortModalVisible, setSortModalVisible] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -34,9 +36,9 @@ export const useFilters = () => {
 
         setSortModalVisible(false);
 
-        const sortTypeText = sortBy === 'amount' ? 'Tutara' : 'Tarihe';
-        const sortOrderText = sortOrder === 'asc' ? 'artan' : 'azalan';
-        ToastAndroid.show(`${sortTypeText} göre ${sortOrderText} sıralandı`, ToastAndroid.SHORT);
+        const sortTypeText = sortBy === 'amount' ? t("homeScreen.filterModal.applySorting.amount") : t("homeScreen.filterModal.applySorting.date");
+        const sortOrderText = sortOrder === 'asc' ? t("homeScreen.filterModal.applySorting.asc") : t("homeScreen.filterModal.applySorting.desc");
+        ToastAndroid.show(t("homeScreen.filterModal.applySorting.final", { type: sortTypeText, order: sortOrderText }), ToastAndroid.SHORT);
     }, [filters]);
 
     const handleFilter = useCallback(() => {
@@ -87,7 +89,7 @@ export const useFilters = () => {
         }
 
         setFilterModalVisible(false);
-        ToastAndroid.show("Filtreler uygulandı", ToastAndroid.SHORT);
+        ToastAndroid.show(t("homeScreen.filterModal.applyFilters.applyed"), ToastAndroid.SHORT);
     }, [tempFilters, sortOptions]);
 
     const clearFilters = useCallback((fetchFunction) => {
@@ -106,7 +108,7 @@ export const useFilters = () => {
         }
 
         setFilterModalVisible(false);
-        ToastAndroid.show("Filtreler temizlendi", ToastAndroid.SHORT);
+        ToastAndroid.show(t("homeScreen.filterModal.clearFilters.cleared"), ToastAndroid.SHORT);
     }, [sortOptions]);
 
     const closeSortModal = useCallback(() => {

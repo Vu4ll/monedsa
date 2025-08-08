@@ -8,6 +8,48 @@
             "title": "Sıralama",
             "sectionTitle": "Sıralama kriteri"
         },
+        "filterModal": {
+            "filter": "Filtreler",
+            "type": "İşlem tipi",
+            "income": "Gelir",
+            "expense": "Gider",
+            "category": "Kategori",
+            "selectCategory": "Kategori seçiniz",
+            "amount": "Tutar aralığı",
+            "minAmount": "Minimum tutar",
+            "maxAmount": "Maksimum tutar",
+            "date": "Tarih aralığı",
+            "startDate": "Başlangıç tarihi",
+            "endDate": "Bitiş tarihi",
+            "eg": "Örn.: {{date}}",
+            "quick": {
+                "title": "Hızlı seçim:",
+                "today": "Bugün",
+                "thisWeek": "Bu hafta",
+                "last7day": "Son 7 gün",
+                "thisMonth": "Bu ay",
+                "last30day": "Son 30 gün",
+                "lastMonth": "Geçen ay"
+            },
+            "buttons": {
+                "apply": "Uygula",
+                "clear": "Temizle"
+            },
+            "categoryModal": "Kategori seç",
+            "applySorting": {
+                "amount": "Tutara",
+                "date": "Tarihe",
+                "asc": "artan",
+                "desc": "azalan",
+                "final": "{{type}} göre {{order}} sıralandı"
+            },
+            "applyFilters": {
+                "applyed": "Filtreler uygulandı"
+            },
+            "clearFilters": {
+                "cleared": "Filtreler temizlendi"
+            }
+        },
         "transactionList": {
             "empty": {
                 "title": "Henüz işlem bulunmuyor",
@@ -15,10 +57,13 @@
             },
             "loading": "Veriler yükleniyor...",
             "summary": {
-                "income": "Toplam Gelir",
-                "expense": "Toplam Gider",
+                "income": "Toplam gelir",
+                "expense": "Toplam gider",
                 "balance": "Bakiye"
             }
+        },
+        "transactionCard": {
+            "noDescription": "Açıklama bulunmuyor"
         }
     },
     "settingsScreen": {
@@ -61,6 +106,17 @@
                 }
             }
         },
+        "currency": {
+            "title": "Para birimi",
+            "description": "Tercih edilin para birimini seçiniz",
+            "modal": {
+                "title": "Para biriminizi seçiniz",
+                "USD": "Amerikan Doları",
+                "EUR": "Euro",
+                "GBP": "İngiliz Sterlini",
+                "TRY": "Türk Lirası"
+            }
+        },
         "about": {
             "title": "Uygulama hakkında",
             "version": "Versiyon",
@@ -69,6 +125,18 @@
             "privacy": "Gizlilik politikası"
         },
         "other": {
+            "loadUserMail": {
+                "profileData": "Profil bilgileri yüklenemedi.",
+                "emailData": "E-posta adresiniz yüklenirken bir hata oluştu, daha sonra tekrar deneyiniz."
+            },
+            "handleIssueSubmit": {
+                "title": "Lütfen başlık giriniz",
+                "description": "Lütfen açıklama giriniz",
+                "email": "E-posta adresiniz yüklenemedi. Lütfen daha sonra tekrar deneyiniz.",
+                "success": "Sorun raporunuz başarıyla gönderildi. En kısa sürede yanıtlanacaktır.",
+                "ratelimit": "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.",
+                "fail": "Sorun raporu sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyiniz."
+            },
             "reportIssue": {
                 "title": "Sorun bildirin",
                 "modal": {
@@ -93,5 +161,10 @@
         "category": "Kategoriler",
         "profile": "Profil",
         "settings": "Ayarlar"
+    },
+    "network": {
+        "notConnected": "İnternet bağlantısı yok",
+        "check": "Lütfen internet bağlantınızı kontrol edin.",
+        "ok": "Tamam"
     }
 }
