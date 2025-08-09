@@ -66,6 +66,38 @@
             "noDescription": "Açıklama bulunmuyor"
         }
     },
+    "loginScreen": {
+        "subtitle": "Hesabınıza giriş yapın",
+        "userInput": "E-posta veya kullanıcı adı",
+        "passwordInput": "Parola",
+        "login": "Giriş yap",
+        "logging": "Giriş yapılıyor...",
+        "google": "Google ile giriş yap",
+        "noAccount": "Hesabınız yok mu?",
+        "register": "Kayıt olun",
+        "langModal": {
+            "title": "Dil seçimi",
+            "close": "Kapat"
+        },
+        "validateForm": {
+            "email": "E-posta veya kullanıcı adı gerekli",
+            "emailLength": "E-posta veya kullanıcı adı en az 2 karakter olmalıdır",
+            "password": "Parola gerekli",
+            "passwordLength": "Parola en az 8 karakter olmalıdır"
+        },
+        "handleLogin": {
+            "errorMessage": "Giriş başarısız",
+            "userNotFound": "Kullanıcı bulunamadı veya geçersiz bilgi girişi",
+            "invalidPassword": "Geçersiz parola",
+            "network": "İnternet bağlantınızı kontrol ediniz",
+            "ratelimit": "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz",
+            "unexpectedError": "Beklenmedik bir hata oluştu"
+        },
+        "handleGoogleLogin": {
+            "unexpectedError": "Beklenmedik bir hata oluştu",
+            "loginFail": "Google ile giriş yapılamadı"
+        }
+    },
     "settingsScreen": {
         "header": "Ayarlar",
         "display": "Görünüm",

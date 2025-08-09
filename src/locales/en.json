@@ -66,6 +66,38 @@
             "noDescription": "No description available"
         }
     },
+    "loginScreen": {
+        "subtitle": "Log in to your account",
+        "userInput": "Email or username",
+        "passwordInput": "Password",
+        "login": "Log in",
+        "logging": "Logging in...",
+        "google": "Sign in with Google",
+        "noAccount": "Don't have an account?",
+        "register": "Sign up",
+        "langModal": {
+            "title": "Language selection",
+            "close": "Close"
+        },
+        "validateForm": {
+            "email": "Email or username required",
+            "emailLength": "Email or username must be at least 2 characters long",
+            "password": "Password required",
+            "passwordLength": "Password must be at least 8 characters long"
+        },
+        "handleLogin": {
+            "errorMessage": "Login failed",
+            "userNotFound": "User not found or invalid input",
+            "invalidPassword": "Invalid password",
+            "network": "Check your internet connection",
+            "ratelimit": "Too many attempts, please try again later",
+            "unexpectedError": "Unexpected error occurred"
+        },
+        "handleGoogleLogin": {
+            "unexpectedError": "Unexpected error occurred",
+            "loginFail": "Google login failed"
+        }
+    },
     "settingsScreen": {
         "header": "Settings",
         "display": "Display",

@@ -12,14 +12,20 @@ import {
     Keyboard,
     SafeAreaView,
     StatusBar,
-    ToastAndroid
+    ToastAndroid,
+    Modal
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Image } from 'react-native';
 import { useTheme } from "../contexts/ThemeContext";
 import { authService } from '../services';
+import { useTranslation } from 'react-i18next';
 
 const LoginScreen = ({ navigation, onLogin }) => {
+    const { t, i18n } = useTranslation();
+    const languageLabels = { en: "English", tr: "Türkçe", nl: "Nederlands" };
+    const languageList = ["en", "tr", "nl"];
+    const [showLanguageModal, setShowLanguageModal] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -32,15 +38,15 @@ const LoginScreen = ({ navigation, onLogin }) => {
         const newErrors = {};
 
         if (!email || !email.trim()) {
-            newErrors.email = 'E-posta veya kullanıcı adı gerekli';
+            newErrors.email = t("loginScreen.validateForm.email");
         } else if (email.trim().length < 2) {
-            newErrors.email = 'En az 2 karakter olmalıdır';
+            newErrors.email = t("loginScreen.validateForm.emailLength");
         }
 
         if (!password || !password.trim()) {
-            newErrors.password = 'Parola gerekli';
+            newErrors.password = t("loginScreen.validateForm.password");
         } else if (password.length < 8) {
-            newErrors.password = 'Parola en az 8 karakter olmalıdır';
+            newErrors.password = t("loginScreen.validateForm.passwordLength");
         }
 
         setErrors(newErrors);
@@ -57,22 +63,22 @@ const LoginScreen = ({ navigation, onLogin }) => {
             if (result.success) {
                 onLogin && onLogin();
             } else {
-                const errorMessage = result.error || 'Giriş başarısız';
+                const errorMessage = result.error || t("loginScreen.handleLogin.errorMessage");
 
                 if (errorMessage.includes('User not found')) {
-                    setErrors({ email: 'Kullanıcı bulunamadı veya hatalı bilgiler' });
+                    setErrors({ email: t("loginScreen.handleLogin.userNotFound") });
                 } else if (errorMessage.includes('Invalid password')) {
-                    setErrors({ password: 'Hatalı parola' });
+                    setErrors({ password: t("loginScreen.handleLogin.invalidPassword") });
                 } else if (errorMessage.includes('Network') || errorMessage.includes('connection')) {
-                    ToastAndroid.show('İnternet bağlantınızı kontrol edin', ToastAndroid.SHORT);
+                    ToastAndroid.show(t("loginScreen.handleLogin.network"), ToastAndroid.SHORT);
                 } else if (errorMessage.includes("requests too quickly")) {
-                    ToastAndroid.show("Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.", ToastAndroid.SHORT);
+                    ToastAndroid.show(t("loginScreen.handleLogin.ratelimit"), ToastAndroid.SHORT);
                 } else {
-                    setErrors({ email: errorMessage });
+                    ToastAndroid.show(errorMessage, ToastAndroid.SHORT);
                 }
             }
         } catch (error) {
-            Alert.alert('Hata', 'Beklenmedik bir hata oluştu.');
+            ToastAndroid.show(t("loginScreen.handleLogin.unexpectedError"), ToastAndroid.SHORT);
             console.error('Login error:', error);
         } finally {
             setLoading(false);
@@ -87,13 +93,19 @@ const LoginScreen = ({ navigation, onLogin }) => {
             if (result.success) {
                 onLogin && onLogin();
             } else {
-                Alert.alert('Hata', result.error);
+                ToastAndroid.show(t("loginScreen.handleGoogleLogin.unexpectedError"), ToastAndroid.SHORT);
             }
         } catch (error) {
-            Alert.alert('Hata', 'Google ile giriş yapılamadı');
+            ToastAndroid.show(t("loginScreen.handleGoogleLogin.loginFail"), ToastAndroid.SHORT);
+            console.error('Google login error:', error);
         } finally {
             setLoading(false);
         }
+    };
+
+    const changeLanguage = async (lng) => {
+        i18n.changeLanguage(lng);
+        setShowLanguageModal(false);
     };
 
     const updateEmail = (value) => {
@@ -240,14 +252,105 @@ const LoginScreen = ({ navigation, onLogin }) => {
             width: 20,
             height: 20,
         },
+        safeAreaContainer: {
+            flex: 1,
+            backgroundColor: colors.background,
+        },
+        languageSelector: {
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            zIndex: 10,
+        },
+        languageSelectorButton: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 8,
+            paddingTop: StatusBar.currentHeight + 4,
+            backgroundColor: colors.card,
+            borderRadius: 24,
+            elevation: 2
+        },
+        languageSelectorText: {
+            color: colors.primary,
+            fontWeight: '600',
+            marginRight: 6
+        },
+        keyboardAvoidingView: {
+            flex: 1
+        },
+        scrollViewContent: {
+            flex: 1
+        },
+        modalOverlay: {
+            flex: 1,
+            backgroundColor: colors.background + 'CC',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        modalContent: {
+            backgroundColor: colors.headerBackgroud,
+            borderRadius: 16,
+            padding: 24,
+            minWidth: 260
+        },
+        modalTitle: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            marginBottom: 8,
+            color: colors.text
+        },
+        languageOption: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingVertical: 12,
+            paddingHorizontal: 8,
+            borderRadius: 8,
+            marginBottom: 4
+        },
+        languageOptionActive: {
+            backgroundColor: colors.primary + '22'
+        },
+        languageOptionInactive: {
+            backgroundColor: 'transparent'
+        },
+        languageOptionText: {
+            color: colors.text
+        },
+        languageOptionTextActive: {
+            fontWeight: 'bold'
+        },
+        languageOptionTextInactive: {
+            fontWeight: 'normal'
+        },
+        modalCloseButton: {
+            alignSelf: 'flex-end',
+            marginTop: 12
+        },
+        modalCloseButtonText: {
+            color: colors.primary,
+            fontWeight: '600'
+        },
     });
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+        <SafeAreaView style={styles.safeAreaContainer}>
             <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={colors.background} />
 
+            <View style={styles.languageSelector}>
+                <TouchableOpacity
+                    style={styles.languageSelectorButton}
+                    onPress={() => setShowLanguageModal(true)}
+                >
+                    <Text style={styles.languageSelectorText}>
+                        {languageLabels[i18n.language]}
+                    </Text>
+                    <Icon name="language" size={22} color={colors.primary} />
+                </TouchableOpacity>
+            </View>
+
             <KeyboardAvoidingView
-                style={{ flex: 1 }}
+                style={styles.keyboardAvoidingView}
                 behavior='height'
                 keyboardVerticalOffset={20}
             >
@@ -256,17 +359,17 @@ const LoginScreen = ({ navigation, onLogin }) => {
                         contentContainerStyle={styles.scrollContainer}
                         showsVerticalScrollIndicator={false}
                         keyboardShouldPersistTaps="handled"
-                        style={{ flex: 1 }}
+                        style={styles.scrollViewContent}
                     >
                         <View style={styles.formContainer}>
                             <Text style={styles.title}>Monedsa</Text>
-                            <Text style={styles.subtitle}>Hesabınıza giriş yapın</Text>
+                            <Text style={styles.subtitle}>{t("loginScreen.subtitle")}</Text>
 
                             <View style={styles.inputContainer}>
                                 <View style={styles.inputField}>
                                     <TextInput
                                         style={[styles.input, errors.email && styles.inputError]}
-                                        placeholder="E-posta veya kullanıcı adı"
+                                        placeholder={t("loginScreen.userInput")}
                                         placeholderTextColor={colors.placeholder}
                                         value={email}
                                         onChangeText={updateEmail}
@@ -285,7 +388,7 @@ const LoginScreen = ({ navigation, onLogin }) => {
                                         <TextInput
                                             ref={passwordRef}
                                             style={[styles.passwordInput, errors.password && styles.passwordInputError]}
-                                            placeholder="Parola"
+                                            placeholder={t("loginScreen.passwordInput")}
                                             placeholderTextColor={colors.placeholder}
                                             value={password}
                                             onChangeText={updatePassword}
@@ -318,7 +421,7 @@ const LoginScreen = ({ navigation, onLogin }) => {
                                     disabled={loading}
                                 >
                                     <Text style={styles.loginButtonText}>
-                                        {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+                                        {loading ? t("loginScreen.logging") : t("loginScreen.login")}
                                     </Text>
                                 </TouchableOpacity>
 
@@ -328,10 +431,10 @@ const LoginScreen = ({ navigation, onLogin }) => {
                                     disabled={loading}
                                 >
                                     <Image
-                                        source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png' }}
+                                        source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/1024px-Google_Favicon_2025.svg.png' }}
                                         style={styles.googleIcon}
                                     />
-                                    <Text style={styles.googleButtonText}>Google ile Giriş Yap</Text>
+                                    <Text style={styles.googleButtonText}>{t("loginScreen.google")}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -339,7 +442,7 @@ const LoginScreen = ({ navigation, onLogin }) => {
                                     onPress={() => navigation.navigate('Register')}
                                 >
                                     <Text style={styles.registerText}>
-                                        Hesabınız yok mu? <Text style={styles.registerHighlight}>Kayıt olun</Text>
+                                        {t("loginScreen.noAccount")} <Text style={styles.registerHighlight}>{t("loginScreen.register")}</Text>
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -347,6 +450,48 @@ const LoginScreen = ({ navigation, onLogin }) => {
                     </ScrollView>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showLanguageModal}
+                onRequestClose={() => setShowLanguageModal(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>{t("loginScreen.langModal.title")}</Text>
+                        {languageList.map(lang => (
+                            <TouchableOpacity
+                                key={lang}
+                                style={[
+                                    styles.languageOption,
+                                    i18n.language === lang ? styles.languageOptionActive : styles.languageOptionInactive
+                                ]}
+                                onPress={() => changeLanguage(lang)}
+                            >
+                                <Icon
+                                    name="check"
+                                    size={18}
+                                    color={i18n.language === lang ? colors.primary : colors.textSecondary}
+                                    style={{ marginRight: 8 }}
+                                />
+                                <Text style={[
+                                    styles.languageOptionText,
+                                    i18n.language === lang ? styles.languageOptionTextActive : styles.languageOptionTextInactive
+                                ]}>
+                                    {languageLabels[lang]}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                        <TouchableOpacity
+                            style={styles.modalCloseButton}
+                            onPress={() => setShowLanguageModal(false)}
+                        >
+                            <Text style={styles.modalCloseButtonText}>{t("loginScreen.langModal.close")}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 };

@@ -66,6 +66,38 @@
             "noDescription": "Geen beschrijving beschikbaar"
         }
     },
+    "loginScreen": {
+        "subtitle": "Log in op uw account",
+        "userInput": "E-mailadres of gebruikersnaam",
+        "passwordInput": "Wachtwoord",
+        "login": "Inloggen",
+        "logging": "Bezig met inloggen...",
+        "google": "Log in met Google",
+        "noAccount": "Heb je nog geen account?",
+        "register": "Registreer je",
+        "langModal": {
+            "title": "Taalkeuze",
+            "close": "Sluiten"
+        },
+        "validateForm": {
+            "email": "E-mailadres of gebruikersnaam vereist",
+            "emailLength": "E-mailadres of gebruikersnaam moet minimaal 2 tekens bevatten",
+            "password": "Wachtwoord vereist",
+            "passwordLength": "Wachtwoord moet minimaal 8 tekens bevatten"
+        },
+        "handleLogin": {
+            "errorMessage": "Inloggen mislukt",
+            "userNotFound": "Gebruiker niet gevonden of ongeldige gegevens ingevoerd",
+            "invalidPassword": "Ongeldig wachtwoord",
+            "network": "Controleer uw internetverbinding",
+            "ratelimit": "U hebt te veel pogingen gedaan, probeer het later opnieuw",
+            "unexpectedError": "Er is een onverwachte fout opgetreden"
+        },
+        "handleGoogleLogin": {
+            "unexpectedError": "Er is een onverwachte fout opgetreden",
+            "loginFail": "Inloggen met Google is mislukt"
+        }
+    },
     "settingsScreen": {
         "header": "Instellingen",
         "display": "Weergave",
