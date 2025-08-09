@@ -484,7 +484,7 @@ const SettingsScreen = ({ navigation }) => {
 
                     <TouchableOpacity
                         style={styles.aboutRow}
-                        onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}?lang=${i18n.language}`)}>
+                        onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}?lang=${i18n.language}&redirect=/`)}>
                         <Text style={styles.aboutLabel}>{t("settingsScreen.about.web")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>
@@ -498,7 +498,7 @@ const SettingsScreen = ({ navigation }) => {
 
                     <TouchableOpacity
                         style={[styles.aboutRow, styles.lastAboutRow]}
-                        onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy?lang=${i18n.language}`)}>
+                        onPress={() => Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy?lang=${i18n.language}&redirect=/privacy-policy`)}>
                         <Text style={styles.aboutLabel}>{t("settingsScreen.about.privacy")}</Text>
                         <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                     </TouchableOpacity>

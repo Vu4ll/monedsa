@@ -98,6 +98,72 @@
             "loginFail": "Google ile giriş yapılamadı"
         }
     },
+    "registerScreen": {
+        "createAccount": "Yeni hesap oluştur",
+        "register": "Kayıt ol",
+        "registering": "Kaydolunuyor...",
+        "alreadyHaveAccount": "Zaten hesabınız var mı?",
+        "login": "Giriş yapın",
+        "username": {
+            "title": "Kullanıcı adı",
+            "placeholder": "Kullanıcı adınızı giriniz"
+        },
+        "email": {
+            "title": "E-posta",
+            "placeholder": "E-posta adresinizi giriniz"
+        },
+        "name": {
+            "title": "İsim",
+            "placeholder": "İsminizi giriniz"
+        },
+        "password": {
+            "title": "Parola",
+            "placeholder": "Parolanızı giriniz"
+        },
+        "passwordConfirm": {
+            "title": "Parola onayı",
+            "placeholder": "Parolanızı tekrar giriniz"
+        },
+        "privacy": {
+            "link": "Gizlilik Politikası",
+            "text": "'nı okudum ve kabul ediyorum"
+        },
+        "validateForm": {
+            "username": {
+                "required": "Kullanıcı adı gerekli",
+                "minLength": "Kullanıcı adı en az 2 karakter olmalı",
+                "maxLength": "Kullanıcı adı en fazla 16 karakter olmalı",
+                "invalid": "Kullanıcı adı sadece harf, rakam ve alt çizgi içerebilir",
+                "space": "Kullanıcı adı boşluk içeremez"
+            },
+            "email": {
+                "required": "E-posta adresi gerekli",
+                "invalid": "Geçerli bir e-posta adresi giriniz",
+                "tooLong": "E-posta adresi çok uzun"
+            },
+            "name": {
+                "required": "İsim gerekli",
+                "minLength": "İsim en az 2 karakter olmalı",
+                "maxLength": "İsim en fazla 50 karakter olmalı"
+            },
+            "password": {
+                "required": "Parola gerekli",
+                "minLength": "Parola en az 8 karakter olmalı",
+                "tooLong": "Parola çok uzun",
+                "noLower": "Parola en az bir küçük harf içermeli",
+                "noUpper": "Parola en az bir büyük harf içermeli",
+                "noNumber": "Parola en az bir rakam içermeli"
+            },
+            "passwordConfirm": {
+                "required": "Parola tekrarı gerekli",
+                "noMatch": "Parolalar eşleşmiyor"
+            },
+            "acceptPrivacyPolicy": "Gizlilik politikasını kabul etmelisiniz"
+        },
+        "handleRegister": {
+
+        }
+    },
     "settingsScreen": {
         "header": "Ayarlar",
         "display": "Görünüm",

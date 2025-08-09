@@ -15,8 +15,10 @@ import PasswordInput from '../components/Auth/PasswordInput';
 import PrivacyPolicyCheckbox from '../components/Auth/PrivacyPolicyCheckbox';
 import AuthButton from '../components/Auth/AuthButton';
 import AuthLink from '../components/Auth/AuthLink';
+import { useTranslation } from 'react-i18next';
 
 const RegisterScreen = ({ navigation }) => {
+    const { t, i18n } = useTranslation();
     const { isDarkMode, colors } = useTheme();
     const {
         formData,
@@ -81,15 +83,15 @@ const RegisterScreen = ({ navigation }) => {
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.title}>Monedsa</Text>
-                        <Text style={styles.subtitle}>Yeni Hesap Oluştur</Text>
+                        <Text style={styles.subtitle}>{t("registerScreen.createAccount")}</Text>
                     </View>
 
                     <View style={styles.formContainer}>
                         <AuthInput
-                            label="Kullanıcı Adı"
+                            label={t("registerScreen.username.title")}
                             value={formData.username}
                             onChangeText={(text) => updateFormData('username', text.toLowerCase())}
-                            placeholder="Kullanıcı adınızı girin"
+                            placeholder={t("registerScreen.username.placeholder")}
                             autoCapitalize="none"
                             autoCorrect={false}
                             returnKeyType="next"
@@ -99,10 +101,10 @@ const RegisterScreen = ({ navigation }) => {
                         />
 
                         <AuthInput
-                            label="E-posta"
+                            label={t("registerScreen.email.title")}
                             value={formData.email}
                             onChangeText={(text) => updateFormData('email', text)}
-                            placeholder="E-posta adresinizi girin"
+                            placeholder={t("registerScreen.email.placeholder")}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -114,10 +116,10 @@ const RegisterScreen = ({ navigation }) => {
                         />
 
                         <AuthInput
-                            label="İsim"
+                            label={t("registerScreen.name.title")}
                             value={formData.name}
                             onChangeText={(text) => updateFormData('name', text)}
-                            placeholder="İsminizi girin"
+                            placeholder={t("registerScreen.name.placeholder")}
                             autoCapitalize="words"
                             returnKeyType="next"
                             onSubmitEditing={() => passwordRef.current?.focus()}
@@ -127,10 +129,10 @@ const RegisterScreen = ({ navigation }) => {
                         />
 
                         <PasswordInput
-                            label="Parola"
+                            label={t("registerScreen.password.title")}
                             value={formData.password}
                             onChangeText={(text) => updateFormData('password', text)}
-                            placeholder="Parolanızı girin"
+                            placeholder={t("registerScreen.password.placeholder")}
                             inputRef={passwordRef}
                             error={errors.password}
                             showPassword={showPassword}
@@ -140,10 +142,10 @@ const RegisterScreen = ({ navigation }) => {
                         />
 
                         <PasswordInput
-                            label="Parola Tekrarı"
+                            label={t("registerScreen.passwordConfirm.title")}
                             value={formData.confirmPassword}
                             onChangeText={(text) => updateFormData('confirmPassword', text)}
-                            placeholder="Parolanızı tekrar girin"
+                            placeholder={t("registerScreen.passwordConfirm.placeholder")}
                             inputRef={confirmPasswordRef}
                             error={errors.confirmPassword}
                             showPassword={showConfirmPassword}
@@ -165,15 +167,15 @@ const RegisterScreen = ({ navigation }) => {
                         />
 
                         <AuthButton
-                            title="Kayıt Ol"
+                            title={t("registerScreen.register")}
                             onPress={handleRegister}
                             loading={loading}
                             disabled={loading || !acceptPrivacyPolicy}
                         />
 
                         <AuthLink
-                            text="Zaten hesabınız var mı?"
-                            highlightText="Giriş yapın"
+                            text={t("registerScreen.alreadyHaveAccount")}
+                            highlightText={t("registerScreen.login")}
                             onPress={() => navigation.goBack()}
                         />
                     </View>

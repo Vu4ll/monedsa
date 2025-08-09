@@ -98,6 +98,70 @@
             "loginFail": "Inloggen met Google is mislukt"
         }
     },
+    "registerScreen": {
+        "createAccount": "Nieuw account aanmaken",
+        "register": "Registreren",
+        "registering": "Bezig met registreren...",
+        "alreadyHaveAccount": "Heb je al een account?",
+        "login": "Inloggen",
+        "username": {
+            "title": "Gebruikersnaam",
+            "placeholder": "Voer je gebruikersnaam in"
+        },
+        "email": {
+            "title": "E-mail",
+            "placeholder": "Voer uw e-mailadres in"
+        },
+        "name": {
+            "title": "Naam",
+            "placeholder": "Voer uw naam in"
+        },
+        "password": {
+            "title": "Wachtwoord",
+            "placeholder": "Voer uw wachtwoord in"
+        },
+        "passwordConfirm": {
+            "title": "Wachtwoord bevestiging",
+            "placeholder": "Voer uw wachtwoord nogmaals in"
+        },
+        "privacy": {
+            "link": "privacybeleid",
+            "text": "Ik heb gelezen en ga akkoord "
+        },
+        "validateForm": {
+            "username": {
+                "required": "Gebruikersnaam is verplicht",
+                "minLength": "Gebruikersnaam moet minimaal 2 tekens bevatten",
+                "maxLength": "Gebruikersnaam mag maximaal 16 tekens bevatten",
+                "invalid": "Gebruikersnaam mag alleen letters, cijfers en onderstrepingstekens bevatten",
+                "space": "Gebruikersnaam mag geen spaties bevatten"
+            },
+            "email": {
+                "required": "E-mailadres verplicht",
+                "invalid": "Voer een geldig e-mailadres in",
+                "tooLong": "E-mailadres is te lang"
+            },
+            "name": {
+                "required": "Naam is verplicht",
+                "minLength": "De naam moet minimaal 2 tekens bevatten",
+                "maxLength": "De naam mag maximaal 50 tekens bevatten"
+            },
+            "password": {
+                "required": "Wachtwoord vereist",
+                "minLength": "Wachtwoord moet minimaal 8 tekens bevatten",
+                "tooLong": "Wachtwoord is te lang",
+                "noLower": "Wachtwoord moet minimaal één kleine letter bevatten",
+                "noUpper": "Wachtwoord moet minstens één hoofdletter bevatten",
+                "noNumber": "Wachtwoord moet minstens één cijfer bevatten"
+            },
+            "passwordConfirm": {
+                "required": "Wachtwoord moet worden herhaald",
+                "noMatch": "Wachtwoorden komen niet overeen"
+            },
+            "acceptPrivacyPolicy": "U moet het privacybeleid accepteren"
+        },
+        "handleRegister": {}
+    },
     "settingsScreen": {
         "header": "Instellingen",
         "display": "Weergave",

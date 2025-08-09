@@ -33,7 +33,7 @@ router.post("/register", authLimiter, async (req, res) => {
     if (!username) return badRequest(res, locale.register.fail.usernameField);
     if (!name) return badRequest(res, locale.register.fail.nameField);
 
-    const userLanguage = language && ["en", "tr"].includes(language) ? language : "en";
+    const userLanguage = language && ["en", "tr", "nl"].includes(language) ? language : "en";
 
     if (email && !emailRegex.test(email)) return badRequest(res, locale.register.fail.invalidEmail);
     if (username && !usernameRegex.test(username)) return badRequest(res, locale.register.fail.invalidUsername);
@@ -183,9 +183,10 @@ router.post("/refresh", async (req, res) => {
 
 router.post("/google", async (req, res) => {
     try {
-        const { idToken, firebaseUid } = req.body;
+        const { idToken, firebaseUid, language } = req.body;
         if (!idToken) return badRequest(res, locale.googleLogin.fail.noToken);
 
+        const userLanguage = language && ["en", "tr", "nl"].includes(language) ? language : "en";
         const decodedToken = await admin.auth().verifyIdToken(idToken);
 
         if (!decodedToken || decodedToken.uid !== firebaseUid) {
@@ -213,7 +214,7 @@ router.post("/google", async (req, res) => {
             });
 
             try {
-                await seedCategoriesForUser(user._id, "tr"); // temprorily set to Turkish
+                await seedCategoriesForUser(user._id, userLanguage);
             } catch (error) {
                 console.error(`Error creating categories for Google user:`, error);
             }

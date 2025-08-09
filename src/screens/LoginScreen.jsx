@@ -88,7 +88,7 @@ const LoginScreen = ({ navigation, onLogin }) => {
     const handleGoogleLogin = async () => {
         setLoading(true);
         try {
-            const result = await authService.googleLogin();
+            const result = await authService.googleLogin(i18n.language);
 
             if (result.success) {
                 onLogin && onLogin();

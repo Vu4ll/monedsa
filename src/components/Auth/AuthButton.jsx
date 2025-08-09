@@ -1,8 +1,10 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useTheme } from "../../contexts/ThemeContext";
+import { useTranslation } from 'react-i18next';
 
 const AuthButton = ({ onPress, title, loading, disabled }) => {
+    const { t, i18n } = useTranslation();
     const { colors } = useTheme();
 
     const styles = StyleSheet.create({
@@ -30,7 +32,7 @@ const AuthButton = ({ onPress, title, loading, disabled }) => {
             disabled={disabled}
         >
             <Text style={styles.buttonText}>
-                {loading ? 'Kaydolunuyor...' : title}
+                {loading ? t("registerScreen.registering") : title}
             </Text>
         </TouchableOpacity>
     );

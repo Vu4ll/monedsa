@@ -4,7 +4,6 @@
     },
     "auth": {
         "fail": {
-            "adminRequired": "Admin access required.",
             "serverError": "Server error occurred."
         }
     },
@@ -143,7 +142,7 @@
             "edit": {
                 "idRequired": "Category ID is required.",
                 "invalidId": "Invalid category ID.",
-                "notFound": "Category not found or access denied.",
+                "notFound": "Category not found.",
                 "invalidName": "Invalid category name.",
                 "invalidColor": "Invalid hex color format.",
                 "invalidType": "Category type must be either 'expense' or 'income'.",
@@ -154,7 +153,7 @@
             "delete": {
                 "idRequired": "Category ID is required.",
                 "invalidId": "Invalid category ID.",
-                "notFound": "Category not found or access denied.",
+                "notFound": "Category not found.",
                 "serverError": "Server error occurred while deleting category.",
                 "isRelated": "This category cannot be deleted because there are related transactions."
             }

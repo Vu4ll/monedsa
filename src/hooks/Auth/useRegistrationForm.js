@@ -2,8 +2,10 @@ import { useState, useRef } from 'react';
 import { Alert, ToastAndroid, Linking } from 'react-native';
 import { authService } from '../../services';
 import { API_CONFIG } from '../../constants/api';
+import { useTranslation } from 'react-i18next';
 
 const useRegistrationForm = (navigation) => {
+    const { t, i18n } = useTranslation();
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -17,7 +19,6 @@ const useRegistrationForm = (navigation) => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [acceptPrivacyPolicy, setAcceptPrivacyPolicy] = useState(false);
 
-    // Refs for input navigation
     const emailRef = useRef(null);
     const nameRef = useRef(null);
     const passwordRef = useRef(null);
@@ -28,61 +29,61 @@ const useRegistrationForm = (navigation) => {
 
         // Username validation
         if (!formData.username.trim()) {
-            newErrors.username = 'Kullanıcı adı gerekli';
+            newErrors.username = t("registerScreen.validateForm.username.required");
         } else if (formData.username.length < 2) {
-            newErrors.username = 'Kullanıcı adı en az 2 karakter olmalı';
+            newErrors.username = t("registerScreen.validateForm.username.minLength");
         } else if (formData.username.length >= 16) {
-            newErrors.username = 'Kullanıcı adı en fazla 16 karakter olmalı';
+            newErrors.username = t("registerScreen.validateForm.username.maxLength");
         } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-            newErrors.username = 'Kullanıcı adı sadece harf, rakam ve alt çizgi içerebilir';
+            newErrors.username = t("registerScreen.validateForm.username.invalid");
         } else if (formData.username.split(" ").length > 1) {
-            newErrors.username = 'Kullanıcı adı boşluk içeremez';
+            newErrors.username = t("registerScreen.validateForm.username.space");
         }
 
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!formData.email.trim()) {
-            newErrors.email = 'E-posta gerekli';
+            newErrors.email = t("registerScreen.validateForm.email.required");
         } else if (!emailRegex.test(formData.email)) {
-            newErrors.email = 'Geçerli bir e-posta adresi girin';
+            newErrors.email = t("registerScreen.validateForm.email.invalid");
         } else if (formData.email.length > 100) {
-            newErrors.email = 'E-posta adresi çok uzun';
+            newErrors.email = t("registerScreen.validateForm.email.tooLong");
         }
 
         // Name validation
         if (!formData.name.trim()) {
-            newErrors.name = 'İsim gerekli';
+            newErrors.name = t("registerScreen.validateForm.name.required");
         } else if (formData.name.trim().length < 2) {
-            newErrors.name = 'İsim en az 2 karakter olmalı';
+            newErrors.name = t("registerScreen.validateForm.name.minLength");
         } else if (formData.name.trim().length > 50) {
-            newErrors.name = 'İsim en fazla 50 karakter olmalı';
+            newErrors.name = t("registerScreen.validateForm.name.maxLength");
         }
 
         // Password validation
         if (!formData.password) {
-            newErrors.password = 'Parola gerekli';
+            newErrors.password = t("registerScreen.validateForm.password.required");
         } else if (formData.password.length < 8) {
-            newErrors.password = 'Parola en az 8 karakter olmalı';
+            newErrors.password = t("registerScreen.validateForm.password.minLength");
         } else if (formData.password.length > 100) {
-            newErrors.password = 'Parola çok uzun';
+            newErrors.password = t("registerScreen.validateForm.password.tooLong");
         } else if (!/(?=.*[a-z])/.test(formData.password)) {
-            newErrors.password = 'Parola en az bir küçük harf içermeli';
+            newErrors.password = t("registerScreen.validateForm.password.noLower");
         } else if (!/(?=.*[A-Z])/.test(formData.password)) {
-            newErrors.password = 'Parola en az bir büyük harf içermeli';
+            newErrors.password = t("registerScreen.validateForm.password.noUpper");
         } else if (!/(?=.*\d)/.test(formData.password)) {
-            newErrors.password = 'Parola en az bir rakam içermeli';
+            newErrors.password = t("registerScreen.validateForm.password.noNumber");
         }
 
         // Confirm password validation
         if (!formData.confirmPassword) {
-            newErrors.confirmPassword = 'Parola tekrarı gerekli';
+            newErrors.confirmPassword = t("registerScreen.validateForm.passwordConfirm.required");
         } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Parolalar eşleşmiyor';
+            newErrors.confirmPassword = t("registerScreen.validateForm.passwordConfirm.noMatch");
         }
 
         // Privacy policy validation
         if (!acceptPrivacyPolicy) {
-            newErrors.privacyPolicy = 'Gizlilik politikasını kabul etmelisiniz';
+            newErrors.privacyPolicy = t("registerScreen.validateForm.acceptPrivacyPolicy");
         }
 
         setErrors(newErrors);
@@ -99,14 +100,14 @@ const useRegistrationForm = (navigation) => {
                 email: formData.email.trim(),
                 name: formData.name.trim(),
                 password: formData.password,
-                language: "tr" // temptorarily
+                language: i18n.language
             });
 
             if (response.success) {
                 Alert.alert(
                     'Başarılı',
                     'Hesabınız başarıyla oluşturuldu. Giriş yapabilirsiniz.',
-                    [{ text: 'Tamam', onPress: () => navigation.navigate('Login') }]
+                    [{ text: 'Tamam', onPress: () => navigation.goBack() }]
                 );
             } else {
                 const errorMessage = response.error || 'Kayıt olurken bir hata oluştu';
@@ -129,9 +130,8 @@ const useRegistrationForm = (navigation) => {
             }
         } catch (error) {
             console.error('Register error:', error);
-            Alert.alert(
-                'Hata',
-                'Sunucu ile bağlantı kurulamadı. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.'
+            ToastAndroid.show(
+                'Sunucu ile bağlantı kurulamadı. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.', ToastAndroid.SHORT
             );
         } finally {
             setLoading(false);
@@ -147,18 +147,18 @@ const useRegistrationForm = (navigation) => {
 
         if (field === 'username' && value.trim()) {
             if (value.length < 2) {
-                setErrors(prev => ({ ...prev, username: 'Kullanıcı adı en az 2 karakter olmalı' }));
+                setErrors(prev => ({ ...prev, username: t("registerScreen.validateForm.username.minLength") }));
             } else if (value.length > 16) {
-                setErrors(prev => ({ ...prev, username: 'Kullanıcı adı en fazla 16 karakter olmalı' }));
+                setErrors(prev => ({ ...prev, username: t("registerScreen.validateForm.username.maxLength") }));
             } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-                setErrors(prev => ({ ...prev, username: 'Sadece harf, rakam ve alt çizgi kullanın' }));
+                setErrors(prev => ({ ...prev, username: t("registerScreen.validateForm.username.invalid") }));
             }
         }
 
         if (field === 'email' && value.trim()) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(value)) {
-                setErrors(prev => ({ ...prev, email: 'Geçerli bir e-posta adresi girin' }));
+                setErrors(prev => ({ ...prev, email: t("registerScreen.validateForm.email.invalid") }));
             }
         }
 
@@ -176,15 +176,15 @@ const useRegistrationForm = (navigation) => {
 
         if (field === 'confirmPassword' && value) {
             if (value !== formData.password) {
-                setErrors(prev => ({ ...prev, confirmPassword: 'Parolalar eşleşmiyor' }));
+                setErrors(prev => ({ ...prev, confirmPassword: t("registerScreen.validateForm.passwordConfirm.noMatch") }));
             }
         }
     };
 
     const openPrivacyPolicy = () => {
-        Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy`).catch((err) => {
+        Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy?lang=${i18n.language}&redirect=/privacy-policy`).catch((err) => {
             console.error('Link açılamadı:', err);
-            Alert.alert('Hata', 'Gizlilik politikası açılamadı. Lütfen daha sonra tekrar deneyin.');
+            ToastAndroid.show('Gizlilik politikası açılamadı. Lütfen daha sonra tekrar deneyin.', ToastAndroid.SHORT);
         });
     };
 

@@ -235,9 +235,10 @@ class AuthService {
 
   /**
    * @description Signs in user with Google using Firebase Auth
+   * @param { string } language - The language for the request.
    * @returns { Promise<{ success: boolean, user?: any, error?: string }> }
    */
-  async googleLogin() {
+  async googleLogin(language) {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 
@@ -253,7 +254,8 @@ class AuthService {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           idToken: firebaseIdToken,
-          firebaseUid: firebaseUser.user.uid
+          firebaseUid: firebaseUser.user.uid,
+          language
         })
       });
 

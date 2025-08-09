@@ -98,6 +98,70 @@
             "loginFail": "Google login failed"
         }
     },
+    "registerScreen": {
+        "createAccount": "Create new account",
+        "register": "Sign up",
+        "registering": "Registering...",
+        "alreadyHaveAccount": "Do you already have an account?",
+        "login": "Log in",
+        "username": {
+            "title": "Username",
+            "placeholder": "Enter your username"
+        },
+        "email": {
+            "title": "Email",
+            "placeholder": "Enter your email address"
+        },
+        "name": {
+            "title": "Name",
+            "placeholder": "Enter your name"
+        },
+        "password": {
+            "title": "Password",
+            "placeholder": "Enter your password"
+        },
+        "passwordConfirm": {
+            "title": "Password confirmation",
+            "placeholder": "Re-enter your password"
+        },
+        "privacy": {
+            "link": "privacy policy",
+            "text": "I have read and agree to the "
+        },
+        "validateForm": {
+            "username": {
+                "required": "Username is required",
+                "minLength": "Username must be at least 2 characters long",
+                "maxLength": "Username must be no more than 16 characters long",
+                "invalid": "Username can only contain letters, numbers, and underscores",
+                "space": "Username cannot contain spaces"
+            },
+            "email": {
+                "required": "Email address required",
+                "invalid": "Please enter a valid email address",
+                "tooLong": "Email address is too long"
+            },
+            "name": {
+                "required": "Name is required",
+                "minLength": "Name must be at least 2 characters long",
+                "maxLength": "Name must be no more than 50 characters long"
+            },
+            "password": {
+                "required": "Password required",
+                "minLength": "Password must be at least 8 characters long",
+                "tooLong": "Password is too long",
+                "noLower": "Password must contain at least one lowercase letter",
+                "noUpper": "Password must contain at least one uppercase letter",
+                "noNumber": "Password must contain at least one number"
+            },
+            "passwordConfirm": {
+                "required": "Password confirmation is required",
+                "noMatch": "Passwords do not match"
+            },
+            "acceptPrivacyPolicy": "You must accept the privacy policy"
+        },
+        "handleRegister": {}
+    },
     "settingsScreen": {
         "header": "Settings",
         "display": "Display",

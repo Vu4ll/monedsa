@@ -2,8 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from "../../contexts/ThemeContext";
+import { useTranslation } from 'react-i18next';
 
 const PrivacyPolicyCheckbox = ({ acceptPrivacyPolicy, setAcceptPrivacyPolicy, openPrivacyPolicy, error }) => {
+    const { t, i18n } = useTranslation();
     const { colors } = useTheme();
 
     const styles = StyleSheet.create({
@@ -57,10 +59,21 @@ const PrivacyPolicyCheckbox = ({ acceptPrivacyPolicy, setAcceptPrivacyPolicy, op
                     )}
                 </TouchableOpacity>
                 <Text style={styles.privacyText}>
-                    <Text onPress={openPrivacyPolicy} style={styles.privacyLink}>
-                        Gizlilik Politikası
-                    </Text>
-                    'nı okudum ve kabul ediyorum.
+                    {i18n.language === "tr" ? (
+                        <>
+                            <Text onPress={openPrivacyPolicy} style={styles.privacyLink}>
+                                {t("registerScreen.privacy.link")}
+                            </Text>
+                            {t("registerScreen.privacy.text")}
+                        </>
+                    ) : (
+                        <>
+                            {t("registerScreen.privacy.text")}
+                            <Text onPress={openPrivacyPolicy} style={styles.privacyLink}>
+                                {t("registerScreen.privacy.link")}
+                            </Text>
+                        </>
+                    )}
                 </Text>
             </View>
             {error && <Text style={styles.errorText}>{error}</Text>}

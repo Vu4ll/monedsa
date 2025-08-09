@@ -36,10 +36,29 @@ const defaultCategoriesTr = [
     { name: "İade", color: "#636e72", type: "income" }
 ];
 
+const defaultCategoriesNl = [
+    { name: "Eten", color: "#FF6B6B", type: "expense" },
+    { name: "Vervoer", color: "#4ECDC4", type: "expense" },
+    { name: "Plezier", color: "#45B7D1", type: "expense" },
+    { name: "Winkelen", color: "#96CEB4", type: "expense" },
+    { name: "Gezondheid", color: "#FFB347", type: "expense" },
+    { name: "Onderwijs", color: "#7D5FFF", type: "expense" },
+    { name: "Factuur", color: "#3C6382", type: "expense" },
+    { name: "Cadeau", color: "#F8A5C2", type: "expense" },
+    { name: "Salaris", color: "#FECA57", type: "income" },
+    { name: "Freelance", color: "#FF9FF3", type: "income" },
+    { name: "Investering", color: "#54A0FF", type: "income" },
+    { name: "Premie", color: "#00B894", type: "income" },
+    { name: "Retourneren", color: "#636e72", type: "income" }
+];
+
 async function seedCategoriesForUser(userId, language = "en") {
     let addedCount = 0;
 
-    const categories = language === "tr" ? defaultCategoriesTr : defaultCategoriesEn;
+    let categories;
+    if (language === "tr") categories = defaultCategoriesTr;
+    else if (language === "nl") categories = defaultCategoriesNl;
+    else categories = defaultCategoriesEn;
 
     for (const cat of categories) {
         const existing = await Category.findOne({
@@ -76,7 +95,7 @@ async function seedCategories() {
         console.log(locale.categorySeed.success.creating.replace("{length}", users.length));
 
         for (const user of users) {
-            const addedCount = await seedCategoriesForUser(user._id, "en"); // Varsayılan dil
+            const addedCount = await seedCategoriesForUser(user._id, "en");
             console.log(locale.categorySeed.success.added
                 .replace("{count}", addedCount).replace("{username}", user.username));
         }
@@ -126,8 +145,8 @@ if (require.main === module) {
     const languageArg = args.find(arg => arg.startsWith('--lang='));
     const language = languageArg ? languageArg.split('=')[1] : 'en';
 
-    if (!['en', 'tr'].includes(language)) {
-        console.error('Invalid language. Use --lang=en or --lang=tr');
+    if (!['en', 'tr', 'nl'].includes(language)) {
+        console.error('Invalid language. Use --lang=en, --lang=tr or --lang=nl');
         process.exit(1);
     }
 
