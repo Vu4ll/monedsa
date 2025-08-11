@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ColorPicker from './ColorPicker';
+import { useTranslation } from 'react-i18next';
 
 const CategoryModal = ({
     visible,
@@ -23,6 +24,7 @@ const CategoryModal = ({
     onSave,
     onDelete
 }) => {
+    const { t, i18n } = useTranslation();
     const styles = StyleSheet.create({
         modalOverlay: {
             flex: 1,
@@ -146,7 +148,7 @@ const CategoryModal = ({
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
                         <Text style={styles.modalTitle}>
-                            {editingCategory ? 'Kategori Düzenle' : 'Yeni Kategori'}
+                            {editingCategory ? t("categoryScreen.categoryModal.modalTitle.edit") : t("categoryScreen.categoryModal.modalTitle.add")}
                         </Text>
                         <TouchableOpacity
                             onPress={onClose}
@@ -158,7 +160,7 @@ const CategoryModal = ({
 
                     <ScrollView contentContainerStyle={styles.modalContent}>
                         <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>Kategori Adı</Text>
+                            <Text style={styles.inputLabel}>{t("categoryScreen.categoryModal.name.text")}</Text>
                             <TextInput
                                 style={[styles.input, formErrors.name && styles.inputError]}
                                 value={formData.name}
@@ -166,14 +168,14 @@ const CategoryModal = ({
                                     ...prev,
                                     name: text.charAt(0).toUpperCase() + text.slice(1)
                                 }))}
-                                placeholder="Kategori adını girin"
+                                placeholder={t("categoryScreen.categoryModal.name.placeholder")}
                                 placeholderTextColor={colors.textSecondary}
                             />
                             {formErrors.name && <Text style={styles.errorText}>{formErrors.name}</Text>}
                         </View>
 
                         <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>Tür</Text>
+                            <Text style={styles.inputLabel}>{t("categoryScreen.categoryModal.type")}</Text>
                             <View style={styles.typeSelector}>
                                 <TouchableOpacity
                                     style={[
@@ -194,7 +196,7 @@ const CategoryModal = ({
                                         styles.typeOptionText,
                                         formData.type === 'income' && styles.selectedTypeText
                                     ]}>
-                                        Gelir
+                                        {t("common.income")}
                                     </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
@@ -216,7 +218,7 @@ const CategoryModal = ({
                                         styles.typeOptionText,
                                         formData.type === 'expense' && styles.selectedTypeText
                                     ]}>
-                                        Gider
+                                        {t("common.expense")}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -237,7 +239,7 @@ const CategoryModal = ({
                                 onPress={onSave}
                             >
                                 <Text style={styles.saveButtonText}>
-                                    {editingCategory ? 'Güncelle' : 'Kaydet'}
+                                    {editingCategory ? t("common.update") : t("common.save")}
                                 </Text>
                             </TouchableOpacity>
 
@@ -249,7 +251,7 @@ const CategoryModal = ({
                                         onDelete(editingCategory);
                                     }}
                                 >
-                                    <Text style={styles.deleteButtonText}>Sil</Text>
+                                    <Text style={styles.deleteButtonText}>{t("common.delete")}</Text>
                                 </TouchableOpacity>
                             )}
                         </View>

@@ -501,7 +501,7 @@ const FilterModal = ({
                                 }))}
                             >
                                 <Text style={[styles.typeText, tempFilters.type === 'income' && { color: colors.white }]}>
-                                    {t("homeScreen.filterModal.income")}
+                                    {t("common.income")}
                                 </Text>
                             </TouchableOpacity>
 
@@ -520,7 +520,7 @@ const FilterModal = ({
                                 }))}
                             >
                                 <Text style={[styles.typeText, tempFilters.type === 'expense' && { color: colors.white }]}>
-                                    {t("homeScreen.filterModal.expense")}
+                                    {t("common.expense")}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -742,7 +742,7 @@ const FilterModal = ({
                                     <View style={[styles.categoryColor, { backgroundColor: item.color }]} />
                                     <Text style={styles.categoryModalName}>{item.name}</Text>
                                     <Text style={styles.categoryType}>
-                                        {item.type === 'income' ? t("homeScreen.filterModal.income") : t("homeScreen.filterModal.expense")}
+                                        {item.type === 'income' ? t("common.income") : t("common.expense")}
                                     </Text>
                                 </TouchableOpacity>
                             )}

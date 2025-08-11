@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Alert, ToastAndroid } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { categoryService } from '../services';
+import { useTranslation } from 'react-i18next';
 
 export const useCategoryLogic = (route, navigation) => {
+    const { t, i18n } = useTranslation();
     const [categories, setCategories] = useState([]);
     const [filteredCategories, setFilteredCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -49,10 +51,10 @@ export const useCategoryLogic = (route, navigation) => {
                 setCategories(result.data);
                 applyFilter(result.data, selectedFilter);
             } else {
-                Alert.alert('Hata', result.error);
+                ToastAndroid.show(result.error, ToastAndroid.SHORT);
             }
         } catch (error) {
-            Alert.alert('Hata', 'Kategoriler yüklenirken bir hata oluştu');
+            ToastAndroid.show(t("categoryScreen.loadCategoryError"), ToastAndroid.SHORT);
         } finally {
             setLoading(false);
         }
@@ -75,9 +77,9 @@ export const useCategoryLogic = (route, navigation) => {
         applyFilter(categories, filter);
         setFilterModalVisible(false);
 
-        const filterText = filter === 'all' ? 'Tüm kategoriler' :
-            filter === 'income' ? 'Gelir kategorileri' : 'Gider kategorileri';
-        ToastAndroid.show(filterText + ' gösteriliyor', ToastAndroid.SHORT);
+        const filterText = filter === 'all' ? t("categoryScreen.handleFilterChange.all") :
+            filter === 'income' ? t("categoryScreen.handleFilterChange.income") : t("categoryScreen.handleFilterChange.expense");
+        ToastAndroid.show(filterText + ` ${t("categoryScreen.handleFilterChange.showing")}`, ToastAndroid.SHORT);
     };
 
     const onRefresh = async () => {
@@ -87,11 +89,9 @@ export const useCategoryLogic = (route, navigation) => {
             if (result.success) {
                 setCategories(result.data);
                 applyFilter(result.data, selectedFilter);
-            } else {
-                ToastAndroid.show(`Hata: ${result.error}`, ToastAndroid.SHORT);
             }
         } catch (error) {
-            ToastAndroid.show(`Kategoriler yüklenirken bir hata oluştu`, ToastAndroid.SHORT);
+            ToastAndroid.show(t("categoryScreen.loadCategoryError"), ToastAndroid.SHORT);
         } finally {
             setRefreshing(false);
         }
@@ -101,15 +101,15 @@ export const useCategoryLogic = (route, navigation) => {
         const errors = {};
 
         if (!formData.name.trim()) {
-            errors.name = 'Kategori adı gerekli';
+            errors.name = t("categoryScreen.validateForm.name");
         }
 
         if (!formData.color) {
-            errors.color = 'Renk seçimi gerekli';
+            errors.color = t("categoryScreen.validateForm.color");
         }
 
         if (!formData.type) {
-            errors.type = 'Tür seçimi gerekli';
+            errors.type = t("categoryScreen.validateForm.type");
         }
 
         if (formData.name.trim() && formData.type) {
@@ -120,8 +120,8 @@ export const useCategoryLogic = (route, navigation) => {
             );
 
             if (existsCheck.exists) {
-                const typeText = formData.type === 'income' ? 'gelir' : 'gider';
-                errors.name = `Bu ${typeText} türünde ${formData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçiniz.`;
+                const typeText = formData.type === 'income' ? t("common.income") : t("common.expense");
+                errors.name = t("categoryScreen.validateForm.nameError", { type: typeText, name: formData.name });
             }
         }
 
@@ -150,30 +150,31 @@ export const useCategoryLogic = (route, navigation) => {
                     applyFilter(categoriesResult.data, selectedFilter);
                 }
                 ToastAndroid.show(
-                    editingCategory ? "Kategori başarılıyla güncellendi" : "Yeni kategori başarılıyla eklendi",
+                    editingCategory ? t("categoryScreen.handleSaveCategory.success.edit") : t("categoryScreen.handleSaveCategory.success.add"),
                     ToastAndroid.SHORT
                 );
             } else {
                 result.error ?
                     ToastAndroid.show(result.error, ToastAndroid.SHORT) :
                     ToastAndroid.show(
-                        `Kategori ${editingCategory ? "güncellenemedi" : "eklenemedi"}`,
+                        `${t("categoryScreen.handleSaveCategory.fail.text")} ${editingCategory ?
+                            t("categoryScreen.handleSaveCategory.fail.edit") : t("categoryScreen.handleSaveCategory.fail.add")}`,
                         ToastAndroid.SHORT
                     );
             }
         } catch (error) {
-            ToastAndroid.show(`Kategori kaydedilirken bir hata oluştu`, ToastAndroid.SHORT);
+            ToastAndroid.show(t("categoryScreen.handleSaveCategory.error"), ToastAndroid.SHORT);
         }
     };
 
     const handleDeleteCategory = async (category) => {
         Alert.alert(
-            'Kategori Sil',
-            `${category.name} kategorisini silmek istediğinizden emin misiniz?`,
+            t("categoryScreen.handleDeleteCategory.delete"),
+            t("categoryScreen.handleDeleteCategory.confirm", { category: category.name }),
             [
-                { text: 'İptal', style: 'cancel' },
+                { text: t("common.cancel"), style: 'cancel' },
                 {
-                    text: 'Sil',
+                    text: t("common.delete"),
                     style: 'destructive',
                     onPress: async () => {
                         try {
@@ -184,12 +185,12 @@ export const useCategoryLogic = (route, navigation) => {
                                     setCategories(categoriesResult.data);
                                     applyFilter(categoriesResult.data, selectedFilter);
                                 }
-                                ToastAndroid.show("Kategori başarıyla silindi", ToastAndroid.SHORT);
+                                ToastAndroid.show(t("categoryScreen.handleDeleteCategory.deleted"), ToastAndroid.SHORT);
                             } else {
                                 ToastAndroid.show(result.error, ToastAndroid.SHORT);
                             }
                         } catch (error) {
-                            ToastAndroid.show(`Kategori silinirken bir hata oluştu`, ToastAndroid.SHORT);
+                            ToastAndroid.show(t("categoryScreen.handleDeleteCategory.error"), ToastAndroid.SHORT);
                         }
                     }
                 }

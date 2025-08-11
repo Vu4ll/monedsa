@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const WheelColorPicker = require('react-native-wheel-color-picker');
+import { useTranslation } from 'react-i18next';
 
 const ColorPicker = ({ colors, formData, setFormData, formErrors, colorOptions }) => {
+    const { t, i18n } = useTranslation();
     const [customColorModalVisible, setCustomColorModalVisible] = useState(false);
     const [selectedCustomColor, setSelectedCustomColor] = useState(formData.color || '#39BE56');
 
@@ -153,7 +155,7 @@ const ColorPicker = ({ colors, formData, setFormData, formErrors, colorOptions }
 
     return (
         <View style={styles.colorPickerContainer}>
-            <Text style={styles.colorPickerLabel}>Renk Seçin</Text>
+            <Text style={styles.colorPickerLabel}>{t("categoryScreen.colorPicker.label")}</Text>
             <View style={styles.colorGrid}>
                 {colorOptions.map((color) => (
                     <TouchableOpacity
@@ -175,7 +177,6 @@ const ColorPicker = ({ colors, formData, setFormData, formErrors, colorOptions }
                     ]}
                     onPress={openCustomColorModal}
                 >
-                    {/* Custom renk seçildiyse arka planda renk göster */}
                     {isCustomColor && (
                         <View
                             style={[
@@ -203,7 +204,7 @@ const ColorPicker = ({ colors, formData, setFormData, formErrors, colorOptions }
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Özel Renk Seçin</Text>
+                            <Text style={styles.modalTitle}>{t("categoryScreen.colorPicker.modalTitle")}</Text>
 
                             <TouchableOpacity
                                 onPress={() => setCustomColorModalVisible(false)}
@@ -213,13 +214,11 @@ const ColorPicker = ({ colors, formData, setFormData, formErrors, colorOptions }
                             </TouchableOpacity>
                         </View>
 
-                        {/* Seçilen rengin önizlemesi */}
                         <View style={styles.selectedColorPreview}>
                             <View style={[styles.colorPreviewBox, { backgroundColor: selectedCustomColor }]} />
                             <Text style={styles.colorCodeText}>{selectedCustomColor.toUpperCase()}</Text>
                         </View>
 
-                        {/* Renk seçici tekerleği */}
                         <View style={[styles.colorPickerContainer, { height: 270 }]}>
                             <WheelColorPicker
                                 color={selectedCustomColor}
@@ -237,7 +236,7 @@ const ColorPicker = ({ colors, formData, setFormData, formErrors, colorOptions }
                                 onPress={handleCustomColorSave}
                             >
                                 <Text style={[styles.modalButtonText, styles.saveButtonText]}>
-                                    Kaydet
+                                    {t("common.save")}
                                 </Text>
                             </TouchableOpacity>
                         </View>

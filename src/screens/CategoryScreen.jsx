@@ -18,8 +18,10 @@ import {
     CategoryFilterModal,
     EmptyState
 } from '../components/CategoryScreen';
+import { useTranslation } from 'react-i18next';
 
 const CategoryScreen = ({ navigation, route }) => {
+    const { t, i18n } = useTranslation();
     const { isDarkMode, colors } = useTheme();
     const {
         // State
@@ -85,7 +87,7 @@ const CategoryScreen = ({ navigation, route }) => {
             <SafeAreaView style={styles.container}>
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color={colors.primary} />
-                    <Text style={styles.loadingText}>Kategoriler yükleniyor...</Text>
+                    <Text style={styles.loadingText}>{t("categoryScreen.loading")}</Text>
                 </View>
             </SafeAreaView>
         );
@@ -97,7 +99,7 @@ const CategoryScreen = ({ navigation, route }) => {
 
             <Header
                 colors={colors}
-                title="Kategoriler"
+                title={t("categoryScreen.header")}
                 showRightAction={true}
                 rightActionIcon="filter-alt"
                 onRightActionPress={() => setFilterModalVisible(true)}

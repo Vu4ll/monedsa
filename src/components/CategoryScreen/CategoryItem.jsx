@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from 'react-i18next';
 
 const CategoryItem = ({ item, colors, onEdit }) => {
+    const { t, i18n } = useTranslation();
     const styles = StyleSheet.create({
         categoryItem: {
             flexDirection: 'row',
@@ -76,7 +78,7 @@ const CategoryItem = ({ item, colors, onEdit }) => {
                         <Text style={styles.categoryName}>
                             {item.name}
                             <Text style={styles.categoryType}>
-                                {item.type === 'expense' ? '  •  Gider' : '  •  Gelir'}
+                                {item.type === 'expense' ? `  •  ${t("common.expense")}` : `  •  ${t("common.income")}`}
                             </Text>
                         </Text>
                     </View>

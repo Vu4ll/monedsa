@@ -11,8 +11,6 @@
         "filterModal": {
             "filter": "Filtreler",
             "type": "İşlem tipi",
-            "income": "Gelir",
-            "expense": "Gider",
             "category": "Kategori",
             "selectCategory": "Kategori seçiniz",
             "amount": "Tutar aralığı",
@@ -64,6 +62,115 @@
         },
         "transactionCard": {
             "noDescription": "Açıklama bulunmuyor"
+        }
+    },
+    "addTransactionScreen": {
+        "header": {
+            "add": "İşlem ekle",
+            "edit": "İşlemi düzenle"
+        },
+        "type": "Tür",
+        "amount": "Tutar",
+        "category": "Kategori",
+        "selectCategory": "Kategori seçiniz",
+        "description": {
+            "text": "Açıklama (opsiyonel)",
+            "placeholder": "Açıklama giriniz"
+        },
+        "saving": "Kaydediliyor...",
+        "updating": "Güncelleniyor...",
+        "deleting": "Siliniyor...",
+        "categoryModalTitle": "Kategori seçiniz",
+        "validateForm": {
+            "amount": "Tutar gerekli",
+            "invalidAmount": "Geçerli bir tutar giriniz",
+            "category": "Kategori seçimi gerekli",
+            "type": "Tür seçimi gerekli"
+        },
+        "handleSaveTransaction": {
+            "success": {
+                "text": "İşlem başarıyla",
+                "added": "eklendi",
+                "updated": "güncellendi"
+            },
+            "fail": "İşlem başarısız",
+            "error": "İşlem sırasında bir hata oluştu"
+        },
+        "handleDeleteTransaction": {
+            "delete": "İşlemi sil",
+            "confirm": "Bu işlemi silmek istediğinizden emin misiniz?",
+            "success": "İşlem başarıyla silindi",
+            "fail": "Silme işlemi başarısız",
+            "error": "İşlem silinirken bir hata oluştu"
+        }
+    },
+    "categoryScreen": {
+        "header": "Kategoriler",
+        "loading": "Kategoriler yükleniyor...",
+        "categoryModal": {
+            "modalTitle": {
+                "add": "Yeni kategori",
+                "edit": "Kategori düzenle"
+            },
+            "name": {
+                "text": "Kategori adı",
+                "placeholder": "Kategori adını giriniz"
+            },
+            "type": "Tür"
+        },
+        "filterModal": {
+            "title": "Kategori Filtresi",
+            "all": {
+                "title": "Tüm kategoriler",
+                "description": "Hem gelir hem gider kategorilerini gösterir"
+            },
+            "income": {
+                "title": "Gelir kategorileri",
+                "description": "Sadece gelir kategorilerini gösterir"
+            },
+            "expense": {
+                "title": "Gider kategorileri",
+                "description": "Sadece gider kategorilerini gösterir"
+            }
+        },
+        "colorPicker": {
+            "label": "Renk seçiniz",
+            "modalTitle": "Özel renk seçiniz"
+        },
+        "emptyState": {
+            "title": "Henüz kategori bulunmuyor",
+            "description": "Gezinme çubuğundaki + tuşuna basarak\nilk kategorinizi ekleyebilirsiniz."
+        },
+        "loadCategoryError": "Kategoriler yüklenirken bir hata oluştu",
+        "handleFilterChange": {
+            "all": "Tüm kategoriler",
+            "income": "Gelir kategorileri",
+            "expense": "Gider kategorileri",
+            "showing": "gösteriliyor"
+        },
+        "validateForm": {
+            "name": "Kategori adı gerekli",
+            "color": "Renk seçimi gerekli",
+            "type": "Tür seçimi gerekli",
+            "nameError": "{{type}} türünde {{name}} adında bir kategori bulunuyor, lütfen farklı bir isim veya tür seçiniz."
+        },
+        "handleSaveCategory": {
+            "success": {
+                "add": "Yeni kategori başarılıyla eklendi",
+                "edit": "Kategori başarılıyla güncellendi"
+            },
+            "fail": {
+                "text": "Kategori",
+                "add": "eklenemedi",
+                "edit": "güncellenemedi"
+            },
+            "error": "Kategori kaydedilirken bir hata oluştu"
+        },
+        "handleDeleteCategory": {
+            "delete": "Kategori sil",
+            "confirm": "{{category}} kategorisini silmek istediğinizden emin misiniz?",
+            "deleted": "Kategori başarıyla silindi",
+            "error": "Kategori silinirken bir hata oluştu"
         }
     },
     "loginScreen": {
@@ -369,7 +476,11 @@
     "common": {
         "ok": "Tamam",
         "save": "Kaydet",
+        "update": "Güncelle",
         "change": "Değiştir",
-        "cancel": "İptal"
+        "cancel": "İptal",
+        "delete": "Sil",
+        "income": "Gelir",
+        "expense": "Gider"
     }
 }

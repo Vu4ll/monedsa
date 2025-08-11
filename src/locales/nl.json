@@ -11,8 +11,6 @@
         "filterModal": {
             "filter": "Filters",
             "type": "Transactietype",
-            "income": "Inkomsten",
-            "expense": "Uitgaven",
             "category": "Categorie",
             "selectCategory": "Selecteer categorie",
             "amount": "Bedragbereik",
@@ -64,6 +62,115 @@
         },
         "transactionCard": {
             "noDescription": "Geen beschrijving beschikbaar"
+        }
+    },
+    "addTransactionScreen": {
+        "header": {
+            "add": "Transactie toevoegen",
+            "edit": "Transactie bewerken"
+        },
+        "type": "Type",
+        "amount": "Bedrag",
+        "category": "Categorie",
+        "selectCategory": "Selecteer categorie",
+        "description": {
+            "text": "Beschrijving (optioneel)",
+            "placeholder": "Beschrijving invoeren"
+        },
+        "saving": "Wordt opgeslagen...",
+        "updating": "Wordt bijgewerkt...",
+        "deleting": "Wordt verwijderd...",
+        "categoryModalTitle": "Selecteer categorie",
+        "validateForm": {
+            "amount": "Bedrag vereist",
+            "invalidAmount": "Voer een geldig bedrag in",
+            "category": "Categorie selecteren vereist",
+            "type": "Type selecteren vereist"
+        },
+        "handleSaveTransaction": {
+            "success": {
+                "text": "Transactie succesvol",
+                "added": "toegevoegd",
+                "updated": "bijgewerkt"
+            },
+            "fail": "Operatie mislukt",
+            "error": "Er is een fout opgetreden tijdens de operatie"
+        },
+        "handleDeleteTransaction": {
+            "delete": "Transactie verwijderen",
+            "confirm": "Weet u zeker dat u deze transactie wilt verwijderen?",
+            "success": "Transactie succesvol verwijderd",
+            "fail": "Verwijderen mislukt",
+            "error": "Er is een fout opgetreden tijdens het verwijderen van de transactie"
+        }
+    },
+    "categoryScreen": {
+        "header": "Categorieën",
+        "loading": "Categorieën worden geladen...",
+        "categoryModal": {
+            "modalTitle": {
+                "add": "Nieuwe categorie",
+                "edit": "Categorie bewerken"
+            },
+            "name": {
+                "text": "Categorienaam",
+                "placeholder": "Voer de categorienaam in"
+            },
+            "type": "Type"
+        },
+        "filterModal": {
+            "title": "Categorie filter",
+            "all": {
+                "title": "Alle categorieën",
+                "description": "Toont zowel inkomsten- als uitgaven categorieën"
+            },
+            "income": {
+                "title": "Inkomsten categorieën",
+                "description": "Toont alleen inkomsten categorieën"
+            },
+            "expense": {
+                "title": "Uitgaven categorieën",
+                "description": "Toont alleen uitgaven categorieën"
+            }
+        },
+        "colorPicker": {
+            "label": "Kleur selecteren",
+            "modalTitle": "Speciale kleur selecteren"
+        },
+        "emptyState": {
+            "title": "Er zijn nog geen categorieën",
+            "description": "U kunt uw eerste categorie toevoegen\ndoor op de + knop in de navigatiebalk te drukken."
+        },
+        "loadCategoryError": "Er is een fout opgetreden tijdens het laden van de categorieën",
+        "handleFilterChange": {
+            "all": "Alle categorieën",
+            "income": "Inkomsten categorieën",
+            "expense": "Uitgaven categorieën",
+            "showing": "wordt weergegeven"
+        },
+        "validateForm": {
+            "name": "Categorienaam vereist",
+            "color": "Kleurkeuze vereist",
+            "type": "Type keuze vereist",
+            "nameError": "Er bestaat al een categorie met de naam {{name}} van het type {{type}}. Kies een andere naam of een ander type."
+        },
+        "handleSaveCategory": {
+            "success": {
+                "add": "Nieuwe categorie succesvol toegevoegd",
+                "edit": "Categorie succesvol bijgewerkt"
+            },
+            "fail": {
+                "text": "Categorie",
+                "add": "kan niet worden toegevoegd",
+                "edit": "kan niet worden bijgewerkt"
+            },
+            "error": "Er is een fout opgetreden tijdens het opslaan van de categorie"
+        },
+        "handleDeleteCategory": {
+            "delete": "Categorie verwijderen",
+            "confirm": "Weet u zeker dat u de categorie {{category}} wilt verwijderen?",
+            "deleted": "Categorie is succesvol verwijderd",
+            "error": "Er is een fout opgetreden tijdens het verwijderen van de categorie"
         }
     },
     "loginScreen": {
@@ -369,7 +476,11 @@
     "common": {
         "ok": "Oké",
         "save": "Opslaan",
+        "update": "Bijwerken",
         "change": "Wijzigen",
-        "cancel": "Annuleren"
+        "cancel": "Annuleren",
+        "delete": "Verwijderen",
+        "income": "Inkomsten",
+        "expense": "Uitgaven"
     }
 }

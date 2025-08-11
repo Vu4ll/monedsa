@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from 'react-i18next';
 
 const EmptyState = ({ colors }) => {
+    const { t, i18n } = useTranslation();
     const styles = StyleSheet.create({
         emptyStateContainer: {
             flex: 1,
@@ -29,9 +31,9 @@ const EmptyState = ({ colors }) => {
     return (
         <View style={styles.emptyStateContainer}>
             <Icon name="category" size={80} color={colors.textSecondary} />
-            <Text style={styles.emptyStateTitle}>Henüz kategori bulunmuyor</Text>
+            <Text style={styles.emptyStateTitle}>{t("categoryScreen.emptyState.title")}</Text>
             <Text style={styles.emptyStateSubtitle}>
-                Gezinme çubuğundaki + tuşuna basarak{'\n'}ilk kategorinizi ekleyebilirsiniz.
+                {t("categoryScreen.emptyState.description")}
             </Text>
         </View>
     );

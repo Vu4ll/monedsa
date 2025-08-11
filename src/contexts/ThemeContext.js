@@ -40,7 +40,7 @@ export const ThemeProvider = ({ children }) => {
                 setThemeMode(savedTheme);
             }
         } catch (error) {
-            console.error('Tema ayarları yüklenirken hata:', error);
+            console.error('Theme settings load error:', error);
         }
     };
 
@@ -49,7 +49,7 @@ export const ThemeProvider = ({ children }) => {
             await AsyncStorage.setItem('themeMode', newThemeMode);
             setThemeMode(newThemeMode);
         } catch (error) {
-            console.error('Tema ayarları kaydedilirken hata:', error);
+            console.error('Theme save error:', error);
         }
     };
 

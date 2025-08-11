@@ -17,8 +17,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from "../contexts/ThemeContext";
 import { transactionService, categoryService } from '../services';
 import { Header } from '../components';
+import { useTranslation } from 'react-i18next';
+import { useCurrency } from '../contexts';
+import { formatCurrency } from '../utils';
 
 const AddTransactionScreen = ({ navigation, route }) => {
+    const { t, i18n } = useTranslation();
+    const { currency } = useCurrency();
     const { isDarkMode, colors } = useTheme();
 
     const editingTransaction = route?.params?.transaction || null;
@@ -75,7 +80,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                 setCategories(result.data);
             }
         } catch (error) {
-            console.error('Kategoriler yüklenirken hata:', error);
+            console.error('Category load error:', error);
         }
     };
 
@@ -83,17 +88,17 @@ const AddTransactionScreen = ({ navigation, route }) => {
         const errors = {};
 
         if (!formData.amount.trim()) {
-            errors.amount = 'Tutar gerekli';
+            errors.amount = t("addTransactionScreen.validateForm.amount");
         } else if (isNaN(parseFloat(formData.amount)) || parseFloat(formData.amount) <= 0) {
-            errors.amount = 'Geçerli bir tutar giriniz';
+            errors.amount = t("addTransactionScreen.validateForm.invalidAmount");
         }
 
         if (!formData.category) {
-            errors.category = 'Kategori seçimi gerekli';
+            errors.category = t("addTransactionScreen.validateForm.category");
         }
 
         if (!formData.type) {
-            errors.type = 'Tür seçimi gerekli';
+            errors.type = t("addTransactionScreen.validateForm.type");
         }
 
         setFormErrors(errors);
@@ -120,10 +125,14 @@ const AddTransactionScreen = ({ navigation, route }) => {
             }
 
             if (result.success) {
-                ToastAndroid.show(`İşlem başarıyla ${editingTransaction ? 'güncellendi' : 'eklendi'}`, ToastAndroid.SHORT);
+                ToastAndroid.show(
+                    `${t("addTransactionScreen.handleSaveTransaction.success.text")} ${editingTransaction ?
+                        t("addTransactionScreen.handleSaveTransaction.success.updated") :
+                        t("addTransactionScreen.handleSaveTransaction.success.added")}`,
+                    ToastAndroid.SHORT);
 
                 if (route.params?.onRefresh) {
-                    route.params.onRefresh();
+                    await route.params.onRefresh();
                 }
 
                 resetForm();
@@ -134,10 +143,10 @@ const AddTransactionScreen = ({ navigation, route }) => {
                     navigation.navigate('MainApp');
                 }
             } else {
-                ToastAndroid.show(result.error || "İşlem başarısız", ToastAndroid.SHORT);
+                ToastAndroid.show(result.error || t("addTransactionScreen.handleSaveTransaction.fail"), ToastAndroid.SHORT);
             }
         } catch (error) {
-            ToastAndroid.show(error.error || "İşlem sırasında bir hata oluştu", ToastAndroid.SHORT);
+            ToastAndroid.show(error.error || t("addTransactionScreen.handleSaveTransaction.error"), ToastAndroid.SHORT);
         } finally {
             setLoading(false);
         }
@@ -147,12 +156,12 @@ const AddTransactionScreen = ({ navigation, route }) => {
         if (!editingTransaction) return;
 
         Alert.alert(
-            'İşlemi Sil',
-            'Bu işlemi silmek istediğinizden emin misiniz?',
+            t("addTransactionScreen.handleDeleteTransaction.delete"),
+            t("addTransactionScreen.handleDeleteTransaction.confirm"),
             [
-                { text: 'İptal', style: 'cancel' },
+                { text: t("common.cancel"), style: 'cancel' },
                 {
-                    text: 'Sil',
+                    text: t("common.delete"),
                     style: 'destructive',
                     onPress: async () => {
                         setLoading(true);
@@ -160,7 +169,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                         try {
                             const result = await transactionService.deleteTransaction(editingTransaction.id);
                             if (result.success) {
-                                ToastAndroid.show('İşlem başarıyla silindi', ToastAndroid.SHORT);
+                                ToastAndroid.show(t("addTransactionScreen.handleDeleteTransaction.success"), ToastAndroid.SHORT);
 
                                 if (route.params?.onRefresh) {
                                     route.params.onRefresh();
@@ -172,10 +181,10 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                     navigation.navigate('MainApp');
                                 }
                             } else {
-                                ToastAndroid.show(result.message || "Silme başarısız", ToastAndroid.SHORT);
+                                ToastAndroid.show(result.message || t("addTransactionScreen.handleDeleteTransaction.fail"), ToastAndroid.SHORT);
                             }
                         } catch (error) {
-                            ToastAndroid.show(error.message || "İşlem silinirken bir hata oluştu", ToastAndroid.SHORT);
+                            ToastAndroid.show(error.message || t("addTransactionScreen.handleDeleteTransaction.error"), ToastAndroid.SHORT);
                         } finally {
                             setLoading(false);
                             setDeleting(false);
@@ -378,7 +387,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
 
             <Header
                 colors={colors}
-                title={editingTransaction ? 'İşlemi Düzenle' : 'Yeni İşlem Ekle'}
+                title={editingTransaction ? t("addTransactionScreen.header.edit") : t("addTransactionScreen.header.add")}
                 showLeftAction={true}
                 onLeftActionPress={() => {
                     if (navigation.canGoBack()) {
@@ -401,7 +410,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                     <View style={styles.formContainer}>
 
                         <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>Tür</Text>
+                            <Text style={styles.inputLabel}>{t("addTransactionScreen.type")}</Text>
 
                             {/* Type selector for expense/income*/}
                             <View style={styles.typeSelector}>
@@ -421,7 +430,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                         styles.typeOptionText,
                                         formData.type === 'income' && styles.selectedTypeText
                                     ]}>
-                                        Gelir
+                                        {t("common.income")}
                                     </Text>
                                 </TouchableOpacity>
 
@@ -441,7 +450,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                         styles.typeOptionText,
                                         formData.type === 'expense' && styles.selectedTypeText
                                     ]}>
-                                        Gider
+                                        {t("common.expense")}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -450,12 +459,12 @@ const AddTransactionScreen = ({ navigation, route }) => {
 
                         {/* Amount */}
                         <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>Tutar (₺)</Text>
+                            <Text style={styles.inputLabel}>{t("addTransactionScreen.amount")}</Text>
                             <TextInput
                                 style={[styles.input, formErrors.amount && styles.inputError]}
                                 value={formData.amount}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, amount: text }))}
-                                placeholder="0.00"
+                                placeholder={formatCurrency(0, currency)}
                                 placeholderTextColor={colors.textSecondary}
                                 keyboardType="numeric"
                                 returnKeyType="next"
@@ -467,7 +476,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
 
                         {/* Category */}
                         <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>Kategori</Text>
+                            <Text style={styles.inputLabel}>{t("addTransactionScreen.category")}</Text>
                             <TouchableOpacity
                                 style={[styles.categorySelector, formErrors.category && styles.inputError]}
                                 onPress={() => setShowCategoryModal(true)}
@@ -480,7 +489,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                         styles.categoryText,
                                         !formData.category && styles.placeholderText
                                     ]}>
-                                        {formData.category || 'Kategori seçin'}
+                                        {formData.category || t("addTransactionScreen.selectCategory")}
                                     </Text>
                                 </View>
                                 <Text style={styles.dropdownArrow}>▼</Text>
@@ -490,13 +499,13 @@ const AddTransactionScreen = ({ navigation, route }) => {
 
                         {/* Description */}
                         <View style={styles.inputContainer}>
-                            <Text style={styles.inputLabel}>Açıklama (Opsiyonel)</Text>
+                            <Text style={styles.inputLabel}>{t("addTransactionScreen.description.text")}</Text>
                             <TextInput
                                 ref={descriptionRef}
                                 style={[styles.input, styles.descriptionInput]}
                                 value={formData.description}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, description: text }))}
-                                placeholder="Açıklama giriniz..."
+                                placeholder={t("addTransactionScreen.description.placeholder")}
                                 placeholderTextColor={colors.textSecondary}
                                 multiline
                                 numberOfLines={3}
@@ -514,8 +523,8 @@ const AddTransactionScreen = ({ navigation, route }) => {
                             <Text style={styles.saveButtonText}>
                                 {loading ?
                                     (editingTransaction ?
-                                        (deleting ? 'Siliniyor...' : 'Güncelleniyor...') : 'Kaydediliyor...') :
-                                    (editingTransaction ? 'Güncelle' : 'Kaydet')}
+                                        (deleting ? t("addTransactionScreen.deleting") : t("addTransactionScreen.updating")) : t("addTransactionScreen.saving")) :
+                                    (editingTransaction ? t("common.update") : t("common.save"))}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -532,7 +541,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Kategori Seç</Text>
+                            <Text style={styles.modalTitle}>{t("addTransactionScreen.categoryModalTitle")}</Text>
                             <TouchableOpacity
                                 onPress={() => setShowCategoryModal(false)}
                                 style={styles.modalCloseButton}

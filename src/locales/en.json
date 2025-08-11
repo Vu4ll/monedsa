@@ -11,8 +11,6 @@
         "filterModal": {
             "filter": "Filters",
             "type": "Transaction type",
-            "income": "Income",
-            "expense": "Expense",
             "category": "Category",
             "selectCategory": "Select category",
             "amount": "Amount range",
@@ -64,6 +62,115 @@
         },
         "transactionCard": {
             "noDescription": "No description available"
+        }
+    },
+    "addTransactionScreen": {
+        "header": {
+            "add": "Add transaction",
+            "edit": "Edit transaction"
+        },
+        "type": "Type",
+        "amount": "Amount",
+        "category": "Category",
+        "selectCategory": "Select category",
+        "description": {
+            "text": "Description (optional)",
+            "placeholder": "Enter description"
+        },
+        "saving": "Saving...",
+        "updating": "Updating...",
+        "deleting": "Deleting...",
+        "categoryModalTitle": "Select category",
+        "validateForm": {
+            "amount": "Amount required",
+            "invalidAmount": "Enter a valid amount",
+            "category": "Category selection required",
+            "type": "Type selection required"
+        },
+        "handleSaveTransaction": {
+            "success": {
+                "text": "Transaction successful",
+                "added": "added",
+                "updated": "updated"
+            },
+            "fail": "Process failed",
+            "error": "An error occurred during the process"
+        },
+        "handleDeleteTransaction": {
+            "delete": "Delete transaction",
+            "confirm": "Are you sure you want to delete this transaction?",
+            "success": "Transaction successfully deleted",
+            "fail": "Deletion failed",
+            "error": "An error occurred while deleting the transaction"
+        }
+    },
+    "categoryScreen": {
+        "header": "Categories",
+        "loading": "Loading categories...",
+        "categoryModal": {
+            "modalTitle": {
+                "add": "New category",
+                "edit": "Edit category"
+            },
+            "name": {
+                "text": "Category name",
+                "placeholder": "Enter category name"
+            },
+            "type": "Type"
+        },
+        "filterModal": {
+            "title": "Category Filter",
+            "all": {
+                "title": "All categories",
+                "description": "Displays both income and expense categories"
+            },
+            "income": {
+                "title": "Income categories",
+                "description": "Displays only income categories"
+            },
+            "expense": {
+                "title": "Expense categories",
+                "description": "Displays only expense categories"
+            }
+        },
+        "colorPicker": {
+            "label": "Select color",
+            "modalTitle": "Select custom color"
+        },
+        "emptyState": {
+            "title": "No categories found yet",
+            "description": "You can add your first category by clicking\nthe + button on the navigation bar."
+        },
+        "loadCategoryError": "An error occurred while loading categories",
+        "handleFilterChange": {
+            "all": "All categories",
+            "income": "Income categories",
+            "expense": "Expense categories",
+            "showing": "showing"
+        },
+        "validateForm": {
+            "name": "Category name required",
+            "color": "Color selection required",
+            "type": "Type selection required",
+            "nameError": "There is already a category named {{name}} of type {{type}}. Please select a different name or type."
+        },
+        "handleSaveCategory": {
+            "success": {
+                "add": "New category added successfully",
+                "edit": "Category updated successfully"
+            },
+            "fail": {
+                "text": "Category",
+                "add": "could not be added",
+                "edit": "could not be updated"
+            },
+            "error": "An error occurred while saving the category"
+        },
+        "handleDeleteCategory": {
+            "delete": "Delete category",
+            "confirm": "Are you sure you want to delete the {{category}} category?",
+            "deleted": "Category successfully deleted",
+            "error": "An error occurred while deleting the category"
         }
     },
     "loginScreen": {
@@ -369,7 +476,11 @@
     "common": {
         "ok": "OK",
         "save": "Save",
+        "update": "Update",
         "change": "Change",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "income": "Income",
+        "expense": "Expense"
     }
 }

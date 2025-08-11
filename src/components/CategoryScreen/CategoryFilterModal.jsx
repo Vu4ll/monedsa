@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from 'react-i18next';
 
 const CategoryFilterModal = ({
     visible,
@@ -9,6 +10,7 @@ const CategoryFilterModal = ({
     selectedFilter,
     onFilterChange
 }) => {
+    const { t, i18n } = useTranslation();
     const styles = StyleSheet.create({
         modalOverlay: {
             flex: 1,
@@ -98,18 +100,18 @@ const CategoryFilterModal = ({
     const filterOptions = [
         {
             key: 'all',
-            title: 'Tüm Kategoriler',
-            description: 'Hem gelir hem gider kategorilerini göster'
+            title: t("categoryScreen.filterModal.all.title"),
+            description: t("categoryScreen.filterModal.all.description")
         },
         {
             key: 'income',
-            title: 'Gelir Kategorileri',
-            description: 'Sadece gelir kategorilerini göster'
+            title: t("categoryScreen.filterModal.income.title"),
+            description: t("categoryScreen.filterModal.income.description")
         },
         {
             key: 'expense',
-            title: 'Gider Kategorileri',
-            description: 'Sadece gider kategorilerini göster'
+            title: t("categoryScreen.filterModal.expense.title"),
+            description: t("categoryScreen.filterModal.expense.description")
         }
     ];
 
@@ -160,7 +162,7 @@ const CategoryFilterModal = ({
             <View style={styles.modalOverlay}>
                 <View style={styles.filterModalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>Kategori Filtresi</Text>
+                        <Text style={styles.modalTitle}>{t("categoryScreen.filterModal.title")}</Text>
                         <TouchableOpacity
                             style={styles.modalCloseButton}
                             onPress={onClose}
