@@ -139,7 +139,7 @@
         },
         "emptyState": {
             "title": "Er zijn nog geen categorieën",
-            "description": "U kunt uw eerste categorie toevoegen\ndoor op de + knop in de navigatiebalk te drukken."
+            "description": "U kunt uw eerste categorie toevoegen door\nop de + knop in de navigatiebalk te drukken."
         },
         "loadCategoryError": "Er is een fout opgetreden tijdens het laden van de categorieën",
         "handleFilterChange": {
@@ -440,7 +440,7 @@
                 "title": "Voer een titel in",
                 "description": "Voer een beschrijving in",
                 "email": "Uw e-mailadres kan niet worden geladen. Probeer het later opnieuw.",
-                "success": "Uw probleemrapport is succesvol verzonden. U ontvangt zo snel mogelijk een reactie.",
+                "success": "Uw probleemmelding is succesvol verzonden. We reageren zo snel mogelijk.",
                 "ratelimit": "U hebt te veel pogingen gedaan, probeer het later opnieuw.",
                 "fail": "Er is een fout opgetreden tijdens het rapporteren van het probleem. Probeer het later opnieuw."
             },

@@ -61,7 +61,7 @@ const SettingsScreen = ({ navigation }) => {
                 ToastAndroid.show(t("settingsScreen.other.loadUserMail.profileData"), ToastAndroid.SHORT);
             }
         } catch (error) {
-            console.error('E-posta yüklenirken hata:', error);
+            console.error('Emaiil load error:', error);
             ToastAndroid.show(t("settingsScreen.other.loadUserMail.emailData"), ToastAndroid.SHORT);
         }
     };
@@ -149,7 +149,7 @@ const SettingsScreen = ({ navigation }) => {
                     platform: Platform.OS,
                     version: version,
                     timestamp: new Date().toISOString(),
-                    // language: i18n.language
+                    language: i18n.language
                 }),
             });
 
