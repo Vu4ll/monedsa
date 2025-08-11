@@ -20,6 +20,64 @@ export const useFilters = () => {
         sortOrder: 'desc'
     });
 
+    const getDateSeparator = () => {
+        switch (i18n.language) {
+            case 'tr':
+                return '.';
+            case 'nl':
+                return '-';
+            case 'en':
+            default:
+                return '/';
+        }
+    };
+
+    const convertServerDateToUI = (serverDate) => {
+        if (!serverDate) return '';
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        if (dateRegex.test(serverDate)) {
+            const [year, month, day] = serverDate.split('-');
+            const separator = getDateSeparator();
+
+            switch (i18n.language) {
+                case 'tr':
+                case 'nl':
+                    return `${day}${separator}${month}${separator}${year}`;
+                case 'en':
+                default:
+                    return `${month}${separator}${day}${separator}${year}`;
+            }
+        }
+        return serverDate;
+    };
+
+    const convertUIDateToServer = (uiDate) => {
+        if (!uiDate) return '';
+
+        const separator = getDateSeparator();
+        const escapedSeparator = separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const dateRegex = new RegExp(`^\\d{2}${escapedSeparator}\\d{2}${escapedSeparator}\\d{4}$`);
+
+        if (dateRegex.test(uiDate)) {
+            const parts = uiDate.split(separator);
+            let day, month, year;
+
+            switch (i18n.language) {
+                case 'tr':
+                case 'nl':
+                    [day, month, year] = parts;
+                    break;
+                case 'en':
+                default:
+                    [month, day, year] = parts;
+                    break;
+            }
+
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        }
+        return uiDate;
+    };
+
     const handleSort = useCallback(() => {
         setSortModalVisible(true);
     }, []);
@@ -42,16 +100,6 @@ export const useFilters = () => {
     }, [filters]);
 
     const handleFilter = useCallback(() => {
-        const convertServerDateToUI = (serverDate) => {
-            if (!serverDate) return '';
-            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-            if (dateRegex.test(serverDate)) {
-                const [year, month, day] = serverDate.split('-');
-                return `${day}-${month}-${year}`;
-            }
-            return serverDate;
-        };
-
         setTempFilters({
             category: filters.category || '',
             type: filters.type || '',
@@ -70,11 +118,7 @@ export const useFilters = () => {
                 let value = tempFilters[key];
 
                 if ((key === 'startDate' || key === 'endDate') && value) {
-                    const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
-                    if (dateRegex.test(value)) {
-                        const [day, month, year] = value.split('-');
-                        value = `${year}-${month}-${day}`;
-                    }
+                    value = convertUIDateToServer(value);
                 }
 
                 cleanFilters[key] = value;

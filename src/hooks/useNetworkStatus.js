@@ -19,7 +19,7 @@ export const useNetworkStatus = () => {
                     t("network.notConnected"),
                     t("network.check"),
                     [{
-                        text: t("network.ok"),
+                        text: t("common.ok"),
                         onPress: () => setHasShownOfflineAlert(false)
                     }]
                 );

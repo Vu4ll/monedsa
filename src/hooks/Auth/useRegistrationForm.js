@@ -105,34 +105,26 @@ const useRegistrationForm = (navigation) => {
 
             if (response.success) {
                 Alert.alert(
-                    'Başarılı',
-                    'Hesabınız başarıyla oluşturuldu. Giriş yapabilirsiniz.',
-                    [{ text: 'Tamam', onPress: () => navigation.goBack() }]
+                    t("registerScreen.handleRegister.success"),
+                    t("registerScreen.handleRegister.accountCreated"),
+                    [{ text: t("common.ok"), onPress: () => navigation.goBack() }]
                 );
             } else {
-                const errorMessage = response.error || 'Kayıt olurken bir hata oluştu';
-
-                let displayMessage = errorMessage;
+                const errorMessage = response.error || t("registerScreen.handleRegister.errorMessage");
 
                 if (errorMessage.includes('username') && errorMessage.includes('already taken')) {
-                    displayMessage = 'Bu kullanıcı adı zaten kullanımda. Lütfen farklı bir kullanıcı adı seçin.';
-                    setErrors(prev => ({ ...prev, username: 'Bu kullanıcı adı zaten kullanımda' }));
+                    setErrors(prev => ({ ...prev, username: t("registerScreen.handleRegister.usernameTaken") }));
                 } else if (errorMessage.includes('email') && errorMessage.includes('already registered')) {
-                    displayMessage = 'Bu e-posta adresi zaten kayıtlı. Lütfen farklı bir e-posta adresi kullanın.';
-                    setErrors(prev => ({ ...prev, email: 'Bu e-posta adresi zaten kayıtlı' }));
+                    setErrors(prev => ({ ...prev, email: t("registerScreen.handleRegister.emailTaken") }));
                 } else if (errorMessage.includes('User already exists')) {
-                    displayMessage = 'Bu kullanıcı bilgileri zaten kayıtlı. Lütfen farklı bilgiler kullanın.';
+                    ToastAndroid.show(t("registerScreen.handleRegister.userExists"), ToastAndroid.SHORT);
                 } else if (errorMessage.includes('requests too quickly')) {
-                    displayMessage = 'Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.';
+                    ToastAndroid.show(t("registerScreen.handleRegister.ratelimit"), ToastAndroid.SHORT);
                 }
-
-                ToastAndroid.show(displayMessage, ToastAndroid.SHORT);
             }
         } catch (error) {
             console.error('Register error:', error);
-            ToastAndroid.show(
-                'Sunucu ile bağlantı kurulamadı. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.', ToastAndroid.SHORT
-            );
+            ToastAndroid.show(t("registerScreen.handleRegister.serverError"), ToastAndroid.SHORT);
         } finally {
             setLoading(false);
         }
@@ -164,13 +156,13 @@ const useRegistrationForm = (navigation) => {
 
         if (field === 'password' && value) {
             const passwordErrors = [];
-            if (value.length < 8) passwordErrors.push('en az 8 karakter');
-            if (!/(?=.*[a-z])/.test(value)) passwordErrors.push('küçük harf');
-            if (!/(?=.*[A-Z])/.test(value)) passwordErrors.push('büyük harf');
-            if (!/(?=.*\d)/.test(value)) passwordErrors.push('rakam');
+            if (value.length < 8) passwordErrors.push(t("registerScreen.updateFormData.minLength"));
+            if (!/(?=.*[a-z])/.test(value)) passwordErrors.push(t("registerScreen.updateFormData.lowercase"));
+            if (!/(?=.*[A-Z])/.test(value)) passwordErrors.push(t("registerScreen.updateFormData.uppercase"));
+            if (!/(?=.*\d)/.test(value)) passwordErrors.push(t("registerScreen.updateFormData.number"));
 
             if (passwordErrors.length > 0) {
-                setErrors(prev => ({ ...prev, password: `Parola şunları içermeli: ${passwordErrors.join(', ')}` }));
+                setErrors(prev => ({ ...prev, password: t("registerScreen.updateFormData.passwordRules", { values: passwordErrors.join(', ') }) }));
             }
         }
 
@@ -183,8 +175,8 @@ const useRegistrationForm = (navigation) => {
 
     const openPrivacyPolicy = () => {
         Linking.openURL(`${API_CONFIG.BASE_URL}/privacy-policy?lang=${i18n.language}&redirect=/privacy-policy`).catch((err) => {
-            console.error('Link açılamadı:', err);
-            ToastAndroid.show('Gizlilik politikası açılamadı. Lütfen daha sonra tekrar deneyin.', ToastAndroid.SHORT);
+            console.error('Link cannot be opened:', err);
+            ToastAndroid.show(t("registerScreen.openPrivacyPolicy"), ToastAndroid.SHORT);
         });
     };
 

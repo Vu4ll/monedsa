@@ -22,11 +22,10 @@ export const useTransactions = (filters = {}) => {
     setLoading(true);
     setError(null);
     setIsEmpty(false);
-    
+
     try {
       const data = await transactionService.getTransaction(queryParams);
       setTransactions(data);
-      console.log("Transactions fetched");
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setIsEmpty(true);
@@ -51,12 +50,10 @@ export const useTransactions = (filters = {}) => {
     setRefreshing(true);
     setError(null);
     setIsEmpty(false);
-    // Refresh sırasında mevcut transactions'ı temizleme
-    
+
     try {
       const data = await transactionService.getTransaction(queryParams);
       setTransactions(data);
-      console.log("Transactions refreshed");
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setIsEmpty(true);
@@ -77,7 +74,6 @@ export const useTransactions = (filters = {}) => {
     fetchTransactions(filters);
   }, []);
 
-  // Filters değiştiğinde yeniden veri çek
   useEffect(() => {
     if (Object.keys(filters).length > 0) {
       fetchTransactions(filters);

@@ -161,7 +161,109 @@
             "acceptPrivacyPolicy": "Gizlilik politikasını kabul etmelisiniz"
         },
         "handleRegister": {
-
+            "success": "Başarılı",
+            "accountCreated": "Hesabınız başarıyla oluşturuldu. Giriş yapabilirsiniz",
+            "errorMessage": "Kayıt olurken bir hata oluştu",
+            "usernameTaken": "Bu kullanıcı adı zaten alınmış",
+            "emailTaken": "Bu e-posta adresi zaten kayıtlı",
+            "userExists": "Bu kullanıcı bilgileri zaten kayıtlı. Lütfen farklı bilgiler kullanın.",
+            "ratelimit": "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.",
+            "serverError": "Sunucu ile bağlantı kurulamadı. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyiniz."
+        },
+        "updateFormData": {
+            "minLength": "en az 8 karakter",
+            "lowercase": "küçük harf",
+            "uppercase": "büyük harf",
+            "number": "rakam",
+            "passwordRules": "Parola şunları içermeli: {{values}}"
+        },
+        "openPrivacyPolicy": "Gizlilik politikası açılamadı. Lütfen daha sonra tekrar deneyiniz."
+    },
+    "profileScreen": {
+        "header": "Profil",
+        "loading": "Profil bilgileri yükleniyor...",
+        "userInfo": {
+            "title": "Hesap bilgileri",
+            "username": "Kullanıcı adı",
+            "email": "E-posta",
+            "joinDate": "Kayıt tarihi"
+        },
+        "stats": {
+            "title": "İstatistikler",
+            "totalIncomes": "Toplam gelir sayısı",
+            "totalExpenses": "Toplam gider sayısı",
+            "totalTransactions": "Toplam işlem sayısı",
+            "noData": "Bulunmuyor"
+        },
+        "accountActions": {
+            "title": "Hesap işlemleri",
+            "edit": "Profili düzenle",
+            "password": "Parola değiştir"
+        },
+        "profileEditModal": {
+            "title": "Profili düzenle",
+            "name": {
+                "title": "İsim",
+                "placeholder": "İsminizi giriniz"
+            },
+            "username": {
+                "title": "Kullanıcı adı",
+                "placeholder": "Kullanıcı adınızı giriniz"
+            },
+            "email": {
+                "title": "E-posta",
+                "placeholder": "E-posta adresinizi giriniz"
+            }
+        },
+        "changePasswordModal": {
+            "title": "Parola değiştir",
+            "currentPass": {
+                "title": "Mevcut parola",
+                "placeholder": "Mevcut parolanızı giriniz"
+            },
+            "newPass": {
+                "title": "Yeni parola",
+                "placeholder": "Yeni parolanızı giriniz"
+            },
+            "newPassConfirm": {
+                "title": "Yeni parola tekrarı",
+                "placeholder": "Yeni parolanızı tekrar giriniz"
+            }
+        },
+        "loadUserProfile": {
+            "name": "Kullanıcı",
+            "username": "kullanici123",
+            "error": "Profil bilgileri yüklenirken bir hata oluştu"
+        },
+        "loadUserStats": "Profil istatistikleri yüklenirken bir hata oluştu",
+        "handleLogout": {
+            "logout": "Çıkış yap",
+            "confirm": "Hesabınızdan çıkış yapmak istediğimize emin misiniz?"
+        },
+        "validateEditForm": {
+            "name": "İsim boş olamaz",
+            "username": "Kullanıcı adı boş olamaz",
+            "usernameSpace": "Kullanıcı adı boşluk içeremez",
+            "emptyEmail": "E-posta boş olamaz",
+            "invalidEmail": "Geçerli bir e-posta adresi giriniz"
+        },
+        "validatePasswordForm": {
+            "emptyCurrent": "Mevcut parola boş olamaz",
+            "emptyNew": "Yeni parola boş olamaz",
+            "minLength": "Parola en az 8 karakter olmalı",
+            "tooLong": "Parola çok uzun",
+            "lowercase": "Parola en az bir küçük harf içermeli",
+            "uppercase": "Parola en az bir büyük harf içermeli",
+            "number": "Parola en az bir rakam içermeli",
+            "noMatch": "Parolalar eşleşmiyor"
+        },
+        "handleSaveProfile": {
+            "success": "Profil başarıyla güncellendi",
+            "error": "Profil güncellenirken bir hata oluştu"
+        },
+        "handleSavePassword": {
+            "success": "Parola başarıyla değiştirildi",
+            "error": "Parola değiştirilirken bir hata oluştu"
         }
     },
     "settingsScreen": {
@@ -262,7 +364,12 @@
     },
     "network": {
         "notConnected": "İnternet bağlantısı yok",
-        "check": "Lütfen internet bağlantınızı kontrol edin.",
-        "ok": "Tamam"
+        "check": "Lütfen internet bağlantınızı kontrol edin."
+    },
+    "common": {
+        "ok": "Tamam",
+        "save": "Kaydet",
+        "change": "Değiştir",
+        "cancel": "İptal"
     }
 }

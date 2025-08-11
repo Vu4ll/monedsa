@@ -160,7 +160,111 @@
             },
             "acceptPrivacyPolicy": "You must accept the privacy policy"
         },
-        "handleRegister": {}
+        "handleRegister": {
+            "success": "Successful",
+            "accountCreated": "Your account has been successfully created. You can log in now",
+            "errorMessage": "An error occurred during registration",
+            "usernameTaken": "This username is already taken",
+            "emailTaken": "This email address is already registered",
+            "userExists": "This user information is already registered. Please use different information.",
+            "ratelimit": "You have made too many attempts, please try again later.",
+            "serverError": "Unable to connect to the server. Please check your internet connection and try again."
+        },
+        "updateFormData": {
+            "minLength": "at least 8 characters",
+            "lowercase": "lowercase letters",
+            "uppercase": "uppercase letters",
+            "number": "number",
+            "passwordRules": "Password must contain: {{values}}"
+        },
+        "openPrivacyPolicy": "Privacy policy could not be opened. Please try again later."
+    },
+    "profileScreen": {
+        "header": "Profile",
+        "loading": "Loading profile information...",
+        "userInfo": {
+            "title": "Account information",
+            "username": "Username",
+            "email": "Email",
+            "joinDate": "Registration date"
+        },
+        "stats": {
+            "title": "Statistics",
+            "totalIncomes": "Total income count",
+            "totalExpenses": "Total expense count",
+            "totalTransactions": "Total transaction count",
+            "noData": "Not available"
+        },
+        "accountActions": {
+            "title": "Account actions",
+            "edit": "Edit profile",
+            "password": "Change password"
+        },
+        "profileEditModal": {
+            "title": "Edit profile",
+            "name": {
+                "title": "Name",
+                "placeholder": "Enter your name"
+            },
+            "username": {
+                "title": "Username",
+                "placeholder": "Enter your username"
+            },
+            "email": {
+                "title": "Email",
+                "placeholder": "Enter your email address"
+            }
+        },
+        "changePasswordModal": {
+            "title": "Change password",
+            "currentPass": {
+                "title": "Current password",
+                "placeholder": "Enter your current password"
+            },
+            "newPass": {
+                "title": "New password",
+                "placeholder": "Enter your new password"
+            },
+            "newPassConfirm": {
+                "title": "Confirm new password",
+                "placeholder": "Enter your new password again"
+            }
+        },
+        "loadUserProfile": {
+            "name": "User",
+            "username": "user123",
+            "error": "An error occurred while loading profile information"
+        },
+        "loadUserStats": "An error occurred while loading profile statistics",
+        "handleLogout": {
+            "logout": "Log out",
+            "confirm": "Are you sure you want to log out of your account?"
+        },
+        "validateEditForm": {
+            "name": "Name cannot be empty",
+            "username": "Username cannot be empty",
+            "usernameSpace": "Username cannot contain spaces",
+            "emptyEmail": "Email cannot be empty",
+            "invalidEmail": "Please enter a valid email address"
+        },
+        "validatePasswordForm": {
+            "emptyCurrent": "Current password cannot be empty",
+            "emptyNew": "New password cannot be empty",
+            "minLength": "Password must be at least 8 characters long",
+            "tooLong": "Password is too long",
+            "lowercase": "Password must contain at least one lowercase letter",
+            "uppercase": "Password must contain at least one uppercase letter",
+            "number": "Password must contain at least one number",
+            "noMatch": "Passwords do not match"
+        },
+        "handleSaveProfile": {
+            "success": "Profile successfully updated",
+            "error": "An error occurred while updating the profile"
+        },
+        "handleSavePassword": {
+            "success": "Password successfully changed",
+            "error": "An error occurred while changing the password"
+        }
     },
     "settingsScreen": {
         "header": "Settings",
@@ -260,7 +364,12 @@
     },
     "network": {
         "notConnected": "No internet connection",
-        "check": "Please check your internet connection.",
-        "ok": "OK"
+        "check": "Please check your internet connection."
+    },
+    "common": {
+        "ok": "OK",
+        "save": "Save",
+        "change": "Change",
+        "cancel": "Cancel"
     }
 }

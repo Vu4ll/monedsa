@@ -14,6 +14,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { categoryService } from '../services';
 import { useTranslation } from 'react-i18next';
+import { formatDate } from '../utils';
 
 const FilterModal = ({
     visible,
@@ -76,16 +77,65 @@ const FilterModal = ({
         setTempFilters(prev => ({ ...prev, category: '' }));
     };
 
+    const getDateFormat = () => {
+        switch (i18n.language) {
+            case 'tr':
+                return 'DD.MM.YYYY';
+            case 'nl':
+                return 'DD-MM-YYYY';
+            case 'en':
+            default:
+                return 'MM/DD/YYYY';
+        }
+    };
+
+    const getDateSeparator = () => {
+        switch (i18n.language) {
+            case 'tr':
+                return '.';
+            case 'nl':
+                return '-';
+            case 'en':
+            default:
+                return '/';
+        }
+    };
+
     const formatDateToString = (date) => {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
+        const separator = getDateSeparator();
+
+        switch (i18n.language) {
+            case 'tr':
+            case 'nl':
+                return `${day}${separator}${month}${separator}${year}`;
+            case 'en':
+            default:
+                return `${month}${separator}${day}${separator}${year}`;
+        }
     };
 
     const parseStringToDate = (dateString) => {
         if (!dateString || !validateDateFormat(dateString)) return new Date();
-        const [day, month, year] = dateString.split('-');
+
+        const separator = getDateSeparator();
+        const parts = dateString.split(separator);
+
+        let day, month, year;
+
+        switch (i18n.language) {
+            case 'tr':
+            case 'nl':
+                [day, month, year] = parts;
+                break;
+            case 'en':
+            default:
+                [month, day, year] = parts;
+                break;
+        }
+
         return new Date(year, month - 1, day);
     };
 
@@ -130,10 +180,26 @@ const FilterModal = ({
     };
 
     const validateDateFormat = (dateString) => {
-        const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+        const separator = getDateSeparator();
+        const escapedSeparator = separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const dateRegex = new RegExp(`^\\d{2}${escapedSeparator}\\d{2}${escapedSeparator}\\d{4}$`);
+
         if (!dateRegex.test(dateString)) return false;
 
-        const [day, month, year] = dateString.split('-');
+        const parts = dateString.split(separator);
+        let day, month, year;
+
+        switch (i18n.language) {
+            case 'tr':
+            case 'nl':
+                [day, month, year] = parts;
+                break;
+            case 'en':
+            default:
+                [month, day, year] = parts;
+                break;
+        }
+
         const date = new Date(year, month - 1, day);
         return date instanceof Date && !isNaN(date) &&
             date.getDate() == day &&
@@ -143,10 +209,16 @@ const FilterModal = ({
 
     const getTodayString = () => {
         const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const year = today.getFullYear();
-        return `${day}-${month}-${year}`;
+        return formatDateToString(today);
+    };
+
+    const getDateExample = () => {
+        const today = new Date();
+        return formatDateToString(today);
+    };
+
+    const getDatePlaceholder = () => {
+        return t("homeScreen.filterModal.eg", { date: getDateExample() });
     };
 
     const getFilteredCategories = () => {
@@ -508,14 +580,17 @@ const FilterModal = ({
                         <View style={styles.dateInputContainer}>
                             <Text style={styles.dateLabel}>{t("homeScreen.filterModal.startDate")}</Text>
                             <TouchableOpacity
-                                style={styles.dateInputWrapper}
+                                style={[
+                                    styles.dateInputWrapper,
+                                    tempFilters.startDate && !validateDateFormat(tempFilters.startDate) && styles.invalidDate
+                                ]}
                                 onPress={openStartDatePicker}
                             >
                                 <Text style={[
                                     styles.dateTextInput,
                                     !tempFilters.startDate && styles.datePlaceholder
                                 ]}>
-                                    {tempFilters.startDate || t("homeScreen.filterModal.eg", { date: getTodayString() })}
+                                    {tempFilters.startDate || getDatePlaceholder()}
                                 </Text>
                                 <Icon name="date-range" size={20} color={colors.textSecondary} style={styles.dateIcon} />
                             </TouchableOpacity>
@@ -524,14 +599,17 @@ const FilterModal = ({
                         <View style={styles.dateInputContainer}>
                             <Text style={styles.dateLabel}>{t("homeScreen.filterModal.endDate")}</Text>
                             <TouchableOpacity
-                                style={styles.dateInputWrapper}
+                                style={[
+                                    styles.dateInputWrapper,
+                                    tempFilters.endDate && !validateDateFormat(tempFilters.endDate) && styles.invalidDate
+                                ]}
                                 onPress={openEndDatePicker}
                             >
                                 <Text style={[
                                     styles.dateTextInput,
                                     !tempFilters.endDate && styles.datePlaceholder
                                 ]}>
-                                    {tempFilters.endDate || t("homeScreen.filterModal.eg", { date: getTodayString() })}
+                                    {tempFilters.endDate || getDatePlaceholder()}
                                 </Text>
                                 <Icon name="date-range" size={20} color={colors.textSecondary} style={styles.dateIcon} />
                             </TouchableOpacity>

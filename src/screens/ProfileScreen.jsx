@@ -17,8 +17,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from "../contexts/ThemeContext";
 import { authService } from '../services';
 import { Header } from '../components';
+import { useTranslation } from 'react-i18next';
 
 const ProfileScreen = ({ navigation, onLogout }) => {
+    const { t, i18n } = useTranslation();
+    const localeMap = { tr: 'tr-TR', en: 'en-US', nl: 'nl-NL' };
     const { isDarkMode, colors } = useTheme();
     const [userInfo, setUserInfo] = useState(null);
     const [userStats, setUserStats] = useState(null);
@@ -40,7 +43,6 @@ const ProfileScreen = ({ navigation, onLogout }) => {
     });
     const [formErrors, setFormErrors] = useState({});
 
-    // Refs for input navigation
     const usernameRef = React.useRef();
     const emailRef = React.useRef();
     const newPasswordRef = React.useRef();
@@ -68,21 +70,19 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                     email: profileData.email,
                     username: profileData.username,
                     role: profileData.role,
-                    joinDate: new Date(profileData.createdAt).toLocaleDateString('tr-TR')
+                    joinDate: new Date(profileData.createdAt).toLocaleDateString(localeMap[i18n.language] || 'en-US')
                 });
             } else {
-                Alert.alert('Hata', result.error);
                 setUserInfo({
-                    name: 'Kullanıcı',
+                    name: t("profileScreen.loadUserProfile.name"),
                     email: 'email@example.com',
-                    username: 'kullanici123',
-                    role: 'user',
-                    joinDate: '01.01.2025'
+                    username: t("profileScreen.loadUserProfile.username"),
+                    joinDate: new Date("2025-01-01").toLocaleDateString(localeMap[i18n.language] || 'en-US')
                 });
             }
         } catch (error) {
-            console.error('Profil yükleme hatası:', error);
-            Alert.alert('Hata', 'Profil bilgileri yüklenirken bir hata oluştu');
+            console.error('Profile data error', error);
+            ToastAndroid.show(t("profileScreen.loadUserProfile.error"), ToastAndroid.SHORT);
         } finally {
             setLoading(false);
         }
@@ -92,8 +92,8 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         try {
             setLoading(true);
             const result = await authService.getStats();
-
             const statData = result.data;
+
             if (result.success) {
                 setUserStats({
                     totalIncomes: statData?.transactions?.income,
@@ -101,16 +101,15 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                     totalTransactions: statData?.transactions?.total,
                 });
             } else {
-                console.error('İstatistik yükleme hatası:', result.error);
                 setUserStats({
-                    totalIncomes: "Bulunmuyor",
-                    totalExpenses: "Bulunmuyor",
-                    totalTransactions: "Bulunmuyor",
+                    totalIncomes: t("profileScreen.stats.noData"),
+                    totalExpenses: t("profileScreen.stats.noData"),
+                    totalTransactions: t("profileScreen.stats.noData"),
                 });
             }
         } catch (error) {
-            console.error('Profil istatistik hatası:', error);
-            Alert.alert('Hata', 'Profil istatistikleri yüklenirken bir hata oluştu');
+            console.error('Profile stats error:', error);
+            ToastAndroid.show(t("profileScreen.loadUserStats"), ToastAndroid.SHORT);
         } finally {
             setLoading(false);
         }
@@ -118,12 +117,12 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
     const handleLogout = async () => {
         Alert.alert(
-            'Çıkış',
-            'Hesabınızdan çıkış yapmak istediğimize emin misiniz?',
+            t("profileScreen.handleLogout.logout"),
+            t("profileScreen.handleLogout.confirm"),
             [
-                { text: 'İptal', style: 'cancel' },
+                { text: t("common.cancel"), style: 'cancel' },
                 {
-                    text: 'Çıkış Yap',
+                    text: t("profileScreen.handleLogout.logout"),
                     style: 'destructive',
                     onPress: async () => {
                         await authService.logout();
@@ -158,21 +157,21 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         const errors = {};
 
         if (!editFormData.name.trim()) {
-            errors.name = 'İsim boş olamaz';
+            errors.name = t("profileScreen.validateEditForm.name");
         }
 
         if (!editFormData.username.trim()) {
-            errors.username = 'Kullanıcı adı boş olamaz';
+            errors.username = t("profileScreen.validateEditForm.username");
         }
 
         if (editFormData.username.trim().split(" ").length > 1) {
-            errors.username = 'Kullanıcı adı boşluk içeremez';
+            errors.username = t("profileScreen.validateEditForm.usernameSpace");
         }
 
         if (!editFormData.email.trim()) {
-            errors.email = 'E-posta boş olamaz';
+            errors.email = t("profileScreen.validateEditForm.emptyEmail");
         } else if (!/\S+@\S+\.\S+/.test(editFormData.email)) {
-            errors.email = 'Geçerli bir e-posta adresi girin';
+            errors.email = t("profileScreen.validateEditForm.invalidEmail");
         }
 
         setFormErrors(errors);
@@ -183,25 +182,25 @@ const ProfileScreen = ({ navigation, onLogout }) => {
         const errors = {};
 
         if (!passwordFormData.currentPassword) {
-            errors.currentPassword = 'Mevcut parola boş olamaz';
+            errors.currentPassword = t("profileScreen.validatePasswordForm.emptyCurrent");
         }
 
         if (!passwordFormData.newPassword) {
-            errors.newPassword = 'Yeni parola boş olamaz';
+            errors.newPassword = t("profileScreen.validatePasswordForm.emptyNew");
         } else if (passwordFormData.newPassword.length < 8) {
-            errors.newPassword = 'Parola en az 8 karakter olmalı';
+            errors.newPassword = t("profileScreen.validatePasswordForm.minLength");
         } else if (passwordFormData.newPassword.length > 100) {
-            errors.newPassword = 'Parola çok uzun';
+            errors.newPassword = t("profileScreen.validatePasswordForm.tooLong");
         } else if (!/(?=.*[a-z])/.test(passwordFormData.newPassword)) {
-            errors.newPassword = 'Parola en az bir küçük harf içermeli';
+            errors.newPassword = t("profileScreen.validatePasswordForm.lowercase");
         } else if (!/(?=.*[A-Z])/.test(passwordFormData.newPassword)) {
-            errors.newPassword = 'Parola en az bir büyük harf içermeli';
+            errors.newPassword = t("profileScreen.validatePasswordForm.uppercase");
         } else if (!/(?=.*\d)/.test(passwordFormData.newPassword)) {
-            errors.newPassword = 'Parola en az bir rakam içermeli';
+            errors.newPassword = t("profileScreen.validatePasswordForm.number");
         }
 
         if (passwordFormData.newPassword !== passwordFormData.confirmPassword) {
-            errors.confirmPassword = 'Parolalar uyuşmuyor';
+            errors.confirmPassword = t("profileScreen.validatePasswordForm.noMatch");
         }
 
         setFormErrors(errors);
@@ -222,13 +221,14 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                     email: result.data.email
                 }));
                 setEditModalVisible(false);
-                ToastAndroid.show('Profil başarıyla güncellendi', ToastAndroid.SHORT);
+                ToastAndroid.show(t("profileScreen.handleSaveProfile.success"), ToastAndroid.SHORT);
             } else {
+                // authService düzenlendiğinde burayı unutma
                 if (result.error.includes("Herhangi bir değişiklik")) setEditModalVisible(false);
                 ToastAndroid.show(result.error, ToastAndroid.SHORT);
             }
         } catch (error) {
-            ToastAndroid.show('Profil güncellenirken bir hata oluştu', ToastAndroid.SHORT);
+            ToastAndroid.show(t("profileScreen.handleSaveProfile.error"), ToastAndroid.SHORT);
         }
     };
 
@@ -243,13 +243,13 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
             if (result.success) {
                 setPasswordModalVisible(false);
-                ToastAndroid.show('Parola başarıyla değiştirildi', ToastAndroid.SHORT);
+                ToastAndroid.show(t("profileScreen.handleSavePassword.success"), ToastAndroid.SHORT);
             } else {
                 setPasswordModalVisible(false);
                 ToastAndroid.show(result.error, ToastAndroid.SHORT);
             }
         } catch (error) {
-            ToastAndroid.show('Parola değiştirilirken bir hata oluştu', ToastAndroid.SHORT);
+            ToastAndroid.show(t("profileScreen.handleSavePassword.error"), ToastAndroid.SHORT);
         }
     };
 
@@ -481,7 +481,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
             <Header
                 colors={colors}
-                title="Profil"
+                title={t("profileScreen.header")}
                 showLeftAction={true}
                 onLeftActionPress={() => navigation.goBack()}
                 showRightAction={true}
@@ -493,7 +493,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
             {loading ? (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color={colors.primary} />
-                    <Text style={styles.loadingText}>Profil bilgileri yükleniyor...</Text>
+                    <Text style={styles.loadingText}>{t("profileScreen.loading")}</Text>
                 </View>
             ) : (
                 <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -513,62 +513,62 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                     </View>
 
                     <View style={styles.infoSection}>
-                        <Text style={styles.sectionTitle}>Hesap Bilgileri</Text>
+                        <Text style={styles.sectionTitle}>{t("profileScreen.userInfo.title")}</Text>
 
                         <View style={styles.infoRow}>
-                            <Text style={styles.infoLabel}>Kullanıcı Adı</Text>
-                            <Text style={styles.infoValue}>{userInfo?.username || 'kullanici123'}</Text>
+                            <Text style={styles.infoLabel}>{t("profileScreen.userInfo.username")}</Text>
+                            <Text style={styles.infoValue}>{userInfo?.username || 'user123'}</Text>
                         </View>
 
                         <View style={styles.infoRow}>
-                            <Text style={styles.infoLabel}>E-posta</Text>
+                            <Text style={styles.infoLabel}>{t("profileScreen.userInfo.email")}</Text>
                             <Text style={styles.infoValue}>{userInfo?.email || 'email@example.com'}</Text>
                         </View>
 
                         <View style={[styles.infoRow, styles.lastInfoRow]}>
-                            <Text style={styles.infoLabel}>Üyelik Tarihi</Text>
-                            <Text style={styles.infoValue}>{userInfo?.joinDate || '01.01.2024'}</Text>
+                            <Text style={styles.infoLabel}>{t("profileScreen.userInfo.joinDate")}</Text>
+                            <Text style={styles.infoValue}>{userInfo?.joinDate || '01.01.2025'}</Text>
                         </View>
                     </View>
 
                     <View style={styles.infoSection}>
-                        <Text style={styles.sectionTitle}>İstatistikler</Text>
+                        <Text style={styles.sectionTitle}>{t("profileScreen.stats.title")}</Text>
 
                         <View style={styles.infoRow}>
-                            <Text style={styles.infoLabel}>Toplam Gelir Sayısı</Text>
-                            <Text style={styles.infoValue}>{userStats?.totalIncomes || "Bulunmuyor"}</Text>
+                            <Text style={styles.infoLabel}>{t("profileScreen.stats.totalIncomes")}</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalIncomes || t("profileScreen.stats.noData")}</Text>
                         </View>
 
                         <View style={styles.infoRow}>
-                            <Text style={styles.infoLabel}>Toplam Gider Sayısı</Text>
-                            <Text style={styles.infoValue}>{userStats?.totalExpenses || "Bulunmuyor"}</Text>
+                            <Text style={styles.infoLabel}>{t("profileScreen.stats.totalExpenses")}</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalExpenses || t("profileScreen.stats.noData")}</Text>
                         </View>
 
                         <View style={[styles.infoRow, styles.lastInfoRow]}>
-                            <Text style={styles.infoLabel}>Toplam İşlem Sayısı</Text>
-                            <Text style={styles.infoValue}>{userStats?.totalTransactions || "Bulunmuyor"}</Text>
+                            <Text style={styles.infoLabel}>{t("profileScreen.stats.totalTransactions")}</Text>
+                            <Text style={styles.infoValue}>{userStats?.totalTransactions || t("profileScreen.stats.noData")}</Text>
                         </View>
                     </View>
 
                     <View style={styles.actionSection}>
-                        <Text style={styles.sectionTitle}>Hesap İşlemleri</Text>
+                        <Text style={styles.sectionTitle}>{t("profileScreen.accountActions.title")}</Text>
 
                         <TouchableOpacity style={styles.actionButton} onPress={handleEditProfile}>
                             <Icon name="edit" size={24} color={colors.textSecondary} style={styles.actionIcon} />
-                            <Text style={styles.actionText}>Profili Düzenle</Text>
+                            <Text style={styles.actionText}>{t("profileScreen.accountActions.edit")}</Text>
                             <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                         </TouchableOpacity>
 
                         <TouchableOpacity style={[styles.actionButton, styles.lastActionButton]} onPress={handleChangePassword}>
                             <Icon name="security" size={24} color={colors.textSecondary} style={styles.actionIcon} />
-                            <Text style={styles.actionText}>Parola Değiştir</Text>
+                            <Text style={styles.actionText}>{t("profileScreen.accountActions.password")}</Text>
                             <Icon name="chevron-right" size={24} color={colors.textSecondary} />
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
             )}
 
-            {/* Profil Düzenleme Modal */}
+            {/* Profile edit modal */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -578,7 +578,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Profili Düzenle</Text>
+                            <Text style={styles.modalTitle}>{t("profileScreen.profileEditModal.title")}</Text>
                             <TouchableOpacity
                                 onPress={() => setEditModalVisible(false)}
                                 style={styles.modalCloseButton}
@@ -589,12 +589,12 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
                         <ScrollView style={styles.modalContent}>
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>İsim</Text>
+                                <Text style={styles.inputLabel}>{t("profileScreen.profileEditModal.name.title")}</Text>
                                 <TextInput
                                     style={[styles.input, formErrors.name && styles.inputError]}
                                     value={editFormData.name}
                                     onChangeText={(text) => setEditFormData(prev => ({ ...prev, name: text }))}
-                                    placeholder="İsminizi girin"
+                                    placeholder={t("profileScreen.profileEditModal.name.placeholder")}
                                     placeholderTextColor={colors.textSecondary}
                                     returnKeyType="next"
                                     onSubmitEditing={() => usernameRef.current?.focus()}
@@ -603,13 +603,13 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             </View>
 
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Kullanıcı Adı</Text>
+                                <Text style={styles.inputLabel}>{t("profileScreen.profileEditModal.username.title")}</Text>
                                 <TextInput
                                     ref={usernameRef}
                                     style={[styles.input, formErrors.username && styles.inputError]}
                                     value={editFormData.username}
                                     onChangeText={(text) => setEditFormData(prev => ({ ...prev, username: text.toLowerCase() }))}
-                                    placeholder="Kullanıcı adınızı girin"
+                                    placeholder={t("profileScreen.profileEditModal.username.placeholder")}
                                     placeholderTextColor={colors.textSecondary}
                                     returnKeyType="next"
                                     onSubmitEditing={() => emailRef.current?.focus()}
@@ -618,13 +618,13 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             </View>
 
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>E-posta</Text>
+                                <Text style={styles.inputLabel}>{t("profileScreen.profileEditModal.email.title")}</Text>
                                 <TextInput
                                     ref={emailRef}
                                     style={[styles.input, formErrors.email && styles.inputError]}
                                     value={editFormData.email}
                                     onChangeText={(text) => setEditFormData(prev => ({ ...prev, email: text }))}
-                                    placeholder="E-posta adresinizi girin"
+                                    placeholder={t("profileScreen.profileEditModal.email.placeholder")}
                                     placeholderTextColor={colors.textSecondary}
                                     keyboardType="email-address"
                                     autoCapitalize="none"
@@ -639,7 +639,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                                     style={styles.saveButton}
                                     onPress={handleSaveProfile}
                                 >
-                                    <Text style={styles.saveButtonText}>Kaydet</Text>
+                                    <Text style={styles.saveButtonText}>{t("common.save")}</Text>
                                 </TouchableOpacity>
                             </View>
                         </ScrollView>
@@ -647,7 +647,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 </View>
             </Modal>
 
-            {/* Parola Değiştirme Modal */}
+            {/* Change password modal */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -657,7 +657,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContainer}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Parola Değiştir</Text>
+                            <Text style={styles.modalTitle}>{t("profileScreen.changePasswordModal.title")}</Text>
                             <TouchableOpacity
                                 onPress={() => setPasswordModalVisible(false)}
                                 style={styles.modalCloseButton}
@@ -668,13 +668,13 @@ const ProfileScreen = ({ navigation, onLogout }) => {
 
                         <ScrollView style={styles.modalContent}>
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Mevcut Parola</Text>
+                                <Text style={styles.inputLabel}>{t("profileScreen.changePasswordModal.currentPass.title")}</Text>
                                 <View style={[styles.passwordInputWrapper, formErrors.currentPassword && styles.inputError]}>
                                     <TextInput
                                         style={styles.passwordInput}
                                         value={passwordFormData.currentPassword}
                                         onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, currentPassword: text }))}
-                                        placeholder="Mevcut parolanızı girin"
+                                        placeholder={t("profileScreen.changePasswordModal.currentPass.placeholder")}
                                         placeholderTextColor={colors.textSecondary}
                                         secureTextEntry={!showCurrentPassword}
                                         returnKeyType="next"
@@ -696,14 +696,14 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             </View>
 
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Yeni Parola</Text>
+                                <Text style={styles.inputLabel}>{t("profileScreen.changePasswordModal.newPass.title")}</Text>
                                 <View style={[styles.passwordInputWrapper, formErrors.newPassword && styles.inputError]}>
                                     <TextInput
                                         ref={newPasswordRef}
                                         style={styles.passwordInput}
                                         value={passwordFormData.newPassword}
                                         onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, newPassword: text }))}
-                                        placeholder="Yeni parolanızı girin"
+                                        placeholder={t("profileScreen.changePasswordModal.newPass.placeholder")}
                                         placeholderTextColor={colors.textSecondary}
                                         secureTextEntry={!showNewPassword}
                                         returnKeyType="next"
@@ -725,14 +725,14 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             </View>
 
                             <View style={styles.inputContainer}>
-                                <Text style={styles.inputLabel}>Yeni Parola Tekrar</Text>
+                                <Text style={styles.inputLabel}>{t("profileScreen.changePasswordModal.newPassConfirm.title")}</Text>
                                 <View style={[styles.passwordInputWrapper, formErrors.confirmPassword && styles.inputError]}>
                                     <TextInput
                                         ref={confirmPasswordRef}
                                         style={styles.passwordInput}
                                         value={passwordFormData.confirmPassword}
                                         onChangeText={(text) => setPasswordFormData(prev => ({ ...prev, confirmPassword: text }))}
-                                        placeholder="Yeni parolanızı tekrar girin"
+                                        placeholder={t("profileScreen.changePasswordModal.newPassConfirm.placeholder")}
                                         placeholderTextColor={colors.textSecondary}
                                         secureTextEntry={!showConfirmNewPassword}
                                         returnKeyType="done"
@@ -758,7 +758,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                                     style={styles.saveButton}
                                     onPress={handleSavePassword}
                                 >
-                                    <Text style={styles.saveButtonText}>Değiştir</Text>
+                                    <Text style={styles.saveButtonText}>{t("common.change")}</Text>
                                 </TouchableOpacity>
                             </View>
                         </ScrollView>

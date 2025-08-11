@@ -160,7 +160,111 @@
             },
             "acceptPrivacyPolicy": "U moet het privacybeleid accepteren"
         },
-        "handleRegister": {}
+        "handleRegister": {
+            "success": "Succesvol",
+            "accountCreated": "Uw account is succesvol aangemaakt. U kunt nu inloggen",
+            "errorMessage": "Er is een fout opgetreden tijdens het registreren",
+            "usernameTaken": "Deze gebruikersnaam is al in gebruik",
+            "emailTaken": "Dit e-mailadres is al geregistreerd",
+            "userExists": "Deze gebruikersgegevens zijn al geregistreerd. Gebruik andere gegevens.",
+            "ratelimit": "U hebt te veel pogingen gedaan, probeer het later opnieuw.",
+            "serverError": "Er kon geen verbinding worden gemaakt met de server. Controleer uw internetverbinding en probeer het opnieuw."
+        },
+        "updateFormData": {
+            "minLength": "minimaal 8 tekens",
+            "lowercase": "kleine letters",
+            "uppercase": "hoofdletters",
+            "number": "cijfer",
+            "passwordRules": "Het wachtwoord moet het volgende bevatten: {{values}}"
+        },
+        "openPrivacyPolicy": "Het privacybeleid kan niet worden geopend. Probeer het later opnieuw."
+    },
+    "profileScreen": {
+        "header": "Profiel",
+        "loading": "Profielgegevens worden geladen...",
+        "userInfo": {
+            "title": "Accountgegevens",
+            "username": "Gebruikersnaam",
+            "email": "E-mailadres",
+            "joinDate": "Registratiedatum"
+        },
+        "stats": {
+            "title": "Statistieken",
+            "totalIncomes": "Totaal aantal inkomsten",
+            "totalExpenses": "Totaal aantal uitgaven",
+            "totalTransactions": "Totaal aantal transacties",
+            "noData": "Niet beschikbaar"
+        },
+        "accountActions": {
+            "title": "Accountacties",
+            "edit": "Profiel bewerken",
+            "password": "Wachtwoord wijzigen"
+        },
+        "profileEditModal": {
+            "title": "Profiel bewerken",
+            "name": {
+                "title": "Naam",
+                "placeholder": "Voer uw naam in"
+            },
+            "username": {
+                "title": "Gebruikersnaam",
+                "placeholder": "Voer uw gebruikersnaam in"
+            },
+            "email": {
+                "title": "E-mail",
+                "placeholder": "Voer uw e-mailadres in"
+            }
+        },
+        "changePasswordModal": {
+            "title": "Wachtwoord wijzigen",
+            "currentPass": {
+                "title": "Huidig wachtwoord",
+                "placeholder": "Voer uw huidige wachtwoord in"
+            },
+            "newPass": {
+                "title": "Nieuw wachtwoord",
+                "placeholder": "Voer uw nieuwe wachtwoord in"
+            },
+            "newPassConfirm": {
+                "title": "Herhaal nieuw wachtwoord",
+                "placeholder": "Voer uw nieuwe wachtwoord opnieuw in"
+            }
+        },
+        "loadUserProfile": {
+            "name": "Gebruiker",
+            "username": "gebruiker123",
+            "error": "Er is een fout opgetreden tijdens het laden van de profielgegevens"
+        },
+        "loadUserStats": "Er is een fout opgetreden tijdens het laden van de profielstatistieken",
+        "handleLogout": {
+            "logout": "Uitloggen",
+            "confirm": "Weet u zeker dat u wilt uitloggen?"
+        },
+        "validateEditForm": {
+            "name": "Naam mag niet leeg zijn",
+            "username": "Gebruikersnaam mag niet leeg zijn",
+            "usernameSpace": "Gebruikersnaam mag geen spaties bevatten",
+            "emptyEmail": "E-mailadres mag niet leeg zijn",
+            "invalidEmail": "Voer een geldig e-mailadres in"
+        },
+        "validatePasswordForm": {
+            "emptyCurrent": "Huidig wachtwoord mag niet leeg zijn",
+            "emptyNew": "Nieuw wachtwoord mag niet leeg zijn",
+            "minLength": "Wachtwoord moet minimaal 8 tekens bevatten",
+            "tooLong": "Wachtwoord is te lang",
+            "lowercase": "Het wachtwoord moet ten minste één kleine letter bevatten",
+            "uppercase": "Het wachtwoord moet ten minste één hoofdletter bevatten",
+            "number": "Het wachtwoord moet ten minste één cijfer bevatten",
+            "noMatch": "De wachtwoorden komen niet overeen"
+        },
+        "handleSaveProfile": {
+            "success": "Profiel is succesvol bijgewerkt",
+            "error": "Er is een fout opgetreden tijdens het bijwerken van het profiel"
+        },
+        "handleSavePassword": {
+            "success": "Wachtwoord is succesvol gewijzigd",
+            "error": "Er is een fout opgetreden tijdens het wijzigen van het wachtwoord"
+        }
     },
     "settingsScreen": {
         "header": "Instellingen",
@@ -260,7 +364,12 @@
     },
     "network": {
         "notConnected": "Geen internetverbinding",
-        "check": "Controleer uw internetverbinding.",
-        "ok": "Oké"
+        "check": "Controleer uw internetverbinding."
+    },
+    "common": {
+        "ok": "Oké",
+        "save": "Opslaan",
+        "change": "Wijzigen",
+        "cancel": "Annuleren"
     }
 }
