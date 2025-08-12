@@ -19,7 +19,7 @@
             "date": "Date range",
             "startDate": "Start date",
             "endDate": "End date",
-            "eg": "e.g.: {{date}}",
+            "eg": "e.g. {{date}}",
             "quick": {
                 "title": "Quick selection:",
                 "today": "Today",
@@ -461,6 +461,73 @@
             },
             "donate": "Make a donation",
             "rateApp": "Rate the app"
+        }
+    },
+    "authService": {
+        "serverError": "Server error. Please try again later.",
+        "network": "Internet connection error",
+        "unexpected": "An unexpected error occurred",
+        "unauthorized": "You do not have permission for this operation",
+        "sessionExpired": "Session has expired",
+        "ratelimit": "You have made too many attempts, please try again later.",
+        "register": {
+            "fail": "Registration failed",
+            "invalidData": "Invalid data entry",
+            "alreadyRegistered": "This information is already registered",
+            "dataValidation": "Data validation error"
+        },
+        "login": {
+            "fail": "Login failed",
+            "network": "Connection error"
+        },
+        "googleLogin": {
+            "fail": "Google login failed"
+        },
+        "_authenticatedFetch": {
+            "tokenNotFound": "Access token not found",
+            "sessionExpired": "Session expired, please log in again."
+        },
+        "getProfile": {
+            "fail": "Profile information could not be retrieved"
+        },
+        "getStats": {
+            "fail": "Profile statistics could not be retrieved"
+        },
+        "updateProfile": {
+            "fail": "Profile could not be updated",
+            "noChanges": " changes were found, so the operation was canceled.",
+            "usernameTaken": "This username is already in use. Please choose a different username."
+        },
+        "changePassword": {
+            "fail": "Password could not be changed",
+            "currentPass": "The specified current password is incorrect."
+        }
+    },
+    "transactionService": {
+        "ratelimit": "You have made too many attempts, please try again later.",
+        "noData": "No data",
+        "addError": "An error occurred while adding the transaction",
+        "updateError": "An error occurred while updating the transaction",
+        "deleteError": "An error occurred while deleting the transaction",
+        "getExpenseError": "An error occurred while loading expenses",
+        "getIncomeError": "An error occurred while loading income"
+    },
+    "categoryService": {
+        "ratelimit": "You have made too many attempts, please try again later.",
+        "network": "Internet connection error",
+        "nameError": "There is already a category named {{name}} of type {{type}}, please choose a different name or type.",
+        "getCategories": {
+            "fail": "Categories could not be loaded"
+        },
+        "addCategory": {
+            "fail": "Category could not be added"
+        },
+        "updateCategory": {
+            "fail": "Category could not be updated"
+        },
+        "deleteCategory": {
+            "fail": "Category could not be deleted",
+            "relatedTransactions": "The {{name}} category cannot be deleted. There are {{count}} transactions associated with this category."
         }
     },
     "navigation": {

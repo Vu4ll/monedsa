@@ -110,7 +110,7 @@
             <div class="screenshots-grid">
                 <% app.screenshots.forEach((screenshot, index)=> { %>
                     <div class="screenshot-item">
-                        <img src="<%= screenshot %>" alt="Screenshot <%= index + 1 %>">
+                        <img src="<%= app.screenshots[index] %>" alt="Screenshot <%= index + 1 %>">
                     </div>
                 <% }); %>
             </div>

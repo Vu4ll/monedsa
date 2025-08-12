@@ -61,7 +61,7 @@ const SettingsScreen = ({ navigation }) => {
                 ToastAndroid.show(t("settingsScreen.other.loadUserMail.profileData"), ToastAndroid.SHORT);
             }
         } catch (error) {
-            console.error('Emaiil load error:', error);
+            console.error('Email load error:', error);
             ToastAndroid.show(t("settingsScreen.other.loadUserMail.emailData"), ToastAndroid.SHORT);
         }
     };

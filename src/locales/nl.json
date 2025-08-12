@@ -6,7 +6,7 @@
             "amount-desc": "Op bedrag (Hoog → Laag)",
             "amount-asc": "Op bedrag (Laag → Hoog)",
             "title": "Rangschikking",
-            "sectionTitle": "Rangschikkings criterium"
+            "sectionTitle": "Rangschikkingscriterium"
         },
         "filterModal": {
             "filter": "Filters",
@@ -19,7 +19,7 @@
             "date": "Datumbereik",
             "startDate": "Startdatum",
             "endDate": "Einddatum",
-            "eg": "Bijv.: {{date}}",
+            "eg": "Bijv. {{date}}",
             "quick": {
                 "title": "Snelle selectie:",
                 "today": "Vandaag",
@@ -386,7 +386,7 @@
                 "title": "Kies een thema",
                 "system": {
                     "title": "Systeemthema",
-                    "description": "Gebruikt de thema-instelling van de apparaat"
+                    "description": "Gebruikt de thema-instelling van het apparaat"
                 },
                 "light": {
                     "title": "Licht Thema",
@@ -406,7 +406,7 @@
                 "title": "Kies uw taal",
                 "selected": "Momenteel geselecteerd",
                 "tr": {
-                    "description": "Turkse"
+                    "description": "Turks"
                 },
                 "en": {
                     "description": "Engels"
@@ -461,6 +461,73 @@
             },
             "donate": "Doneer",
             "rateApp": "Beoordeel de app"
+        }
+    },
+    "authService": {
+        "serverError": "Serverfout. Probeer het later opnieuw.",
+        "network": "Internetverbindingsfout",
+        "unexpected": "Er is een onverwachte fout opgetreden",
+        "unauthorized": "U hebt geen toestemming voor deze handeling",
+        "sessionExpired": "De sessie is verlopen",
+        "ratelimit": "U hebt te veel pogingen gedaan, probeer het later opnieuw.",
+        "register": {
+            "fail": "Registratie mislukt",
+            "invalidData": "Ongeldige gegevensinvoer",
+            "alreadyRegistered": "Deze gegevens zijn al geregistreerd",
+            "dataValidation": "Gegevensvalidatiefout"
+        },
+        "login": {
+            "fail": "Inloggen mislukt",
+            "network": "Verbindingsfout"
+        },
+        "googleLogin": {
+            "fail": "Inloggen met Google mislukt"
+        },
+        "_authenticatedFetch": {
+            "tokenNotFound": "Toegangstoken niet gevonden",
+            "sessionExpired": "Sessie verlopen, log opnieuw in."
+        },
+        "getProfile": {
+            "fail": "Profielgegevens kunnen niet worden opgehaald"
+        },
+        "getStats": {
+            "fail": "Profielstatistieken kunnen niet worden opgehaald"
+        },
+        "updateProfile": {
+            "fail": "Profiel kon niet worden bijgewerkt",
+            "noChanges": "De bewerking is geannuleerd omdat er geen wijzigingen zijn aangebracht.",
+            "usernameTaken": "Deze gebruikersnaam is al in gebruik. Kies een andere gebruikersnaam."
+        },
+        "changePassword": {
+            "fail": "Wachtwoord kon niet worden gewijzigd",
+            "currentPass": "Het opgegeven huidige wachtwoord is onjuist."
+        }
+    },
+    "transactionService": {
+        "ratelimit": "U hebt te veel pogingen gedaan, probeer het later opnieuw.",
+        "noData": "Geen gegevens",
+        "addError": "Er is een fout opgetreden tijdens het toevoegen van de transactie",
+        "updateError": "Er is een fout opgetreden tijdens het bijwerken van de transactie",
+        "deleteError": "Er is een fout opgetreden tijdens het verwijderen van de transactie",
+        "getExpenseError": "Er is een fout opgetreden tijdens het laden van de uitgaven",
+        "getIncomeError": "Er is een fout opgetreden tijdens het laden van de inkomsten"
+    },
+    "categoryService": {
+        "ratelimit": "U hebt te veel pogingen gedaan, probeer het later opnieuw.",
+        "network": "Internetverbinding fout",
+        "nameError": "Er bestaat al een categorie van het type {{type}} met de naam {{name}}, kies een andere naam of een ander type.",
+        "getCategories": {
+            "fail": "Categorieën kunnen niet worden geladen"
+        },
+        "addCategory": {
+            "fail": "Categorie kan niet worden toegevoegd"
+        },
+        "updateCategory": {
+            "fail": "Categorie kan niet worden bijgewerkt"
+        },
+        "deleteCategory": {
+            "fail": "Categorie kan niet worden verwijderd",
+            "relatedTransactions": "De categorie {{name}} kan niet worden verwijderd. Er zijn {{count}} transacties gekoppeld aan deze categorie."
         }
     },
     "navigation": {

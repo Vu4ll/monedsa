@@ -1,13 +1,13 @@
 # Monedsa - Inkomsten & Uitgaven Tracker
 
-![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)
+![Version](https://img.shields.io/badge/version-1.4-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
 [Turkse](README_TR.md) | [Engels](README.md) | Nederlands
 
-![Banner](/server/public/images/banner-nl.png)
+![Banner](/server/public/images/nl/banner.png)
 
 **Monedsa** is een moderne en gebruiksvriendelijke mobiele applicatie waarmee u eenvoudig uw inkomsten en uitgaven kunt bijhouden op Android-apparaten. Met zijn eenvoudige, snelle en veilige structuur helpt het u uw financiële situatie onder controle te houden.
 
@@ -181,7 +181,7 @@ PUT  /api/profile/change-password # Wachtwoord wijzigen
 
 | Startscherm | Startscherm (Wit Thema) | Transactie Toevoegen (Wit Thema) | Categorieën | Profiel |
 |-----------|-----------|-----------|-----------|-----------|
-| <img src="server/public/images/home-page.png" width="200"/> | <img src="server/public/images/home-page-white.png" width="200"/> | <img src="server/public/images/add-transaction.png" width="200"/> | <img src="server/public/images/categories.png" width="200"/> | <img src="server/public/images/profile.png" width="200"/> |
+| <img src="server/public/images/nl/home-page.png" width="200"/> | <img src="server/public/images/nl/home-page-white.png" width="200"/> | <img src="server/public/images/nl/add-transaction.png" width="200"/> | <img src="server/public/images/nl/categories.png" width="200"/> | <img src="server/public/images/nl/profile.png" width="200"/> |
 
 - Startscherm: Balans overzicht en recente transacties
 - Transactie Toevoegen: Nieuw inkomsten/uitgaven invoerformulier

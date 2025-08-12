@@ -17,7 +17,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-const translatedAppData = res => {
+const translatedAppData = (req, res) => {
     const featuresFromLocale = res.locals.t("featuresSection.list");
     const iconsFromConfig = appData.features.map(feature => feature.icon);
     const translatedFeatures = featuresFromLocale.map((feature, index) => ({
@@ -25,17 +25,20 @@ const translatedAppData = res => {
         title: feature.title,
         description: feature.description
     }));
+    const lang = req.cookies.locale || "en";
+    const screenshots = appData.screenshots[lang] || appData.screenshots["en"];
 
     return {
         ...appData,
         tagline: res.locals.t("hero.tagline"),
         description: res.locals.t("hero.description"),
-        features: translatedFeatures
+        features: translatedFeatures,
+        screenshots
     };
 };
 
 app.get("/", (req, res) => {
-    res.render("index", { app: translatedAppData(res) });
+    res.render("index", { app: translatedAppData(req, res) });
 });
 
 app.get("/privacy-policy", (req, res) => {

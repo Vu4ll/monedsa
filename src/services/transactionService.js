@@ -1,8 +1,13 @@
 import axios from "axios";
 import { API_CONFIG } from "../constants";
 import { authService } from "./authService";
+import i18n from "../i18n";
 
 const api = axios.create();
+
+function t(key, options = {}) {
+  return i18n.t(key, options);
+}
 
 api.interceptors.request.use(async (config) => {
   let token = authService.getToken();
@@ -34,7 +39,7 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 429) {
       return Promise.reject({
         ...error,
-        customMessage: "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz."
+        customMessage: t("transactionService.ratelimit")
       });
     }
     return Promise.reject(error);
@@ -59,7 +64,7 @@ export const transactionService = {
     const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TRANSACTION.LIST}${queryString ? '?' + queryString : ''}`;
 
     const response = await api.get(url);
-    return response.data ? response.data : "Veri yok";
+    return response.data ? response.data : t("transactionService.noData");
   },
 
   /**
@@ -79,7 +84,7 @@ export const transactionService = {
         return { success: false, error: error.customMessage };
       }
 
-      throw new Error(error.response?.data?.message || 'Transaction eklenirken bir hata oluştu');
+      throw new Error(error.response?.data?.message || t("transactionService.addError"));
     }
   },
 
@@ -97,7 +102,7 @@ export const transactionService = {
       );
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Transaction güncellenirken bir hata oluştu');
+      throw new Error(error.response?.data?.message || t("transactionService.updateError"));
     }
   },
 
@@ -113,7 +118,7 @@ export const transactionService = {
       );
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Transaction silinirken bir hata oluştu');
+      throw new Error(error.response?.data?.message || t("transactionService.ratelimit"));
     }
   },
 
@@ -128,7 +133,7 @@ export const transactionService = {
       );
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Giderler yüklenirken bir hata oluştu');
+      throw new Error(error.response?.data?.message || t("transactionService.getExpenseError"));
     }
   },
 
@@ -143,7 +148,7 @@ export const transactionService = {
       );
       return response.data;
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Gelirler yüklenirken bir hata oluştu');
+      throw new Error(error.response?.data?.message || t("transactionService.getIncomeError"));
     }
   },
 };

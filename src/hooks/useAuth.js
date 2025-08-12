@@ -31,31 +31,31 @@ export const useAuth = () => {
             await authService.loadToken();
 
             if (!authService.getToken()) {
-                console.log('Token bulunamadı, kullanıcı giriş yapmalı');
+                console.log('Token not found user must be logged in');
                 setIsAuthenticated(false);
                 return;
             }
 
             if (authService.isTokenValid()) {
-                console.log('Token geçerli, kullanıcı otomatik giriş yapıyor');
+                console.log('Token valid');
                 setIsAuthenticated(true);
                 return;
             }
 
             if (!authService.getRefreshToken()) {
-                console.log('Refresh token bulunamadı, kullanıcı giriş yapmalı');
+                console.log('Refresh token not found user must be logged in');
                 setIsAuthenticated(false);
                 return;
             }
 
-            console.log('Token geçersiz, refresh token ile yenileme deneniyor...');
+            console.log('Access token is invalid, trying to refresh...');
             const newToken = await authService.refreshAccessToken();
 
             if (newToken) {
-                console.log('Token başarıyla yenilendi');
+                console.log('Access token refreshed successfully');
                 setIsAuthenticated(true);
             } else {
-                console.log('Token yenilenemedi, kullanıcı giriş yapmalı');
+                console.log('Access token can not be refreshed, user must be logged in');
                 setIsAuthenticated(false);
             }
         } catch (error) {
@@ -77,18 +77,18 @@ export const useAuth = () => {
             }
 
             if (!authService.getRefreshToken()) {
-                console.log('Refresh token bulunamadı, kullanıcı çıkış yapılıyor');
+                console.log('Refresh token not found, logging out user');
                 setIsAuthenticated(false);
                 return;
             }
 
-            console.log('Token süresi dolmuş, yenileme deneniyor...');
+            console.log('Access token is expired, trying to refresh...');
             const newToken = await authService.refreshAccessToken();
             if (!newToken) {
-                console.log('Token yenilenemedi, kullanıcı çıkış yapılıyor');
+                console.log('Access token can not be refreshed, logging out user');
                 setIsAuthenticated(false);
             } else {
-                console.log('Token başarıyla yenilendi (periodic check)');
+                console.log('Access token refreshed successfully');
             }
         } catch (error) {
             console.error('Token status check error:', error);
@@ -111,7 +111,7 @@ export const useAuth = () => {
         try {
             await authService.logout();
             setIsAuthenticated(false);
-            console.log('Kullanıcı çıkış yaptı');
+            console.log('User logged out successfully');
         } catch (error) {
             console.error('Logout error:', error);
         }

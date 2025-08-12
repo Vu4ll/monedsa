@@ -1,8 +1,13 @@
 import axios from 'axios';
 import { API_CONFIG } from '../constants';
 import { authService } from './authService';
+import i18n from '../i18n';
 
 const api = axios.create();
+
+function t(key, options = {}) {
+  return i18n.t(key, options);
+}
 
 api.interceptors.request.use(async (config) => {
   let token = authService.getToken();
@@ -34,7 +39,7 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 429) {
       return Promise.reject({
         ...error,
-        customMessage: "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz."
+        customMessage: t("categoryService.ratelimit")
       });
     }
     return Promise.reject(error);
@@ -73,7 +78,7 @@ class CategoryService {
       }
       return { exists: false };
     } catch (error) {
-      console.error('Kategori kontrol hatası:', error);
+      console.error('Category check error:', error);
       return { exists: false };
     }
   }
@@ -96,11 +101,11 @@ class CategoryService {
       if (data.success) {
         return { success: true, data: data.data };
       } else {
-        return { success: false, error: data.message || 'Kategoriler yüklenemedi' };
+        return { success: false, error: data.message || t("categoryService.getCategories.fail") };
       }
     } catch (error) {
-      console.error('Kategori listeleme hatası:', error);
-      return { success: false, error: 'Bağlantı hatası' };
+      console.error('Category list error:', error);
+      return { success: false, error: t("categoryService.network") };
     }
   }
 
@@ -117,7 +122,7 @@ class CategoryService {
       if (data.success) {
         return { success: true, data: data.data };
       } else {
-        return { success: false, error: data.message || 'Kategori eklenemedi' };
+        return { success: false, error: data.message || t("categoryService.addCategory.fail") };
       }
     } catch (error) {
       if (error.customMessage) {
@@ -129,21 +134,20 @@ class CategoryService {
 
         if (errorData.status === 400 && errorData.message) {
           if (errorData.message.includes('already exists')) {
-
-            const typeText = categoryData.type === 'income' ? 'gelir' : 'gider';
+            const typeText = categoryData.type === 'income' ? t("common.income") : t("common.expense");
             return {
               success: false,
-              error: `Bu ${typeText} türünde ${categoryData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçiniz.`
+              error: t("categoryService.nameError", { type: typeText, name: categoryData.name })
             };
           }
 
           return { success: false, error: errorData.message };
         }
 
-        return { success: false, error: errorData.message || 'Kategori eklenemedi' };
+        return { success: false, error: errorData.message || t("categoryService.addCategory.fail") };
       }
 
-      return { success: false, error: 'Bağlantı hatası' };
+      return { success: false, error: t("categoryService.network") };
     }
   }
 
@@ -154,7 +158,6 @@ class CategoryService {
    * @return { Promise<{ success: boolean, data?: any, error?: string }> } 
    */
   async updateCategory(categoryId, categoryData) {
-    console.log(categoryData);
     try {
       const response = await api.put(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORY.EDIT}${categoryId}`, categoryData);
 
@@ -162,7 +165,7 @@ class CategoryService {
       if (data.success) {
         return { success: true, data: data.data };
       } else {
-        return { success: false, error: data.message || 'Kategori güncellenemedi' };
+        return { success: false, error: data.message || t("categoryService.updateCategory.fail") };
       }
     } catch (error) {
       if (error.customMessage) {
@@ -175,20 +178,20 @@ class CategoryService {
         if (errorData.status === 400 && errorData.message) {
           if (errorData.message.includes('already exists')) {
 
-            const typeText = categoryData.type === 'income' ? 'gelir' : 'gider';
+            const typeText = categoryData.type === 'income' ? t("common.income") : t("common.expense");
             return {
               success: false,
-              error: `Bu ${typeText} türünde ${categoryData.name} adında bir kategori zaten bulunuyor. Lütfen farklı bir isim seçiniz.`
+              error: t("categoryService.nameError", { type: typeText, name: categoryData.name })
             };
           }
 
           return { success: false, error: errorData.message };
         }
 
-        return { success: false, error: errorData.message || 'Kategori güncellenemedi' };
+        return { success: false, error: errorData.message || t("categoryService.updateCategory.fail") };
       }
 
-      return { success: false, error: 'Bağlantı hatası' };
+      return { success: false, error: t("categoryService.network") };
     }
   }
 
@@ -205,7 +208,7 @@ class CategoryService {
       if (data.success) {
         return { success: true, data: data.data };
       } else {
-        return { success: false, error: data.message || 'Kategori silinemedi' };
+        return { success: false, error: data.message || t("categoryService.deleteCategory.fail") };
       }
     } catch (error) {
       if (error.response && error.response.data) {
@@ -217,17 +220,17 @@ class CategoryService {
           const { categoryInfo, relatedTransactionsCount } = errorData.data;
           return {
             success: false,
-            error: `${categoryInfo.name} kategorisi silinemez. Bu kategoriyle ilişkili ${relatedTransactionsCount} adet işlem bulunmaktadır.`,
+            error: t("categoryService.deleteCategory.relatedTransactions", { name: categoryInfo.name, count: relatedTransactionsCount }),
             relatedTransactionsCount: relatedTransactionsCount,
             categoryInfo: categoryInfo
           };
         }
 
-        return { success: false, error: errorData.message || 'Kategori silinemedi' };
+        return { success: false, error: errorData.message || t("categoryService.deleteCategory.fail") };
       }
 
-      console.error('Kategori silme hatası:', error);
-      return { success: false, error: 'Bağlantı hatası' };
+      console.error('Category delete error:', error);
+      return { success: false, error: t("categoryService.network") };
     }
   }
 }

@@ -223,8 +223,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                 setEditModalVisible(false);
                 ToastAndroid.show(t("profileScreen.handleSaveProfile.success"), ToastAndroid.SHORT);
             } else {
-                // authService düzenlendiğinde burayı unutma
-                if (result.error.includes("Herhangi bir değişiklik")) setEditModalVisible(false);
+                if (result.error.includes(t("authService.updateProfile.noChanges"))) setEditModalVisible(false);
                 ToastAndroid.show(result.error, ToastAndroid.SHORT);
             }
         } catch (error) {
@@ -506,7 +505,7 @@ const ProfileScreen = ({ navigation, onLogout }) => {
                             </View>
 
                             <View style={styles.profileDetails}>
-                                <Text style={styles.userName}>{userInfo?.name || 'Kullanıcı'}</Text>
+                                <Text style={styles.userName}>{userInfo?.name || t("profileScreen.loadUserProfile.name")}</Text>
                                 <Text style={styles.userEmail}>{userInfo?.email || 'email@example.com'}</Text>
                             </View>
                         </View>

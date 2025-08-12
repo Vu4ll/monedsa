@@ -38,7 +38,38 @@ module.exports = {
                 description: "Verileriniz güvenli bir şekilde bulut veritabanında saklanır",
             },
         ],
-        screenshots: ["/images/home-page.png", "/images/home-page-white.png", "/images/filter.png", "/images/add-transaction.png", "/images/categories.png", "/images/add-category.png", "/images/profile.png", "/images/settings.png"],
+        screenshots: {
+            en: [
+                "/images/en/home-page.png",
+                "/images/en/home-page-white.png",
+                "/images/en/filter.png",
+                "/images/en/add-transaction.png",
+                "/images/en/categories.png",
+                "/images/en/add-category.png",
+                "/images/en/profile.png",
+                "/images/en/settings.png"
+            ],
+            tr: [
+                "/images/tr/home-page.png",
+                "/images/tr/home-page-white.png",
+                "/images/tr/filter.png",
+                "/images/tr/add-transaction.png",
+                "/images/tr/categories.png",
+                "/images/tr/add-category.png",
+                "/images/tr/profile.png",
+                "/images/tr/settings.png"
+            ],
+            nl: [
+                "/images/nl/home-page.png",
+                "/images/nl/home-page-white.png",
+                "/images/nl/filter.png",
+                "/images/nl/add-transaction.png",
+                "/images/nl/categories.png",
+                "/images/nl/add-category.png",
+                "/images/nl/profile.png",
+                "/images/nl/settings.png"
+            ]
+        },
         downloadLinks: {
             playStore: "#",
             apk: "https://github.com/Vu4ll/monedsa/releases/download/v1.3.1/monedsa-1.3.1.apk",

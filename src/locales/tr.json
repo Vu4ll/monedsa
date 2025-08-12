@@ -19,7 +19,7 @@
             "date": "Tarih aralığı",
             "startDate": "Başlangıç tarihi",
             "endDate": "Bitiş tarihi",
-            "eg": "Örn.: {{date}}",
+            "eg": "Örn. {{date}}",
             "quick": {
                 "title": "Hızlı seçim:",
                 "today": "Bugün",
@@ -461,6 +461,73 @@
             },
             "donate": "Bağışta bulunun",
             "rateApp": "Uygulamayı değerlendirin"
+        }
+    },
+    "authService": {
+        "serverError": "Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.",
+        "network": "İnternet bağlantısı hatası",
+        "unexpected": "Beklenmeyen bir hata oluştu",
+        "unauthorized": "Bu işlem için yetkiniz yok",
+        "sessionExpired": "Oturum süresi dolmuş",
+        "ratelimit": "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.",
+        "register": {
+            "fail": "Kayıt başarısız",
+            "invalidData": "Geçersiz veri girişi",
+            "alreadyRegistered": "Bu bilgiler zaten kayıtlı",
+            "dataValidation": "Veri doğrulama hatası"
+        },
+        "login": {
+            "fail": "Giriş başarısız",
+            "network": "Bağlantı hatası"
+        },
+        "googleLogin": {
+            "fail": "Google ile giriş başarısız"
+        },
+        "_authenticatedFetch": {
+            "tokenNotFound": "Access token bulunamadı",
+            "sessionExpired": "Oturum süresi dolmuş, lütfen tekrar giriş yapınız."
+        },
+        "getProfile": {
+            "fail": "Profil bilgileri alınamadı"
+        },
+        "getStats": {
+            "fail": "Profil istatistikleri alınamadı"
+        },
+        "updateProfile": {
+            "fail": "Profil güncellenemedi",
+            "noChanges": "Herhangi bir değişiklik bulunmadığı için işlem iptal edildi.",
+            "usernameTaken": "Bu kullanıcı adı zaten kullanımda. Lütfen farklı bir kullanıcı adı seçiniz."
+        },
+        "changePassword": {
+            "fail": "Şifre değiştirilemedi",
+            "currentPass": "Belirtilen mevcut şifre yanlış."
+        }
+    },
+    "transactionService": {
+        "ratelimit": "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.",
+        "noData": "Veri yok",
+        "addError": "İşlem eklenirken bir hata oluştu",
+        "updateError": "İşlem güncellenirken bir hata oluştu",
+        "deleteError": "İşlem silinirken bir hata oluştu",
+        "getExpenseError": "Giderler yüklenirken bir hata oluştu",
+        "getIncomeError": "Gelirler yüklenirken bir hata oluştu"
+    },
+    "categoryService": {
+        "ratelimit": "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.",
+        "network": "İnternet bağlantısı hatası",
+        "nameError": "{{type}} türünde {{name}} adında bir kategori bulunuyor, lütfen farklı bir isim veya tür seçiniz.",
+        "getCategories": {
+            "fail": "Kategoriler yüklenemedi"
+        },
+        "addCategory": {
+            "fail": "Kategori eklenemedi"
+        },
+        "updateCategory": {
+            "fail": "Kategori güncellenemedi"
+        },
+        "deleteCategory": {
+            "fail": "Kategori silinemedi",
+            "relatedTransactions": "{{name}} kategorisi silinemez. Bu kategoriyle ilişkili {{count}} adet işlem bulunmaktadır."
         }
     },
     "navigation": {

@@ -1,13 +1,13 @@
 # Monedsa - Income & Expense Tracker
 
-![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)
+![Version](https://img.shields.io/badge/version-1.4-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
 [Turkish](README_TR.md) | English | [Dutch](README_NL.md)
 
-![Banner](/server/public/images/banner-en.png)
+![Banner](/server/public/images/en/banner.png)
 
 **Monedsa** is a modern and user-friendly mobile application that allows you to easily track your income and expenses on Android devices. With its simple, fast, and secure structure, it helps you keep your financial situation under control.
 
@@ -181,7 +181,7 @@ PUT  /api/profile/change-password # Change password
 
 | Home Screen | Home Screen (White Thema) | Add Transaction (White Thema) | Categories | Profile |
 |-----------|-----------|-----------|-----------|-----------|
-| <img src="server/public/images/home-page.png" width="200"/> | <img src="server/public/images/home-page-white.png" width="200"/> | <img src="server/public/images/add-transaction.png" width="200"/> | <img src="server/public/images/categories.png" width="200"/> | <img src="server/public/images/profile.png" width="200"/> |
+| <img src="server/public/images/en/home-page.png" width="200"/> | <img src="server/public/images/en/home-page-white.png" width="200"/> | <img src="server/public/images/en/add-transaction.png" width="200"/> | <img src="server/public/images/en/categories.png" width="200"/> | <img src="server/public/images/en/profile.png" width="200"/> |
 
 - Home Screen: Balance summary and recent transactions
 - Add Transaction: New income/expense entry form

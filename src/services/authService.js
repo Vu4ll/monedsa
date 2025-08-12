@@ -3,6 +3,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { getAuth, GoogleAuthProvider, signInWithCredential } from '@react-native-firebase/auth';
 import { GOOGLE_WEB_CLIENT_ID } from '@env';
 import { API_CONFIG } from '../constants';
+import i18n from '../i18n';
 
 /**
  * @description AuthService handles user authentication, token management, and profile retrieval.
@@ -12,6 +13,16 @@ class AuthService {
     this.token = null;
     this.refreshToken = null;
     this.configureGoogleSignIn();
+  }
+
+  /**
+   * @description Translates a key using i18n.
+   * @param { string } key 
+   * @param { Object } options 
+   * @returns 
+   */
+  t(key, options = {}) {
+    return i18n.t(key, options);
   }
 
   /**
@@ -66,7 +77,7 @@ class AuthService {
       if (storedRefreshToken) this.refreshToken = storedRefreshToken;
       return this.token;
     } catch (error) {
-      console.error('Token yükleme hatası:', error);
+      console.error('Token load error:', error);
       return null;
     }
   }
@@ -82,7 +93,7 @@ class AuthService {
       await AsyncStorage.removeItem('authToken');
       await AsyncStorage.removeItem('refreshToken');
     } catch (error) {
-      console.error('Token temizleme hatası:', error);
+      console.error('Token clear error:', error);
     }
   }
 
@@ -102,14 +113,14 @@ class AuthService {
       const timeRemaining = expiryTime - currentTime;
 
       if (timeRemaining > 0) {
-        console.log(`Token geçerli - Kalan süre: ${Math.floor(timeRemaining / 60)} dakika`);
+        console.log(`Token is valid - Remaining time: ${Math.floor(timeRemaining / 60)} minutes`);
       } else {
-        console.log('Token süresi dolmuş');
+        console.log('Token has expired');
       }
 
       return timeRemaining > 0;
     } catch (error) {
-      console.error('Token geçerlilik kontrolü hatası:', error);
+      console.error('Token validity check error:', error);
       return false;
     }
   }
@@ -124,12 +135,12 @@ class AuthService {
     }
 
     if (!this.refreshToken) {
-      console.log('Refresh token bulunamadı');
+      console.log('Refresh token not found');
       return await this.clearToken();
     }
 
     try {
-      console.log('Refresh token ile yenileme yapılıyor...');
+      console.log('Refreshing access token with refresh token');
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH.REFRESH}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -140,10 +151,10 @@ class AuthService {
 
       if (response.ok && data.success && data.token) {
         this.setToken(data.token, data.refreshToken || this.refreshToken);
-        console.log("Token başarıyla yenilendi");
+        console.log("Access token refreshed successfully");
         return data.token;
       } else {
-        console.log('Refresh token geçersiz veya süresi dolmuş');
+        console.log('Refresh token invalid or expired');
         await this.clearToken();
         return null;
       }
@@ -174,30 +185,30 @@ class AuthService {
       if (response.ok && data.success) {
         return { success: true, data: data.data };
       } else {
-        let errorMessage = data.message || 'Kayıt başarısız';
+        let errorMessage = data.message || this.t("authService.register.fail");
 
         if (response.status === 400) {
-          errorMessage = data.message || 'Geçersiz veri girişi';
+          errorMessage = data.message || this.t("authService.register.invalidData");
         } else if (response.status === 409) {
-          errorMessage = data.message || 'Bu bilgiler zaten kayıtlı';
+          errorMessage = data.message || this.t("authService.register.alreadyRegistered");
         } else if (response.status === 422) {
-          errorMessage = data.message || 'Veri doğrulama hatası';
+          errorMessage = data.message || this.t("authService.register.dataValidation");
         } else if (response.status === 429) {
-          errorMessage = data.message || "Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.";
+          errorMessage = data.message || this.t("authService.ratelimit");
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
+          errorMessage = this.t("authService.serverError");
         }
 
         return { success: false, error: errorMessage };
       }
     } catch (error) {
-      console.error('Register hatası:', error);
+      console.error('Register error:', error);
 
       if (error.name === 'TypeError' && error.message.includes('Network')) {
-        return { success: false, error: 'İnternet bağlantısı hatası' };
+        return { success: false, error: this.t("authService.network") };
       }
 
-      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+      return { success: false, error: this.t("authService.unexpected") };
     }
   }
 
@@ -225,11 +236,11 @@ class AuthService {
         this.setToken(data.token, data.refreshToken);
         return { success: true, user: data.user };
       } else {
-        return { success: false, error: data.message || 'Giriş başarısız' };
+        return { success: false, error: data.message || this.t("authService.login.fail") };
       }
     } catch (error) {
-      console.error('Login hatası:', error);
-      return { success: false, error: 'Bağlantı hatası' };
+      console.error('Login error:', error);
+      return { success: false, error: this.t("authService.login.network") };
     }
   }
 
@@ -265,7 +276,7 @@ class AuthService {
         this.setToken(data.token, data.refreshToken);
         return { success: true, user: data.user };
       } else {
-        return { success: false, error: data.message || 'Google ile giriş başarısız' };
+        return { success: false, error: data.message || this.t("authService.googleLogin.fail") };
       }
     } catch (error) {
       console.error(error);
@@ -299,14 +310,14 @@ class AuthService {
     }
 
     if (!this.token) {
-      throw new Error('Token bulunamadı');
+      throw new Error(this.t("authService._authenticatedFetch.tokenNotFound"));
     }
 
     if (!this.isTokenValid()) {
-      console.log('Token süresi dolmuş, yenileme yapılıyor...');
+      console.log('Access token is expired, trying to refresh...');
       const newToken = await this.refreshAccessToken();
       if (!newToken) {
-        throw new Error('Oturum süresi dolmuş, lütfen tekrar giriş yapınız.');
+        throw new Error(this.t("authService._authenticatedFetch.sessionExpired"));
       }
     }
 
@@ -320,10 +331,9 @@ class AuthService {
     });
 
     if (response.status === 401) {
-      console.log('401 hatası alındı, token yenileme deneniyor...');
+      console.log('Access token is invalid, trying to refresh...');
       const newToken = await this.refreshAccessToken();
       if (newToken) {
-        // Retry the request with the new token
         return await fetch(url, {
           ...options,
           headers: {
@@ -334,7 +344,7 @@ class AuthService {
         });
       } else {
         await this.clearToken();
-        throw new Error('Oturum süresi dolmuş, lütfen tekrar giriş yapınız.');
+        throw new Error(this.t("authService._authenticatedFetch.sessionExpired"));
       }
     }
 
@@ -356,27 +366,27 @@ class AuthService {
       if (response.ok && data.success) {
         return { success: true, data: data.data };
       } else {
-        let errorMessage = data.message || 'Profil bilgileri alınamadı';
+        let errorMessage = data.message || this.t("authService.getProfile.fail");
         if (response.status === 403) {
-          errorMessage = 'Bu işlem için yetkiniz yok';
+          errorMessage = this.t("authService.unauthorized");
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
+          errorMessage = this.t("authService.serverError");
         }
 
         return { success: false, error: errorMessage };
       }
     } catch (error) {
-      if (error.message.includes('Oturum süresi dolmuş')) {
+      if (error.message.includes(this.t("authService.sessionExpired"))) {
         return { success: false, error: error.message };
       }
 
-      console.error('Profile hatası:', error);
+      console.error('Profile error:', error);
 
       if (error.name === 'TypeError' && error.message.includes('Network')) {
-        return { success: false, error: 'İnternet bağlantısı hatası' };
+        return { success: false, error: this.t("authService.network") };
       }
 
-      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+      return { success: false, error: this.t("authService.unexpected") };
     }
   }
 
@@ -394,28 +404,28 @@ class AuthService {
       if (response.ok) {
         return { success: true, data: data.data };
       } else {
-        let errorMessage = data.message || 'Profil istatistikleri alınamadı';
+        let errorMessage = data.message || this.t("authService.getStats.fail");
 
         if (response.status === 403) {
-          errorMessage = 'Bu işlem için yetkiniz yok';
+          errorMessage = this.t("authService.unauthorized");
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
+          errorMessage = this.t("authService.serverError");
         }
 
         return { success: false, error: errorMessage };
       }
     } catch (error) {
-      if (error.message.includes('Oturum süresi dolmuş')) {
+      if (error.message.includes(this.t("authService.sessionExpired"))) {
         return { success: false, error: error.message };
       }
 
-      console.error('Profile istatistik hatası:', error);
+      console.error('Profile stats error:', error);
 
       if (error.name === 'TypeError' && error.message.includes('Network')) {
-        return { success: false, error: 'İnternet bağlantısı hatası' };
+        return { success: false, error: this.t("authService.network") };
       }
 
-      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+      return { success: false, error: this.t("authService.unexpected") };
     }
   }
 
@@ -436,36 +446,36 @@ class AuthService {
       if (response.ok) {
         return { success: true, data: data.data };
       } else {
-        let errorMessage = data.message || 'Profil güncellenemedi';
+        let errorMessage = data.message || this.t("authService.updateProfile.fail");
 
         if (errorMessage.includes("No changes detected")) {
-          errorMessage = "Herhangi bir değişiklik bulunmadığı için işlem iptal edildi."
+          errorMessage = this.t("authService.updateProfile.noChanges");
         } else if (errorMessage.includes("username is already taken")) {
-          errorMessage = "Bu kullanıcı adı zaten kullanımda. Lütfen farklı bir kullanıcı adı seçiniz."
+          errorMessage = this.t("authService.updateProfile.usernameTaken");
         }
 
         if (response.status === 403) {
-          errorMessage = 'Bu işlem için yetkiniz yok';
+          errorMessage = this.t("authService.unauthorized");
         } else if (response.status === 429) {
-          errorMessage = 'Çok fazla deneme yaptınız, lütfen daha sonra tekrar deneyiniz.';
+          errorMessage = this.t("authService.ratelimit");
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
+          errorMessage = this.t("authService.serverError");
         }
 
         return { success: false, error: errorMessage };
       }
     } catch (error) {
-      if (error.message.includes('Oturum süresi dolmuş')) {
+      if (error.message.includes(this.t("authService.sessionExpired"))) {
         return { success: false, error: error.message };
       }
 
-      console.error('Profil güncelleme hatası:', error);
+      console.error('Profile update error:', error);
 
       if (error.name === 'TypeError' && error.message.includes('Network')) {
-        return { success: false, error: 'İnternet bağlantısı hatası' };
+        return { success: false, error: this.t("authService.network") };
       }
 
-      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+      return { success: false, error: this.t("authService.unexpected") };
     }
   }
 
@@ -486,30 +496,30 @@ class AuthService {
       if (response.ok) {
         return { success: true, message: data.message };
       } else {
-        let errorMessage = data.message || 'Şifre değiştirilemedi';
+        let errorMessage = data.message || this.t("authService.changePassword.fail");
 
         if (errorMessage.includes("Current password is incorrect"))
-          errorMessage = "Belirtilen mevcut şifre yanlış.";
+          errorMessage = this.t("authService.changePassword.currentPass");
         if (response.status === 403) {
-          errorMessage = 'Bu işlem için yetkiniz yok';
+          errorMessage = this.t("authService.unauthorized");
         } else if (response.status >= 500) {
-          errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyiniz.';
+          errorMessage = this.t("authService.serverError");
         }
 
         return { success: false, error: errorMessage };
       }
     } catch (error) {
-      if (error.message.includes('Oturum süresi dolmuş')) {
+      if (error.message.includes(this.t("authService.sessionExpired"))) {
         return { success: false, error: error.message };
       }
 
-      console.error('Şifre değiştirme hatası:', error);
+      console.error('Change password error:', error);
 
       if (error.name === 'TypeError' && error.message.includes('Network')) {
-        return { success: false, error: 'İnternet bağlantısı hatası' };
+        return { success: false, error: this.t("authService.network") };
       }
 
-      return { success: false, error: 'Beklenmeyen bir hata oluştu' };
+      return { success: false, error: this.t("authService.unexpected") };
     }
   }
 }

@@ -62,7 +62,7 @@ const FilterModal = ({
                 setCategories(result.data);
             }
         } catch (error) {
-            console.error('Kategoriler yüklenirken hata oluştu:', error);
+            console.error('Category load error:', error);
         }
     };
 

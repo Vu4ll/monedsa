@@ -1,13 +1,13 @@
 # Monedsa - Gelir Gider Takip Uygulaması
 
-![Version](https://img.shields.io/badge/version-1.3.1-blue.svg)
+![Version](https://img.shields.io/badge/version-1.4-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
 Türkçe | [English](README.md) | [Dutch](README_NL.md)
 
-![Banner](/server/public/images/banner-tr.png)
+![Banner](/server/public/images/tr/banner.png)
 
 **Monedsa**, Android cihazlarınızda kolayca gelir ve giderlerinizi takip edebileceğiniz modern ve kullanıcı dostu bir mobil uygulamadır. Basit, hızlı ve güvenli yapısıyla finansal durumunuzu kontrol altında tutmanıza yardımcı olur.
 
@@ -181,7 +181,7 @@ PUT  /api/profile/change-password # Şifre değiştirme
 
 | Ana Sayfa | Ana Sayfa (Beyaz Tema) | İşlem Ekleme (Beyaz Tema) | Kategoriler | Profil |
 |-----------|-----------|-----------|-----------|-----------|
-| <img src="server/public/images/home-page.png" width="200"/> | <img src="server/public/images/home-page-white.png" width="200"/> | <img src="server/public/images/add-transaction.png" width="200"/> | <img src="server/public/images/categories.png" width="200"/> | <img src="server/public/images/profile.png" width="200"/> |
+| <img src="server/public/images/tr/home-page.png" width="200"/> | <img src="server/public/images/tr/home-page-white.png" width="200"/> | <img src="server/public/images/tr/add-transaction.png" width="200"/> | <img src="server/public/images/tr/categories.png" width="200"/> | <img src="server/public/images/tr/profile.png" width="200"/> |
 
 - Ana Sayfa: Bakiye özeti ve son işlemler
 - İşlem Ekleme: Yeni gelir/gider ekleme formu
