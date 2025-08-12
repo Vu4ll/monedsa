@@ -7,6 +7,9 @@
 
 [Turkish](README_TR.md) | English | [Dutch](README_NL.md)
 
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
+alt="Download from Google Play" height="80">](https://play.google.com/store/apps/details?id=com.vu4ll.monedsa)
+
 ![Banner](/server/public/images/en/banner.png)
 
 **Monedsa** is a modern and user-friendly mobile application that allows you to easily track your income and expenses on Android devices. With its simple, fast, and secure structure, it helps you keep your financial situation under control.
@@ -22,6 +25,12 @@
 - Create custom categories
 - Distinguish your categories with color coding system
 - Separate category management for income and expenses
+
+### 🌐 Multi-language & Currency Support
+- Multi-language interface (English, Turkish, Dutch)
+- Easily switch between supported languages
+- Multiple currency support for transactions
+- Set your preferred currency for balance and reports
 
 ### 📈 Financial Analysis
 - Total income, expense, and balance overview

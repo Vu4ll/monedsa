@@ -5,7 +5,10 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
-[Turkse](README_TR.md) | [Engels](README.md) | Nederlands
+[Turks](README_TR.md) | [Engels](README.md) | Nederlands
+
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
+alt="Download from Google Play" height="80">](https://play.google.com/store/apps/details?id=com.vu4ll.monedsa)
 
 ![Banner](/server/public/images/nl/banner.png)
 
@@ -22,6 +25,12 @@
 - Maak aangepaste categorieën aan
 - Onderscheid uw categorieën met kleurcodering systeem
 - Gescheiden categoriebeheer voor inkomsten en uitgaven
+
+### 🌐 Meertalige & Valuta Ondersteuning
+- Meertalige interface (Engels, Turks, Nederlands)
+- Eenvoudig schakelen tussen ondersteunde talen
+- Ondersteuning voor meerdere valuta's voor transacties
+- Stel uw voorkeursvaluta in voor saldo en rapporten
 
 ### 📈 Financiële Analyse
 - Totaal inkomsten, uitgaven en balans overzicht

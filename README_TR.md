@@ -5,7 +5,10 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
-Türkçe | [English](README.md) | [Dutch](README_NL.md)
+Türkçe | [İngilizce](README.md) | [Felemenkçe](README_NL.md)
+
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
+alt="Download from Google Play" height="80">](https://play.google.com/store/apps/details?id=com.vu4ll.monedsa)
 
 ![Banner](/server/public/images/tr/banner.png)
 
@@ -22,6 +25,12 @@ Türkçe | [English](README.md) | [Dutch](README_NL.md)
 - Özel kategoriler oluşturun
 - Renk kodlama sistemi ile kategorilerinizi ayırt edin
 - Gelir ve gider için ayrı kategori yönetimi
+
+### 🌐 Çoklu Dil ve Para Birimi Desteği
+- Çoklu dil arayüzü (İngilizce, Türkçe, Hollandaca)
+- Desteklenen diller arasında kolayca geçiş yapın
+- İşlemler için çoklu para birimi desteği
+- Bakiye ve raporlar için tercih ettiğiniz para birimini ayarlayın
 
 ### 📈 Finansal Analiz
 - Toplam gelir, gider ve bakiye görünümü
