@@ -179,7 +179,7 @@ PUT  /api/profile/change-password # Change password
 
 ## 🌟 Screenshots
 
-| Home Screen | Home Screen (White Thema) | Add Transaction (White Thema) | Categories | Profile |
+| Home Screen | Home Screen (White Theme) | Add Transaction (White Theme) | Categories | Profile |
 |-----------|-----------|-----------|-----------|-----------|
 | <img src="server/public/images/en/home-page.png" width="200"/> | <img src="server/public/images/en/home-page-white.png" width="200"/> | <img src="server/public/images/en/add-transaction.png" width="200"/> | <img src="server/public/images/en/categories.png" width="200"/> | <img src="server/public/images/en/profile.png" width="200"/> |
 
