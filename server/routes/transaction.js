@@ -3,7 +3,7 @@ const router = express.Router();
 require("dotenv").config();
 
 const { badRequest, notFound, serverError, getTransactionList } = require("../util/functions");
-const { generalLimiter } = require("../util/rate-limits");
+const { generalLimiter } = require("../util/ratelimit");
 const verifyToken = require("../middlewares/verifyToken");
 const locale = require("../locales/api.json");
 const Transaction = require("../models/transaction");

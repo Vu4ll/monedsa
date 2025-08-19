@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { badRequest, notFound, serverError, hexValidator } = require("../util/functions");
-const { generalLimiter } = require("../util/rate-limits");
+const { generalLimiter } = require("../util/ratelimit");
 const verifyToken = require("../middlewares/verifyToken");
 const locale = require("../locales/api.json");
 const Category = require("../models/category");

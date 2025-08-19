@@ -11,7 +11,7 @@ const { badRequest, serverError } = require("../util/functions");
 const User = require("../models/user");
 const locale = require("../locales/api.json");
 const { seedCategoriesForUser } = require("../seeds/categorySeed");
-const { authLimiter } = require("../util/rate-limits");
+const { authLimiter } = require("../util/ratelimit");
 
 if (!admin.apps.length) {
     admin.initializeApp({

@@ -8,7 +8,7 @@ const verifyToken = require("../middlewares/verifyToken");
 const locale = require("../locales/api.json");
 const User = require("../models/user");
 const { emailRegex, usernameRegex, passwordRegex } = require("../config");
-const { authLimiter } = require("../util/rate-limits");
+const { authLimiter } = require("../util/ratelimit");
 
 router.get("/me", verifyToken, async (req, res) => {
     try {
