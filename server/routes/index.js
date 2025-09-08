@@ -6,5 +6,6 @@ router.use("/api/transaction", require("./transaction.js"));
 router.use("/api/category", require("./category.js"));
 router.use("/api/profile", require("./profile.js"));
 router.use("/api/support", require("./support.js"));
+router.use("/api/health", require("./health.js"));
 
 module.exports = router;
