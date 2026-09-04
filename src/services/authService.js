@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { getAuth, GoogleAuthProvider, signInWithCredential } from '@react-native-firebase/auth';
-import { GOOGLE_WEB_CLIENT_ID } from '@env';
+import { getAuth, GoogleAuthProvider, signInWithCredential, getIdToken, signOut } from '@react-native-firebase/auth'; import { GOOGLE_WEB_CLIENT_ID } from '@env';
 import { API_CONFIG } from '../constants';
 import i18n from '../i18n';
 
@@ -258,7 +257,7 @@ class AuthService {
       const authInstance = getAuth();
       const googleCredential = GoogleAuthProvider.credential(idToken);
       const firebaseUser = await signInWithCredential(authInstance, googleCredential);
-      const firebaseIdToken = await firebaseUser.user.getIdToken();
+      const firebaseIdToken = await getIdToken(firebaseUser.user);
 
       const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH.GOOGLE}`, {
         method: "POST",
@@ -289,7 +288,7 @@ class AuthService {
    */
   async logout() {
     try {
-      await auth().signOut();
+      await signOut(getAuth());
       await GoogleSignin.signOut();
       await this.clearToken();
     } catch (error) {

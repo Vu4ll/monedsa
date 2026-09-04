@@ -1,7 +1,7 @@
 {
   "name": "monedsa",
   "displayName": "Monedsa",
-  "version": "1.4",
+  "version": "1.5",
   "scripts": {
     "android": "react-native run-android",
     "lint": "eslint .",
@@ -18,12 +18,12 @@
     "@react-navigation/bottom-tabs": "^7.4.2",
     "@react-navigation/native": "^7.1.14",
     "@react-navigation/stack": "^7.4.2",
-    "axios": "^1.10.0",
-    "i18next": "^25.3.2",
+    "axios": "^1.20.0",
+    "i18next": "^26.4.0",
     "ms": "^2.1.3",
-    "react": "19.1.0",
-    "react-i18next": "^15.6.1",
-    "react-native": "0.80.1",
+    "react": "^19.1.0",
+    "react-i18next": "^17.0.12",
+    "react-native": "^0.80.1",
     "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "^2.27.1",
     "react-native-localize": "^3.5.1",
@@ -37,8 +37,8 @@
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
     "@react-native-community/cli": "latest",
-    "@react-native-community/cli-platform-android": "19.0.0",
-    "@react-native-community/cli-platform-ios": "19.0.0",
+    "@react-native-community/cli-platform-android": "^20.0.0",
+    "@react-native-community/cli-platform-ios": "^20.0.0",
     "@react-native/babel-preset": "0.80.1",
     "@react-native/eslint-config": "0.80.1",
     "@react-native/metro-config": "0.80.1",
@@ -46,9 +46,19 @@
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
-    "react-test-renderer": "19.1.0"
+    "react-test-renderer": "^19.1.0"
   },
   "engines": {
     "node": ">=18"
+  },
+  "allowScripts": {
+    "@firebase/util@1.12.1": true,
+    "protobufjs@7.6.6": true,
+    "@react-native-async-storage/async-storage@2.2.0": true,
+    "@react-native-community/datetimepicker@8.4.2": true,
+    "@react-native-google-signin/google-signin@15.0.0": true,
+    "react-native-gesture-handler@2.27.1": true,
+    "react-native-localize@3.5.1": true,
+    "react-native-vector-icons@10.2.0": true
   }
 }

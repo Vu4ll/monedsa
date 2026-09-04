@@ -3,13 +3,17 @@ require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS
     }
 });
+
+transporter.verify()
+    .then(() => console.log("SMTP authentication successful"))
+    .catch(error => console.error("SMTP authentication failed:", error));
 
 const issueMail = async (t, title, description, email, platform, version, timestamp, locale) => {
     const emailContent = {

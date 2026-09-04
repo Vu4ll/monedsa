@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
-const admin = require("firebase-admin");
+const { getApps, initializeApp, cert } = require("firebase-admin/app");
+const { getAuth } = require("firebase-admin/auth");
 require("dotenv").config();
 
 const config = require("../config");
@@ -13,11 +14,11 @@ const locale = require("../locales/api.json");
 const { seedCategoriesForUser } = require("../seeds/categorySeed");
 const { authLimiter } = require("../util/ratelimit");
 
-if (!admin.apps.length) {
-    admin.initializeApp({
-        credential: admin.credential.cert({
+if (getApps().length === 0) {
+    initializeApp({
+        credential: cert({
             projectId: process.env.FIREBASE_PROJECT_ID,
-            privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+            privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n"),
             clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
         }),
     });
@@ -187,7 +188,7 @@ router.post("/google", async (req, res) => {
         if (!idToken) return badRequest(res, locale.googleLogin.fail.noToken);
 
         const userLanguage = language && ["en", "tr", "nl"].includes(language) ? language : "en";
-        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        const decodedToken = await getAuth().verifyIdToken(idToken);
 
         if (!decodedToken || decodedToken.uid !== firebaseUid) {
             return badRequest(res, locale.googleLogin.fail.invalidToken);

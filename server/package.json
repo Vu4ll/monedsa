@@ -1,6 +1,6 @@
 {
   "name": "monedsa-server",
-  "version": "1.4",
+  "version": "1.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -15,16 +15,21 @@
     "argon2": "^0.43.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
-    "firebase-admin": "^13.4.0",
+    "firebase-admin": "^14.3.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
-    "nodemailer": "^7.0.5",
-    "nodemon": "^3.1.10",
-    "path": "^0.12.7"
+    "nodemailer": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "allowScripts": {
+    "argon2@0.43.0": true,
+    "@firebase/util@1.13.0": true,
+    "protobufjs@7.6.6": true
   }
 }

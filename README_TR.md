@@ -1,6 +1,6 @@
 # Monedsa - Gelir Gider Takip Uygulaması
 
-![Version](https://img.shields.io/badge/version-1.4-blue.svg)
+![Version](https://img.shields.io/badge/version-1.5-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
