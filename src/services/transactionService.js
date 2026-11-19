@@ -3,7 +3,7 @@ import { API_CONFIG } from "../constants";
 import { authService } from "./authService";
 import i18n from "../i18n";
 
-const api = axios.create();
+export const api = axios.create();
 
 function t(key, options = {}) {
   return i18n.t(key, options);

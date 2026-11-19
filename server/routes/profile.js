@@ -7,8 +7,10 @@ const { badRequest, notFound, serverError } = require("../util/functions");
 const verifyToken = require("../middlewares/verifyToken");
 const locale = require("../locales/api.json");
 const User = require("../models/user");
+const Category = require("../models/category");
+const Transaction = require("../models/transaction");
 const { emailRegex, usernameRegex, passwordRegex } = require("../config");
-const { authLimiter } = require("../util/ratelimit");
+const { authLimiter, generalLimiter } = require("../util/ratelimit");
 
 router.get("/me", verifyToken, async (req, res) => {
     try {
@@ -142,8 +144,6 @@ router.put("/change-password", authLimiter, verifyToken, async (req, res) => {
 
 router.get("/stats", verifyToken, async (req, res) => {
     try {
-        const Transaction = require("../models/transaction");
-
         const [totalTransactions, expenseCount, incomeCount] = await Promise.all([
             Transaction.countDocuments({ userId: req.user.id }),
             Transaction.countDocuments({ userId: req.user.id, type: "expense" }),
@@ -183,6 +183,38 @@ router.get("/stats", verifyToken, async (req, res) => {
         });
     } catch (error) {
         console.error(`Error retrieving stats: \n${error.message}`);
+        serverError(res, locale.profile.fail.serverError);
+    }
+});
+
+// One-time data export for the offline v2 app. The body format is consumed by the v2 importer: keep it stable.
+router.get("/export", generalLimiter, verifyToken, async (req, res) => {
+    try {
+        const [categories, transactions] = await Promise.all([
+            Category.find({ userId: req.user.id }).sort({ createdAt: 1 }).lean(),
+            Transaction.find({ userId: req.user.id }).sort({ createdAt: 1 }).lean()
+        ]);
+
+        res.status(200).json({
+            schemaVersion: 1,
+            exportedAt: new Date().toISOString(),
+            app: "monedsa",
+            categories: categories.map(c => ({
+                id: c._id.toString(),
+                name: c.name,
+                color: c.color,
+                type: c.type
+            })),
+            transactions: transactions.map(tx => ({
+                amount: tx.amount,
+                description: tx.description || "",
+                categoryId: tx.category ? tx.category.toString() : null,
+                type: tx.type,
+                createdAt: new Date(tx.createdAt).toISOString()
+            }))
+        });
+    } catch (error) {
+        console.error(`Error exporting data: \n${error.message}`);
         serverError(res, locale.profile.fail.serverError);
     }
 });

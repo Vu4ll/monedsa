@@ -30,6 +30,7 @@ export const API_CONFIG = {
       STATS: "/api/profile/stats",
       UPDATE: "/api/profile/update",
       CHANGE_PASSWORD: "/api/profile/change-password",
+      EXPORT: "/api/profile/export",
     },
 
     SUPPORT: {

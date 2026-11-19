@@ -461,6 +461,13 @@
             },
             "donate": "Bağışta bulunun",
             "rateApp": "Uygulamayı değerlendirin"
+        },
+        "export": {
+            "title": "Verilerimi dışa aktar",
+            "description": "Kategorilerinizi ve işlemlerinizi dosya olarak kaydedin",
+            "notice": "Monedsa'nın yeni çevrimdışı sürümü yakında geliyor. Verileriniz artık çevrimiçi saklanmayacak; yeni sürüme aktarabilmek için verilerinizi şimdi dışa aktarın ve dosyayı saklayın.",
+            "shareTitle": "Monedsa verilerinizi kaydedin veya paylaşın",
+            "fail": "Verileriniz dışa aktarılamadı. Lütfen daha sonra tekrar deneyiniz."
         }
     },
     "authService": {

@@ -1,7 +1,7 @@
 {
   "name": "monedsa",
   "displayName": "Monedsa",
-  "version": "1.5",
+  "version": "1.6",
   "scripts": {
     "android": "react-native run-android",
     "lint": "eslint .",

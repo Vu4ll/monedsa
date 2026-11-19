@@ -461,6 +461,13 @@
             },
             "donate": "Doneer",
             "rateApp": "Beoordeel de app"
+        },
+        "export": {
+            "title": "Mijn gegevens exporteren",
+            "description": "Sla uw categorieën en transacties op als bestand",
+            "notice": "Er komt een nieuwe offline versie van Monedsa. Uw gegevens worden niet langer online bewaard, dus exporteer uw gegevens nu en bewaar het bestand om het in de nieuwe versie te importeren.",
+            "shareTitle": "Uw Monedsa-gegevens opslaan of delen",
+            "fail": "Uw gegevens konden niet worden geëxporteerd. Probeer het later opnieuw."
         }
     },
     "authService": {

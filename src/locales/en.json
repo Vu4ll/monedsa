@@ -461,6 +461,13 @@
             },
             "donate": "Make a donation",
             "rateApp": "Rate the app"
+        },
+        "export": {
+            "title": "Export my data",
+            "description": "Save your categories and transactions as a file",
+            "notice": "A new offline version of Monedsa is coming. Your data will no longer be stored online, so export your data now and keep the file to import it into the new version.",
+            "shareTitle": "Save or share your Monedsa data",
+            "fail": "Your data could not be exported. Please try again later."
         }
     },
     "authService": {

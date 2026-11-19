@@ -19,7 +19,7 @@ import { Header } from '../components';
 import { useTheme } from '../contexts/ThemeContext';
 import { useCurrency } from '../contexts/CurrencyContext';
 import { API_CONFIG } from '../constants/api';
-import { authService } from '../services';
+import { authService, exportService } from '../services';
 import { version } from '../../package.json';
 import { useTranslation } from 'react-i18next';
 
@@ -44,6 +44,7 @@ const SettingsScreen = ({ navigation }) => {
         email: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
 
     useEffect(() => {
         loadUserMail();
@@ -170,6 +171,19 @@ const SettingsScreen = ({ navigation }) => {
         }
     };
 
+    const handleExport = async () => {
+        if (isExporting) return;
+        setIsExporting(true);
+        try {
+            await exportService.exportAndShare();
+        } catch (error) {
+            console.error('Export error:', error);
+            ToastAndroid.show(error.message || t("settingsScreen.export.fail"), ToastAndroid.LONG);
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -234,6 +248,21 @@ const SettingsScreen = ({ navigation }) => {
             fontSize: 16,
             color: colors.primary,
             fontWeight: '500',
+        },
+        exportNotice: {
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            backgroundColor: colors.primary + '15',
+            borderRadius: 8,
+            padding: 12,
+            marginBottom: 8,
+        },
+        exportNoticeText: {
+            flex: 1,
+            fontSize: 14,
+            lineHeight: 20,
+            color: colors.text,
+            marginLeft: 8,
         },
         aboutSection: {
             backgroundColor: colors.cardBackground,
@@ -425,6 +454,30 @@ const SettingsScreen = ({ navigation }) => {
             />
 
             <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <View style={styles.settingSection}>
+                    <View style={styles.exportNotice}>
+                        <Icon name="info-outline" size={20} color={colors.primary} />
+                        <Text style={styles.exportNoticeText}>{t("settingsScreen.export.notice")}</Text>
+                    </View>
+
+                    <TouchableOpacity
+                        style={[styles.settingRow, styles.lastSettingRow]}
+                        onPress={handleExport}
+                        disabled={isExporting}
+                    >
+                        <Icon name="file-download" size={24} color={colors.primary} style={styles.settingIcon} />
+                        <View style={styles.settingContent}>
+                            <Text style={styles.settingTitle}>{t("settingsScreen.export.title")}</Text>
+                            <Text style={styles.settingDescription}>{t("settingsScreen.export.description")}</Text>
+                        </View>
+                        <View style={styles.settingAction}>
+                            {isExporting
+                                ? <ActivityIndicator size="small" color={colors.primary} />
+                                : <Icon name="chevron-right" size={20} color={colors.textSecondary} />}
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
                 <View style={styles.settingSection}>
                     <Text style={styles.sectionTitle}>{t("settingsScreen.display")}</Text>
 
