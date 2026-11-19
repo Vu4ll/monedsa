@@ -62,6 +62,10 @@
         },
         "transactionCard": {
             "noDescription": "No description available"
+        },
+        "exportBanner": {
+            "title": "Export your data before 20 December 2026",
+            "description": "The server is shutting down. Tap to export your data for the new offline version."
         }
     },
     "addTransactionScreen": {
@@ -465,7 +469,7 @@
         "export": {
             "title": "Export my data",
             "description": "Save your categories and transactions as a file",
-            "notice": "A new offline version of Monedsa is coming. Your data will no longer be stored online, so export your data now and keep the file to import it into the new version.",
+            "notice": "Monedsa is moving to a new offline version. The server will be shut down on 20 December 2026; after that your online data can no longer be reached. Export your data before then and keep the file to import it into the new version.",
             "shareTitle": "Save or share your Monedsa data",
             "fail": "Your data could not be exported. Please try again later."
         }

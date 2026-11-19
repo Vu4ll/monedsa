@@ -62,6 +62,10 @@
         },
         "transactionCard": {
             "noDescription": "Açıklama bulunmuyor"
+        },
+        "exportBanner": {
+            "title": "Verilerinizi 20 Aralık 2026'dan önce dışa aktarın",
+            "description": "Sunucu kapatılıyor. Yeni çevrimdışı sürüm için verilerinizi dışa aktarmak üzere dokunun."
         }
     },
     "addTransactionScreen": {
@@ -465,7 +469,7 @@
         "export": {
             "title": "Verilerimi dışa aktar",
             "description": "Kategorilerinizi ve işlemlerinizi dosya olarak kaydedin",
-            "notice": "Monedsa'nın yeni çevrimdışı sürümü yakında geliyor. Verileriniz artık çevrimiçi saklanmayacak; yeni sürüme aktarabilmek için verilerinizi şimdi dışa aktarın ve dosyayı saklayın.",
+            "notice": "Monedsa yeni bir çevrimdışı sürüme geçiyor. Sunucu 20 Aralık 2026 tarihinde kapatılacak; bu tarihten sonra çevrimiçi verilerinize ulaşılamayacak. Bu tarihten önce verilerinizi dışa aktarın ve yeni sürüme aktarmak için dosyayı saklayın.",
             "shareTitle": "Monedsa verilerinizi kaydedin veya paylaşın",
             "fail": "Verileriniz dışa aktarılamadı. Lütfen daha sonra tekrar deneyiniz."
         }

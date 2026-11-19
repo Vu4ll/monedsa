@@ -62,6 +62,10 @@
         },
         "transactionCard": {
             "noDescription": "Geen beschrijving beschikbaar"
+        },
+        "exportBanner": {
+            "title": "Exporteer uw gegevens vóór 20 december 2026",
+            "description": "De server wordt uitgeschakeld. Tik om uw gegevens te exporteren voor de nieuwe offline versie."
         }
     },
     "addTransactionScreen": {
@@ -465,7 +469,7 @@
         "export": {
             "title": "Mijn gegevens exporteren",
             "description": "Sla uw categorieën en transacties op als bestand",
-            "notice": "Er komt een nieuwe offline versie van Monedsa. Uw gegevens worden niet langer online bewaard, dus exporteer uw gegevens nu en bewaar het bestand om het in de nieuwe versie te importeren.",
+            "notice": "Monedsa stapt over op een nieuwe offline versie. De server wordt op 20 december 2026 uitgeschakeld; daarna zijn uw online gegevens niet meer bereikbaar. Exporteer uw gegevens vóór die datum en bewaar het bestand om het in de nieuwe versie te importeren.",
             "shareTitle": "Uw Monedsa-gegevens opslaan of delen",
             "fail": "Uw gegevens konden niet worden geëxporteerd. Probeer het later opnieuw."
         }
