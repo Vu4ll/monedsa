@@ -2,6 +2,8 @@
   package="com.vu4ll.monedsa">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- netinfo requests ACCESS_WIFI_STATE, which implies a required wifi feature; keep the app installable without wifi. -->
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
 
     <application
       android:name=".MainApplication"
