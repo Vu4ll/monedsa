@@ -1,6 +1,11 @@
 # Monedsa - Inkomsten & Uitgaven Tracker
 
-![Version](https://img.shields.io/badge/version-1.5-blue.svg)
+> [!WARNING]
+> **De Monedsa-server wordt op 20 december 2026 uitgeschakeld.** Monedsa 2.0 is een nieuwe, volledig offline versie: je gegevens blijven op je apparaat en je kunt ze optioneel in je eigen Google Drive back-uppen. Geen account of inloggen nodig.
+>
+> **Exporteer je gegevens vóór de uitschakeling:** ga in Monedsa 1.6 naar *Instellingen → Mijn gegevens exporteren* en bewaar het `.json`-bestand. Na de update naar 2.0 zet je het terug via *Instellingen → Importeren uit bestand*. Na 20 december kunnen gegevens op de server niet meer worden geëxporteerd.
+
+![Version](https://img.shields.io/badge/version-1.6-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)

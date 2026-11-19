@@ -1,6 +1,11 @@
 # Monedsa - Gelir Gider Takip Uygulaması
 
-![Version](https://img.shields.io/badge/version-1.5-blue.svg)
+> [!WARNING]
+> **Monedsa sunucusu 20 Aralık 2026'da kapatılıyor.** Monedsa 2.0 tamamen çevrimdışı çalışan yeni bir sürüm: verileriniz cihazınızda kalır, isterseniz kendi Google Drive'ınıza yedekleyebilirsiniz. Hesap veya giriş gerekmez.
+>
+> **Sunucu kapanmadan önce verilerinizi dışa aktarın:** Monedsa 1.6'da *Ayarlar → Verilerimi dışa aktar* ile `.json` dosyasını kaydedin. 2.0'a güncelledikten sonra *Ayarlar → Dosyadan içe aktar* ile geri yükleyin. 20 Aralık'tan sonra sunucudaki veriler dışa aktarılamaz.
+
+![Version](https://img.shields.io/badge/version-1.6-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)

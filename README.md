@@ -1,6 +1,11 @@
 # Monedsa - Income & Expense Tracker
 
-![Version](https://img.shields.io/badge/version-1.5-blue.svg)
+> [!WARNING]
+> **The Monedsa server is shutting down on 20 December 2026.** Monedsa 2.0 is a new, fully offline version: your data stays on your device and can optionally be backed up to your own Google Drive. No account or login needed.
+>
+> **Export your data before the shutdown:** in Monedsa 1.6, go to *Settings → Export my data* and keep the `.json` file. After updating to 2.0, use *Settings → Import from file* to bring it back. After 20 December, data on the server can no longer be exported.
+
+![Version](https://img.shields.io/badge/version-1.6-blue.svg)
 ![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
