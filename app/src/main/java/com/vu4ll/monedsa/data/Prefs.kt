@@ -51,6 +51,14 @@ class Prefs(private val context: Context) {
 
     suspend fun setTheme(v: ThemeMode) = context.store.edit { it[K.theme] = v.name }
     suspend fun setCurrency(v: String) = context.store.edit { it[K.currency] = v }
+
+    /**
+     * Saves the locale-based default once. Without this, changing the phone's
+     * language would silently switch the currency every amount is shown in.
+     */
+    suspend fun pinDefaultCurrency() = context.store.edit {
+        if (it[K.currency] == null) it[K.currency] = defaultCurrency()
+    }
     suspend fun setAutoBackup(v: AutoBackup) = context.store.edit { it[K.autoBackup] = v.name }
     suspend fun setDriveConnected(v: Boolean) = context.store.edit {
         it[K.driveConnected] = v

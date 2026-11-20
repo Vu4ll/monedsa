@@ -94,7 +94,23 @@ fun AppNav(container: AppContainer, settings: Settings) {
                 composable(Tab.HOME.route) {
                     HomeScreen(container, settings.currency, onOpen = { id -> nav.navigate("edit/$id") })
                 }
-                composable(Tab.CATEGORIES.route) { CategoriesScreen(container) }
+                composable(Tab.CATEGORIES.route) {
+                    CategoriesScreen(container, onOpen = { id, type -> nav.navigate("category/$id/${type.name}") })
+                }
+                composable(
+                    "category/{id}/{type}",
+                    arguments = listOf(
+                        navArgument("id") { type = NavType.LongType },
+                        navArgument("type") { type = NavType.StringType },
+                    ),
+                ) { e ->
+                    CategoryEditScreen(
+                        container,
+                        id = e.arguments!!.getLong("id"),
+                        newType = com.vu4ll.monedsa.data.TxType.valueOf(e.arguments!!.getString("type")!!),
+                        onDone = { nav.popBackStack() },
+                    )
+                }
                 composable(Tab.SETTINGS.route) { SettingsScreen(container, settings) }
                 composable(
                     "edit/{id}",

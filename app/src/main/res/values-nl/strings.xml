@@ -114,4 +114,15 @@
         <item quantity="one">Deze categorie wordt door %d transactie gebruikt. Verplaats die naar een andere categorie om deze te verwijderen.</item>
         <item quantity="other">Deze categorie wordt door %d transacties gebruikt. Verplaats ze naar een andere categorie om deze te verwijderen.</item>
     </plurals>
+    <string name="new_category">Nieuwe categorie</string>
+    <string name="error_name_required">Vul een naam in</string>
+    <string name="more_icons">Alle pictogrammen tonen (%1$d)</string>
+    <string name="fewer_icons">Minder tonen</string>
+    <string name="change">Wijzigen</string>
+    <string name="use_color">Deze kleur gebruiken</string>
+    <string name="delete_category_title">Categorie verwijderen?</string>
+    <string name="delete_category_text">Deze categorie wordt verwijderd. Dit kan niet ongedaan worden gemaakt.</string>
+    <string name="most_used">Meest gebruikt</string>
+    <string name="all_categories">Alle categorieën</string>
+    <string name="pick_date">Kies datum</string>
 </resources>

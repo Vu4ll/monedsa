@@ -39,11 +39,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerDefaults
+import com.vu4ll.monedsa.ui.components.Segment
+import com.vu4ll.monedsa.ui.components.SegmentedPills
+import com.vu4ll.monedsa.ui.components.TypeToggle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -102,6 +106,8 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
     var pickDate by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
     var pickCategory by remember { mutableStateOf(false) }
+    val usage by container.db.categories().observeUsage().collectAsStateWithLifecycle(emptyList())
+    val usageCounts = remember(usage) { usage.associate { it.categoryId to it.count } }
 
     LaunchedEffect(id) {
         if (!loaded) {
@@ -140,7 +146,7 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
                 },
                 actions = {
                     if (!isNew) IconButton(onClick = { confirmDelete = true }) {
-                        Icon(Icons.Default.Delete, stringResource(R.string.delete))
+                        Icon(Icons.Outlined.Delete, stringResource(R.string.delete), tint = MaterialTheme.colorScheme.error)
                     }
                 },
             )
@@ -158,15 +164,7 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
             Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState()).padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                listOf(TxType.EXPENSE to R.string.expense, TxType.INCOME to R.string.income).forEachIndexed { i, (t, label) ->
-                    SegmentedButton(
-                        selected = type == t,
-                        onClick = { if (type != t) { type = t; categoryId = null } },
-                        shape = SegmentedButtonDefaults.itemShape(i, 2),
-                    ) { Text(stringResource(label)) }
-                }
-            }
+            TypeToggle(type, onChange = { if (type != it) { type = it; categoryId = null } })
 
             // The amount is the point of this screen: big, first, keyboard already open.
             Column {
@@ -242,20 +240,29 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            AssistChip(
-                onClick = { pickDate = true },
-                label = {
-                    val d = Format.localDate(date)
-                    Text(
-                        when (d) {
-                            java.time.LocalDate.now() -> stringResource(R.string.today)
-                            java.time.LocalDate.now().minusDays(1) -> stringResource(R.string.yesterday)
-                            else -> Format.date(date)
-                        },
-                    )
+            // Most transactions are from today or yesterday: one tap. The calendar is for the rest.
+            val day = Format.localDate(date)
+            val today = java.time.LocalDate.now()
+            val dateIndex = when (day) { today -> 0; today.minusDays(1) -> 1; else -> 2 }
+            val brass = MaterialTheme.colorScheme.primaryContainer
+            val onBrass = MaterialTheme.colorScheme.onPrimaryContainer
+            SegmentedPills(
+                segments = listOf(
+                    Segment(stringResource(R.string.today), selectedBg = brass, selectedFg = onBrass),
+                    Segment(stringResource(R.string.yesterday), selectedBg = brass, selectedFg = onBrass),
+                    Segment(
+                        if (dateIndex == 2) Format.shortDate(date) else stringResource(R.string.pick_date),
+                        icon = Icons.Default.CalendarToday, selectedBg = brass, selectedFg = onBrass,
+                    ),
+                ),
+                selected = dateIndex,
+                onSelect = { i ->
+                    when (i) {
+                        0 -> date = Format.onDay(date, today)
+                        1 -> date = Format.onDay(date, today.minusDays(1))
+                        else -> pickDate = true
+                    }
                 },
-                leadingIcon = { Icon(Icons.Default.CalendarToday, null, Modifier.size(18.dp)) },
-                trailingIcon = { Icon(Icons.Default.ArrowDropDown, null) },
             )
             Spacer(Modifier.height(8.dp))
         }
@@ -264,6 +271,7 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
     if (pickDate) {
         val state = rememberDatePickerState(initialSelectedDateMillis = localToUtcDay(date))
         DatePickerDialog(
+            colors = DatePickerDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
             onDismissRequest = { pickDate = false },
             confirmButton = {
                 TextButton(onClick = {
@@ -278,7 +286,12 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
                 }) { Text(stringResource(R.string.ok)) }
             },
             dismissButton = { TextButton(onClick = { pickDate = false }) { Text(stringResource(R.string.cancel)) } },
-        ) { DatePicker(state) }
+        ) {
+            DatePicker(
+                state,
+                colors = DatePickerDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+            )
+        }
     }
 
     if (confirmDelete) {
@@ -289,29 +302,62 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
             dismissLabel = stringResource(R.string.cancel),
             onConfirm = { scope.launch { dao.delete(id); onDone() } },
             onDismiss = { confirmDelete = false },
+            preview = {
+                val cat = categories.firstOrNull { it.id == categoryId }
+                val minor = Format.parseAmount(amount) ?: 0L
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (cat != null) {
+                        CategoryBadge(cat.icon, Format.color(cat.colorHex), 36.dp)
+                        Spacer(Modifier.width(12.dp))
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Text(cat?.name.orEmpty(), style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            listOf(description.trim(), Format.date(date)).filter { it.isNotEmpty() }.joinToString(", "),
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                        )
+                    }
+                    Text(
+                        Format.signed(minor, currency, positive = type == TxType.INCOME),
+                        style = MaterialTheme.typography.bodyLarge.merge(Tabular),
+                        color = if (type == TxType.INCOME) LocalMoneyColors.current.income else MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            },
         )
     }
 
     if (pickCategory) {
         CategoryPickerSheet(
             categories = categories.filter { it.type == type },
+            usage = usageCounts,
             selectedId = categoryId,
             onDismiss = { pickCategory = false },
         ) { categoryId = it.id; categoryError = false }
     }
 }
 
-/** Searchable category list; the search field appears once the list gets long. */
+/**
+ * Category list in a fixed order: the few you use most on top, then all of them
+ * alphabetically. A search field appears once the list gets long.
+ */
 @Composable
 fun CategoryPickerSheet(
     categories: List<CategoryEntity>,
+    usage: Map<Long, Int>,
     selectedId: Long?,
     onDismiss: () -> Unit,
     onPick: (CategoryEntity) -> Unit,
 ) {
     var query by remember { mutableStateOf("") }
+    val sorted = remember(categories) { categories.sortedForDisplay() }
+    val frequent = remember(sorted, usage) {
+        if (sorted.size <= 6) emptyList()
+        else sorted.filter { (usage[it.id] ?: 0) > 0 }.sortedByDescending { usage[it.id] ?: 0 }.take(4)
+    }
     AppSheet(stringResource(R.string.choose_category), onDismiss) { close ->
-        if (categories.size > 8) {
+        if (sorted.size > 8) {
             OutlinedTextField(
                 value = query, onValueChange = { query = it },
                 placeholder = { Text(stringResource(R.string.search)) },
@@ -320,20 +366,34 @@ fun CategoryPickerSheet(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
             )
         }
-        val shown = categories.filter { it.name.contains(query.trim(), ignoreCase = true) }
+        @Composable
+        fun rowFor(c: CategoryEntity) = OptionRow(
+            title = c.name,
+            selected = c.id == selectedId,
+            leading = { CategoryBadge(c.icon, Format.color(c.colorHex), 36.dp) },
+            onClick = { onPick(c); close() },
+        )
+        val searching = query.isNotBlank()
+        val shown = sorted.filter { it.name.contains(query.trim(), ignoreCase = true) }
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            shown.forEach { c ->
-                OptionRow(
-                    title = c.name,
-                    selected = c.id == selectedId,
-                    leading = { CategoryBadge(c.icon, Format.color(c.colorHex), 36.dp) },
-                    onClick = { onPick(c); close() },
-                )
+            if (!searching && frequent.isNotEmpty()) {
+                PickerLabel(R.string.most_used)
+                frequent.forEach { rowFor(it) }
+                PickerLabel(R.string.all_categories)
             }
+            shown.forEach { rowFor(it) }
             if (shown.isEmpty()) Text(
                 stringResource(R.string.no_results), color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(vertical = 16.dp),
             )
         }
     }
+}
+
+@Composable
+private fun PickerLabel(id: Int) {
+    Text(
+        stringResource(id), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 14.dp, top = 12.dp, bottom = 4.dp),
+    )
 }

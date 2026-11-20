@@ -1,6 +1,7 @@
 package com.vu4ll.monedsa
 
 import android.app.Application
+import kotlinx.coroutines.launch
 import com.vu4ll.monedsa.backup.BackupManager
 import com.vu4ll.monedsa.backup.DriveBackup
 import com.vu4ll.monedsa.data.AppDatabase
@@ -21,5 +22,6 @@ class MonedsaApp : Application() {
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
+        kotlinx.coroutines.MainScope().launch { container.prefs.pinDefaultCurrency() }
     }
 }

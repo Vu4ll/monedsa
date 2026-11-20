@@ -39,6 +39,20 @@ object Format {
         return DateTimeFormatter.ofPattern(pattern, locale).format(d).replaceFirstChar { it.titlecase(locale) }
     }
 
+    /** "15 nov", year added when it isn't the current one. */
+    fun shortDate(epochMillis: Long, locale: Locale = Locale.getDefault()): String {
+        val d = localDate(epochMillis)
+        val pattern = if (d.year == LocalDate.now().year) "d MMM" else "d MMM yyyy"
+        return DateTimeFormatter.ofPattern(pattern, locale).format(d)
+    }
+
+    /** Same time of day as [epochMillis], moved to [day]; keeps ordering within a day stable. */
+    fun onDay(epochMillis: Long, day: LocalDate): Long {
+        val zone = ZoneId.systemDefault()
+        val time = Instant.ofEpochMilli(epochMillis).atZone(zone).toLocalTime()
+        return day.atTime(time).atZone(zone).toInstant().toEpochMilli()
+    }
+
     fun localDate(epochMillis: Long): LocalDate =
         Instant.ofEpochMilli(epochMillis).atZone(ZoneId.systemDefault()).toLocalDate()
 
@@ -52,8 +66,11 @@ object Format {
         DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale)
             .format(Instant.ofEpochMilli(epochMillis).atZone(ZoneId.systemDefault()))
 
-    /** Plain number for an input field, e.g. 1250 -> "12.50" (no grouping). */
-    fun amountInput(minor: Long): String = BigDecimal.valueOf(minor, 2).toPlainString()
+    /** Plain number for an input field in the locale's decimal style: 1250 -> "12,50" / "12.50". */
+    fun amountInput(minor: Long, locale: Locale = Locale.getDefault()): String {
+        val sep = java.text.DecimalFormatSymbols.getInstance(locale).decimalSeparator
+        return BigDecimal.valueOf(minor, 2).toPlainString().replace('.', sep)
+    }
 
     /** Accepts "12", "12.5", "12,50". Returns null for invalid or > 2 decimals rounding. */
     fun parseAmount(text: String): Long? {

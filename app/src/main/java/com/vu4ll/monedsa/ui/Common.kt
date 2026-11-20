@@ -49,3 +49,12 @@ fun <T> EvenGrid(
         }
     }
 }
+
+/**
+ * The one category order used everywhere: alphabetical by the device language's
+ * rules, so "Ç", "İ" or "é" sort where a reader expects, not after "z".
+ */
+fun List<com.vu4ll.monedsa.data.CategoryEntity>.sortedForDisplay(): List<com.vu4ll.monedsa.data.CategoryEntity> {
+    val collator = java.text.Collator.getInstance(java.util.Locale.getDefault()).apply { strength = java.text.Collator.SECONDARY }
+    return sortedWith { a, b -> collator.compare(a.name.trim(), b.name.trim()) }
+}

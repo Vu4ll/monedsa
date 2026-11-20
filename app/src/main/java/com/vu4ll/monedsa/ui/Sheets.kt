@@ -101,7 +101,7 @@ fun FilterSheet(
             Text(stringResource(R.string.category), style = MaterialTheme.typography.titleSmall)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(categoryId == null, { categoryId = null }, { Text(stringResource(R.string.all)) })
-                categories.filter { type == null || it.type == type }.forEach { c ->
+                categories.filter { type == null || it.type == type }.sortedForDisplay().forEach { c ->
                     FilterChip(categoryId == c.id, { categoryId = c.id }, { Text(c.name) })
                 }
             }

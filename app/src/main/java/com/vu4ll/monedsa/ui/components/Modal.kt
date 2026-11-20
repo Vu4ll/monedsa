@@ -16,7 +16,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Surface
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -146,7 +152,11 @@ fun SheetActions(
     }
 }
 
-/** Confirmation for actions that can't be undone. */
+/**
+ * Confirmation for actions that can't be undone: an icon that says what kind of
+ * action this is, a short explanation, an optional preview of what is affected,
+ * and a clearly red confirm button next to a neutral cancel.
+ */
 @Composable
 fun ConfirmDialog(
     title: String,
@@ -156,21 +166,49 @@ fun ConfirmDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     destructive: Boolean = true,
+    icon: ImageVector = if (destructive) Icons.Outlined.Delete else Icons.Outlined.Info,
+    preview: (@Composable () -> Unit)? = null,
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        title = { Text(title, style = MaterialTheme.typography.headlineSmall) },
-        text = { Text(text, style = MaterialTheme.typography.bodyMedium) },
-        confirmButton = {
-            Button(
-                onClick = onConfirm,
-                colors = if (destructive) ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.onError,
-                ) else ButtonDefaults.buttonColors(),
-            ) { Text(confirmLabel) }
-        },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(dismissLabel) } },
-    )
+    val scheme = MaterialTheme.colorScheme
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(shape = MaterialTheme.shapes.extraLarge, color = scheme.surfaceContainerLow) {
+            Column(
+                Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Box(
+                    Modifier.size(56.dp).clip(CircleShape)
+                        .background(if (destructive) scheme.errorContainer else scheme.primaryContainer),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(icon, null, tint = if (destructive) scheme.error else scheme.onPrimaryContainer, modifier = Modifier.size(28.dp))
+                }
+                Spacer(Modifier.height(16.dp))
+                Text(title, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text, style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
+                if (preview != null) {
+                    Spacer(Modifier.height(16.dp))
+                    Box(
+                        Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
+                            .background(scheme.surfaceContainerHighest).padding(12.dp),
+                    ) { preview() }
+                }
+                Spacer(Modifier.height(24.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f).height(48.dp)) { Text(dismissLabel) }
+                    Button(
+                        onClick = onConfirm,
+                        modifier = Modifier.weight(1f).height(48.dp),
+                        colors = if (destructive) ButtonDefaults.buttonColors(
+                            containerColor = scheme.error, contentColor = scheme.onError,
+                        ) else ButtonDefaults.buttonColors(),
+                    ) { Text(confirmLabel) }
+                }
+            }
+        }
+    }
 }

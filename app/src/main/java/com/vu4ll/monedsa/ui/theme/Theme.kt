@@ -71,7 +71,10 @@ private val LightScheme = lightColorScheme(
     surfaceTint = Color.Transparent,
     outline = Light.line,
     outlineVariant = Light.line,
-    error = Color(0xFFB3261E),
+    error = Color(0xFFC0392B),
+    onError = Color.White,
+    errorContainer = Color(0xFFF6DAD6),
+    onErrorContainer = Color(0xFF5C1A12),
 )
 
 private val DarkScheme = darkColorScheme(
@@ -97,13 +100,35 @@ private val DarkScheme = darkColorScheme(
     surfaceTint = Color.Transparent,
     outline = Dark.line,
     outlineVariant = Dark.line,
-    error = Color(0xFFF2B8B5),
+    error = Color(0xFFE5675C),
+    onError = Color(0xFF2A0A06),
+    errorContainer = Color(0xFF4E2420),
+    onErrorContainer = Color(0xFFFFD9D4),
 )
 
 @Immutable
-data class MoneyColors(val income: Color, val negative: Color)
+data class MoneyColors(
+    val income: Color,
+    val negative: Color,
+    /** Tints for picking a type: income reads green, expense reads red, never the same. */
+    val incomeContainer: Color,
+    val onIncomeContainer: Color,
+    val expenseContainer: Color,
+    val onExpenseContainer: Color,
+)
 
-val LocalMoneyColors = staticCompositionLocalOf { MoneyColors(Color(0xFF2F7A4C), Color(0xFFB8443A)) }
+private val LightMoney = MoneyColors(
+    income = Color(0xFF2F7A4C), negative = Color(0xFFB8443A),
+    incomeContainer = Color(0xFFD5EBDC), onIncomeContainer = Color(0xFF123A21),
+    expenseContainer = Color(0xFFF5DAD5), onExpenseContainer = Color(0xFF5C1A12),
+)
+private val DarkMoney = MoneyColors(
+    income = Color(0xFF7CC497), negative = Color(0xFFE88A80),
+    incomeContainer = Color(0xFF1F4A31), onIncomeContainer = Color(0xFFC6EFD3),
+    expenseContainer = Color(0xFF52251F), onExpenseContainer = Color(0xFFFFD9D3),
+)
+
+val LocalMoneyColors = staticCompositionLocalOf { LightMoney }
 
 /** Bricolage Grotesque, cut at its display optical size: only for amounts and screen titles. */
 val Display = FontFamily(
@@ -133,8 +158,7 @@ private val MonedsaShapes = Shapes(
 
 @Composable
 fun MonedsaTheme(dark: Boolean, content: @Composable () -> Unit) {
-    val money = if (dark) MoneyColors(income = Color(0xFF7CC497), negative = Color(0xFFE88A80))
-    else MoneyColors(income = Color(0xFF2F7A4C), negative = Color(0xFFB8443A))
+    val money = if (dark) DarkMoney else LightMoney
     CompositionLocalProvider(LocalMoneyColors provides money) {
         MaterialTheme(
             colorScheme = if (dark) DarkScheme else LightScheme,

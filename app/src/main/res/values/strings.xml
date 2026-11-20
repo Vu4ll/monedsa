@@ -115,4 +115,15 @@
         <item quantity="one">This category is used by %d transaction. Move it to another category to delete this one.</item>
         <item quantity="other">This category is used by %d transactions. Move them to another category to delete this one.</item>
     </plurals>
+    <string name="new_category">New category</string>
+    <string name="error_name_required">Enter a name</string>
+    <string name="more_icons">Show all icons (%1$d)</string>
+    <string name="fewer_icons">Show fewer</string>
+    <string name="change">Change</string>
+    <string name="use_color">Use colour</string>
+    <string name="delete_category_title">Delete category?</string>
+    <string name="delete_category_text">This category will be removed. This can’t be undone.</string>
+    <string name="most_used">Most used</string>
+    <string name="all_categories">All categories</string>
+    <string name="pick_date">Pick a date</string>
 </resources>
