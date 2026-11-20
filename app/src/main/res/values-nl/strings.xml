@@ -93,4 +93,25 @@
         <item quantity="one">Deze categorie wordt door %d transactie gebruikt en kan niet worden verwijderd</item>
         <item quantity="other">Deze categorie wordt door %d transacties gebruikt en kan niet worden verwijderd</item>
     </plurals>
+    <string name="new_transaction">Nieuwe transactie</string>
+    <string name="close">Sluiten</string>
+    <string name="today">Vandaag</string>
+    <string name="yesterday">Gisteren</string>
+    <string name="previous_month">Vorige maand</string>
+    <string name="next_month">Volgende maand</string>
+    <string name="empty_month">Geen transacties in deze periode. Tik op + om er een toe te voegen.</string>
+    <string name="spending_breakdown">Uitgaven per categorie, tik voor details</string>
+    <string name="unused">Nog niet gebruikt</string>
+    <string name="all_time">Alle tijd</string>
+    <string name="all_time_desc">Inkomsten %1$s, uitgaven %2$s</string>
+    <string name="choose_category">Kies een categorie</string>
+    <string name="search">Zoeken</string>
+    <string name="no_results">Niets gevonden</string>
+    <string name="icon">Pictogram</string>
+    <string name="color">Kleur</string>
+    <string name="custom_color">Eigen kleur</string>
+    <plurals name="category_in_use_info">
+        <item quantity="one">Deze categorie wordt door %d transactie gebruikt. Verplaats die naar een andere categorie om deze te verwijderen.</item>
+        <item quantity="other">Deze categorie wordt door %d transacties gebruikt. Verplaats ze naar een andere categorie om deze te verwijderen.</item>
+    </plurals>
 </resources>

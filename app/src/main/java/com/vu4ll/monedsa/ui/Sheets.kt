@@ -1,6 +1,8 @@
 package com.vu4ll.monedsa.ui
 
-import androidx.compose.foundation.clickable
+import com.vu4ll.monedsa.ui.components.AppSheet
+import com.vu4ll.monedsa.ui.components.OptionRow
+import com.vu4ll.monedsa.ui.components.SheetActions
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -48,7 +50,6 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SortSheet(current: TxFilter, onDismiss: () -> Unit, onApply: (TxFilter) -> Unit) {
     val options = listOf(
@@ -57,18 +58,13 @@ fun SortSheet(current: TxFilter, onDismiss: () -> Unit, onApply: (TxFilter) -> U
         Triple(SortBy.AMOUNT, false, R.string.sort_amount_desc),
         Triple(SortBy.AMOUNT, true, R.string.sort_amount_asc),
     )
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(Modifier.navigationBarsPadding().padding(bottom = 16.dp)) {
-            Text(stringResource(R.string.sort_title), style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp))
+    AppSheet(stringResource(R.string.sort_title), onDismiss) { close ->
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             options.forEach { (by, asc, label) ->
-                val selected = current.sortBy == by && current.ascending == asc
-                ListItem(
-                    headlineContent = { Text(stringResource(label)) },
-                    leadingContent = { RadioButton(selected = selected, onClick = null) },
-                    modifier = Modifier.clickable {
-                        onApply(current.copy(sortBy = by, ascending = asc)); onDismiss()
-                    },
+                OptionRow(
+                    title = stringResource(label),
+                    selected = current.sortBy == by && current.ascending == asc,
+                    onClick = { onApply(current.copy(sortBy = by, ascending = asc)); close() },
                 )
             }
         }
@@ -92,21 +88,17 @@ fun FilterSheet(
     var until by remember { mutableStateOf(current.until) }
     var pickDates by remember { mutableStateOf(false) }
 
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
-        Column(
-            Modifier.navigationBarsPadding().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            Text(stringResource(R.string.filter_title), style = MaterialTheme.typography.titleLarge)
+    AppSheet(stringResource(R.string.filter_title), onDismiss) { close ->
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
-            Text(stringResource(R.string.type), style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.type), style = MaterialTheme.typography.titleSmall)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(type == null, { type = null; categoryId = null }, { Text(stringResource(R.string.all)) })
                 FilterChip(type == TxType.EXPENSE, { type = TxType.EXPENSE; categoryId = null }, { Text(stringResource(R.string.expense)) })
                 FilterChip(type == TxType.INCOME, { type = TxType.INCOME; categoryId = null }, { Text(stringResource(R.string.income)) })
             }
 
-            Text(stringResource(R.string.category), style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.category), style = MaterialTheme.typography.titleSmall)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(categoryId == null, { categoryId = null }, { Text(stringResource(R.string.all)) })
                 categories.filter { type == null || it.type == type }.forEach { c ->
@@ -114,7 +106,7 @@ fun FilterSheet(
                 }
             }
 
-            Text(stringResource(R.string.amount_range, currency), style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.amount_range, currency), style = MaterialTheme.typography.titleSmall)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(min, { min = it }, Modifier.weight(1f), label = { Text(stringResource(R.string.min)) },
                     singleLine = true, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
@@ -122,7 +114,7 @@ fun FilterSheet(
                     singleLine = true, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
             }
 
-            Text(stringResource(R.string.date_range), style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.date_range), style = MaterialTheme.typography.titleSmall)
             OutlinedButton(onClick = { pickDates = true }, modifier = Modifier.fillMaxWidth()) {
                 Icon(Icons.Default.DateRange, null)
                 Text(
@@ -132,25 +124,21 @@ fun FilterSheet(
                 )
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(bottom = 16.dp)) {
-                OutlinedButton(
-                    onClick = { onApply(TxFilter(sortBy = current.sortBy, ascending = current.ascending)); onDismiss() },
-                    modifier = Modifier.weight(1f),
-                ) { Text(stringResource(R.string.clear)) }
-                Button(
-                    onClick = {
-                        onApply(
-                            current.copy(
-                                type = type, categoryId = categoryId,
-                                minAmountMinor = Format.parseAmount(min), maxAmountMinor = Format.parseAmount(max),
-                                from = from, until = until,
-                            ),
-                        )
-                        onDismiss()
-                    },
-                    modifier = Modifier.weight(1f),
-                ) { Text(stringResource(R.string.apply)) }
-            }
+            SheetActions(
+                secondary = stringResource(R.string.clear),
+                onSecondary = { onApply(TxFilter(sortBy = current.sortBy, ascending = current.ascending)); close() },
+                primary = stringResource(R.string.apply),
+                onPrimary = {
+                    onApply(
+                        current.copy(
+                            type = type, categoryId = categoryId,
+                            minAmountMinor = Format.parseAmount(min), maxAmountMinor = Format.parseAmount(max),
+                            from = from, until = until,
+                        ),
+                    )
+                    close()
+                },
+            )
         }
     }
 

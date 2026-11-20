@@ -5,6 +5,8 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.time.Instant
+import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -16,6 +18,35 @@ object Format {
         NumberFormat.getCurrencyInstance(locale).apply {
             this.currency = Currency.getInstance(currency)
         }.format(BigDecimal.valueOf(minor, 2))
+
+    /** "+€ 12,50" / "−€ 12,50" with a real minus sign; the locale's own minus placement is avoided. */
+    fun signed(minor: Long, currency: String, positive: Boolean, locale: Locale = Locale.getDefault()): String =
+        (if (positive) "+" else "\u2212") + money(kotlin.math.abs(minor), currency, locale)
+
+    /** Balance: minus sign only when negative. */
+    fun balance(minor: Long, currency: String, locale: Locale = Locale.getDefault()): String =
+        if (minor < 0) "\u2212" + money(-minor, currency, locale) else money(minor, currency, locale)
+
+    fun month(m: YearMonth, locale: Locale = Locale.getDefault()): String {
+        val pattern = if (m.year == YearMonth.now().year) "LLLL" else "LLLL yyyy"
+        return DateTimeFormatter.ofPattern(pattern, locale).format(m)
+            .replaceFirstChar { it.titlecase(locale) }
+    }
+
+    /** "Saturday 15 November", year added when it isn't the current one. */
+    fun day(d: LocalDate, locale: Locale = Locale.getDefault()): String {
+        val pattern = if (d.year == LocalDate.now().year) "EEEE d MMMM" else "EEEE d MMMM yyyy"
+        return DateTimeFormatter.ofPattern(pattern, locale).format(d).replaceFirstChar { it.titlecase(locale) }
+    }
+
+    fun localDate(epochMillis: Long): LocalDate =
+        Instant.ofEpochMilli(epochMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+
+    fun monthBounds(m: YearMonth): Pair<Long, Long> {
+        val zone = ZoneId.systemDefault()
+        return m.atDay(1).atStartOfDay(zone).toInstant().toEpochMilli() to
+            m.plusMonths(1).atDay(1).atStartOfDay(zone).toInstant().toEpochMilli()
+    }
 
     fun date(epochMillis: Long, locale: Locale = Locale.getDefault()): String =
         DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale)

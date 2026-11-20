@@ -21,6 +21,8 @@ data class BackupCategory(
     val name: String,
     val color: String = "#39BE56",
     val type: String,
+    /** Added in v2.0; older exports don't have it. */
+    val icon: String? = null,
 )
 
 @Serializable

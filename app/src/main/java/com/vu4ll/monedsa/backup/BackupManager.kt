@@ -3,6 +3,7 @@ package com.vu4ll.monedsa.backup
 import androidx.room.withTransaction
 import com.vu4ll.monedsa.data.AppDatabase
 import com.vu4ll.monedsa.data.CategoryEntity
+import com.vu4ll.monedsa.data.DefaultCategories
 import com.vu4ll.monedsa.data.TransactionEntity
 import com.vu4ll.monedsa.data.TxType
 import kotlinx.serialization.json.Json
@@ -19,7 +20,7 @@ class BackupManager(private val db: AppDatabase) {
         val (cats, txs) = db.withTransaction { db.categories().all() to db.transactions().all() }
         val file = BackupFile(
             exportedAt = Instant.now().toString(),
-            categories = cats.map { BackupCategory(it.id.toString(), it.name, it.colorHex, it.type.wire) },
+            categories = cats.map { BackupCategory(it.id.toString(), it.name, it.colorHex, it.type.wire, it.icon) },
             transactions = txs.map {
                 BackupTransaction(
                     amount = BigDecimal.valueOf(it.amountMinor, 2).toDouble(),
@@ -56,6 +57,7 @@ class BackupManager(private val db: AppDatabase) {
                 name = it.name.trim().take(50),
                 colorHex = it.color,
                 type = parseType(it.type),
+                icon = it.icon ?: DefaultCategories.guessIcon(it.name),
             )
         }
         db.withTransaction {

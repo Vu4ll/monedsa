@@ -15,7 +15,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.AccountBalanceWallet
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.CloudDownload
@@ -31,7 +32,7 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -53,11 +54,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vu4ll.monedsa.ui.theme.LocalMoneyColors
+import com.vu4ll.monedsa.ui.theme.Tabular
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import com.vu4ll.monedsa.AppContainer
 import com.vu4ll.monedsa.BuildConfig
+import com.vu4ll.monedsa.ui.components.ChoiceSheet
+import com.vu4ll.monedsa.ui.components.ConfirmDialog
 import com.vu4ll.monedsa.R
 import com.vu4ll.monedsa.backup.BackupException
 import com.vu4ll.monedsa.backup.BackupFile
@@ -92,6 +99,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
     var busy by remember { mutableStateOf(false) }
     var pendingAction by remember { mutableStateOf<DriveAction?>(null) }
     var pendingRestore by remember { mutableStateOf<BackupFile?>(null) }
+    val allTime by c.db.transactions().observeStats().collectAsStateWithLifecycle(null)
 
     fun msg(id: Int, vararg args: Any) = scope.launch { snackbar.showSnackbar(ctx.getString(id, *args)) }
 
@@ -178,16 +186,38 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
 
     fun open(url: String) = ctx.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 
+    val space = com.vu4ll.monedsa.ui.LocalBottomBarSpace.current
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text(stringResource(R.string.nav_settings)) }) },
-        snackbarHost = { SnackbarHost(snackbar) },
+        contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0, 0, 0, 0),
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.nav_settings)) }) },
+        snackbarHost = { SnackbarHost(snackbar, modifier = Modifier.padding(bottom = space)) },
     ) { pad ->
         Column(Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState())) {
+            allTime?.let { st ->
+                Section(R.string.all_time)
+                ListItem(
+                    headlineContent = {
+                        Text(
+                            Format.balance(st.balance, s.currency),
+                            style = MaterialTheme.typography.headlineSmall.merge(Tabular),
+                            color = if (st.balance < 0) LocalMoneyColors.current.negative else MaterialTheme.colorScheme.onSurface,
+                        )
+                    },
+                    supportingContent = {
+                        Text(
+                            stringResource(R.string.all_time_desc, Format.money(st.totalIncome, s.currency), Format.money(st.totalExpense, s.currency)) +
+                                "\n" + pluralStringResource(R.plurals.n_transactions, st.total, st.total),
+                        )
+                    },
+                    leadingContent = { Icon(Icons.Default.AccountBalanceWallet, null) },
+                )
+                HorizontalDivider(Modifier.padding(vertical = 8.dp))
+            }
             Section(R.string.section_display)
             val themeLabel = stringResource(themeLabel(s.theme))
             Row(Icons.Default.Palette, R.string.theme, themeLabel) { dialog = "theme" }
             Row(Icons.Default.Language, R.string.language, currentLanguageName()) { dialog = "language" }
-            Row(Icons.Default.AttachMoney, R.string.currency, s.currency) { dialog = "currency" }
+            Row(Icons.Default.Payments, R.string.currency, s.currency) { dialog = "currency" }
 
             HorizontalDivider(Modifier.padding(vertical = 8.dp))
             Section(R.string.section_backup)
@@ -232,6 +262,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
             Row(Icons.Default.Policy, R.string.privacy_policy, null, trailingLink = true) { open(PRIVACY_URL) }
             Row(Icons.Default.BugReport, R.string.report_issue, null, trailingLink = true) { open(ISSUES_URL) }
             Row(Icons.Default.Star, R.string.rate_app, null, trailingLink = true) { open(STORE_URL) }
+            androidx.compose.foundation.layout.Spacer(Modifier.padding(bottom = space))
         }
     }
 
@@ -241,7 +272,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
         "theme" -> ChoiceDialog(R.string.theme, ThemeMode.entries, s.theme, { stringResource(themeLabel(it)) }, { dialog = null }) {
             scope.launch { c.prefs.setTheme(it) }
         }
-        "currency" -> ChoiceDialog(R.string.currency, Prefs.CURRENCIES, s.currency, { currencyLabel(it) }, { dialog = null }) {
+        "currency" -> ChoiceDialog(R.string.currency, Prefs.CURRENCIES, s.currency, { currencyLabel(it) }, { dialog = null }, { currencyName(it) }) {
             scope.launch { c.prefs.setCurrency(it) }
         }
         "language" -> {
@@ -261,26 +292,23 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
     }
 
     pendingRestore?.let { file ->
-        AlertDialog(
-            onDismissRequest = { pendingRestore = null },
-            title = { Text(stringResource(R.string.restore_confirm_title)) },
-            text = {
-                Text(stringResource(R.string.restore_confirm_text, file.transactions.size, file.categories.size))
-            },
-            confirmButton = {
-                TextButton(onClick = {
-                    pendingRestore = null
-                    scope.launch {
-                        try {
-                            c.backup.restore(file)
-                            msg(R.string.restore_done)
-                        } catch (e: Exception) {
-                            errorMsg(if (e is BackupException) e else BackupException(ctx.getString(R.string.error_import)))
-                        }
+        ConfirmDialog(
+            title = stringResource(R.string.restore_confirm_title),
+            text = stringResource(R.string.restore_confirm_text, file.transactions.size, file.categories.size),
+            confirmLabel = stringResource(R.string.restore),
+            dismissLabel = stringResource(R.string.cancel),
+            onDismiss = { pendingRestore = null },
+            onConfirm = {
+                pendingRestore = null
+                scope.launch {
+                    try {
+                        c.backup.restore(file)
+                        msg(R.string.restore_done)
+                    } catch (e: Exception) {
+                        errorMsg(if (e is BackupException) e else BackupException(ctx.getString(R.string.error_import)))
                     }
-                }) { Text(stringResource(R.string.restore), color = MaterialTheme.colorScheme.error) }
+                }
             },
-            dismissButton = { TextButton(onClick = { pendingRestore = null }) { Text(stringResource(R.string.cancel)) } },
         )
     }
 }
@@ -288,7 +316,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
 @Composable
 private fun Section(title: Int) {
     Text(
-        stringResource(title), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+        stringResource(title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 4.dp),
     )
 }
@@ -313,25 +341,9 @@ private fun <T> ChoiceDialog(
     selected: T,
     label: @Composable (T) -> String,
     onDismiss: () -> Unit,
+    subtitle: @Composable (T) -> String? = { null },
     onPick: (T) -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(title)) },
-        text = {
-            Column {
-                options.forEach { o ->
-                    ListItem(
-                        headlineContent = { Text(label(o)) },
-                        leadingContent = { RadioButton(selected = o == selected, onClick = null) },
-                        modifier = Modifier.clickable { onPick(o); onDismiss() },
-                    )
-                }
-            }
-        },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } },
-    )
-}
+) = ChoiceSheet(stringResource(title), options, selected, label, onDismiss, subtitle, onPick)
 
 private fun themeLabel(t: ThemeMode) = when (t) {
     ThemeMode.SYSTEM -> R.string.theme_system
@@ -345,10 +357,11 @@ private fun autoLabel(a: AutoBackup) = when (a) {
     AutoBackup.WEEKLY -> R.string.auto_weekly
 }
 
-private fun currencyLabel(code: String): String {
-    val cur = java.util.Currency.getInstance(code)
-    return "$code (${cur.getSymbol(Locale.getDefault())}) · ${cur.getDisplayName(Locale.getDefault())}"
-}
+private fun currencyLabel(code: String): String =
+    "$code (${java.util.Currency.getInstance(code).getSymbol(Locale.getDefault())})"
+
+private fun currencyName(code: String): String =
+    java.util.Currency.getInstance(code).getDisplayName(Locale.getDefault()).replaceFirstChar { it.titlecase(Locale.getDefault()) }
 
 @Composable
 private fun languageName(tag: String): String =

@@ -94,4 +94,25 @@
         <item quantity="one">This category is used by %d transaction and can\'t be deleted</item>
         <item quantity="other">This category is used by %d transactions and can\'t be deleted</item>
     </plurals>
+    <string name="new_transaction">New transaction</string>
+    <string name="close">Close</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="previous_month">Previous month</string>
+    <string name="next_month">Next month</string>
+    <string name="empty_month">No transactions in this period. Tap + to add one.</string>
+    <string name="spending_breakdown">Spending by category, tap for details</string>
+    <string name="unused">Not used yet</string>
+    <string name="all_time">All time</string>
+    <string name="all_time_desc">Income %1$s, expenses %2$s</string>
+    <string name="choose_category">Choose a category</string>
+    <string name="search">Search</string>
+    <string name="no_results">Nothing found</string>
+    <string name="icon">Icon</string>
+    <string name="color">Colour</string>
+    <string name="custom_color">Custom colour</string>
+    <plurals name="category_in_use_info">
+        <item quantity="one">This category is used by %d transaction. Move it to another category to delete this one.</item>
+        <item quantity="other">This category is used by %d transactions. Move them to another category to delete this one.</item>
+    </plurals>
 </resources>

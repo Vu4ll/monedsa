@@ -93,4 +93,25 @@
         <item quantity="one">Bu kategori %d işlemde kullanıldığı için silinemez</item>
         <item quantity="other">Bu kategori %d işlemde kullanıldığı için silinemez</item>
     </plurals>
+    <string name="new_transaction">Yeni işlem</string>
+    <string name="close">Kapat</string>
+    <string name="today">Bugün</string>
+    <string name="yesterday">Dün</string>
+    <string name="previous_month">Önceki ay</string>
+    <string name="next_month">Sonraki ay</string>
+    <string name="empty_month">Bu dönemde işlem yok. Eklemek için + simgesine dokunun.</string>
+    <string name="spending_breakdown">Kategoriye göre giderler, ayrıntılar için dokunun</string>
+    <string name="unused">Henüz kullanılmadı</string>
+    <string name="all_time">Tüm zamanlar</string>
+    <string name="all_time_desc">Gelir %1$s, gider %2$s</string>
+    <string name="choose_category">Kategori seçin</string>
+    <string name="search">Ara</string>
+    <string name="no_results">Sonuç yok</string>
+    <string name="icon">İkon</string>
+    <string name="color">Renk</string>
+    <string name="custom_color">Özel renk</string>
+    <plurals name="category_in_use_info">
+        <item quantity="one">Bu kategori %d işlemde kullanılıyor. Silmek için önce işlemi başka bir kategoriye taşıyın.</item>
+        <item quantity="other">Bu kategori %d işlemde kullanılıyor. Silmek için önce işlemleri başka bir kategoriye taşıyın.</item>
+    </plurals>
 </resources>

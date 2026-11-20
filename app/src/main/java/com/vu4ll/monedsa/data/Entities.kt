@@ -19,6 +19,8 @@ data class CategoryEntity(
     val colorHex: String,
     val type: TxType,
     val createdAt: Long = System.currentTimeMillis(),
+    /** Key from CategoryIcons; unknown keys fall back to a generic icon. */
+    @ColumnInfo(defaultValue = DefaultCategories.FALLBACK_ICON) val icon: String = DefaultCategories.FALLBACK_ICON,
 )
 
 /** Money is stored in minor units (cents) to avoid floating point drift. */
@@ -48,6 +50,7 @@ data class TransactionWithCategory(
     @Embedded val tx: TransactionEntity,
     @ColumnInfo(name = "categoryName") val categoryName: String,
     @ColumnInfo(name = "categoryColor") val categoryColor: String,
+    @ColumnInfo(name = "categoryIcon") val categoryIcon: String,
 )
 
 data class Stats(
@@ -59,6 +62,16 @@ data class Stats(
 ) {
     val balance: Long get() = totalIncome - totalExpense
 }
+
+data class CategoryTotal(
+    val categoryId: Long,
+    val name: String,
+    val colorHex: String,
+    val icon: String,
+    val total: Long,
+)
+
+data class CategoryUsage(val categoryId: Long, val count: Int)
 
 enum class SortBy { DATE, AMOUNT }
 

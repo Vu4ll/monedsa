@@ -1,7 +1,33 @@
 package com.vu4ll.monedsa.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.draw.clip
+import com.vu4ll.monedsa.data.CategoryEntity
+import com.vu4ll.monedsa.ui.components.AppSheet
+import com.vu4ll.monedsa.ui.components.ConfirmDialog
+import com.vu4ll.monedsa.ui.components.OptionRow
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
+import com.vu4ll.monedsa.ui.theme.LocalMoneyColors
+import com.vu4ll.monedsa.ui.theme.Tabular
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +38,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
@@ -25,7 +50,6 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
@@ -77,6 +101,7 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
     var categoryError by remember { mutableStateOf(false) }
     var pickDate by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
+    var pickCategory by remember { mutableStateOf(false) }
 
     LaunchedEffect(id) {
         if (!loaded) {
@@ -103,12 +128,15 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
         }
     }
 
+    val focus = remember { FocusRequester() }
+    LaunchedEffect(loaded) { if (loaded && isNew) runCatching { focus.requestFocus() } }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(if (isNew) R.string.add_transaction else R.string.edit_transaction)) },
+                title = { Text(stringResource(if (isNew) R.string.new_transaction else R.string.edit_transaction)) },
                 navigationIcon = {
-                    IconButton(onClick = onDone) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back)) }
+                    IconButton(onClick = onDone) { Icon(Icons.Default.Close, stringResource(R.string.close)) }
                 },
                 actions = {
                     if (!isNew) IconButton(onClick = { confirmDelete = true }) {
@@ -117,69 +145,119 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
                 },
             )
         },
+        bottomBar = {
+            Button(
+                onClick = ::save,
+                modifier = Modifier.fillMaxWidth().navigationBarsPadding().imePadding()
+                    .padding(horizontal = 20.dp, vertical = 12.dp).height(52.dp),
+            ) { Text(stringResource(if (isNew) R.string.save else R.string.update), style = MaterialTheme.typography.titleMedium) }
+        },
     ) { pad ->
         if (!loaded) return@Scaffold
         Column(
-            Modifier.fillMaxSize().padding(pad).imePadding().verticalScroll(rememberScrollState()).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState()).padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                 listOf(TxType.EXPENSE to R.string.expense, TxType.INCOME to R.string.income).forEachIndexed { i, (t, label) ->
                     SegmentedButton(
                         selected = type == t,
-                        onClick = {
-                            if (type != t) { type = t; categoryId = null }
-                        },
+                        onClick = { if (type != t) { type = t; categoryId = null } },
                         shape = SegmentedButtonDefaults.itemShape(i, 2),
                     ) { Text(stringResource(label)) }
                 }
             }
 
-            OutlinedTextField(
-                value = amount,
-                onValueChange = { amount = it; amountError = false },
-                label = { Text(stringResource(R.string.amount_in, currency)) },
-                isError = amountError,
-                supportingText = { if (amountError) Text(stringResource(R.string.error_amount)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                modifier = Modifier.fillMaxWidth(),
-            )
-
+            // The amount is the point of this screen: big, first, keyboard already open.
             Column {
-                Text(stringResource(R.string.category), style = MaterialTheme.typography.labelLarge,
-                    color = if (categoryError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    categories.filter { it.type == type }.forEach { c ->
-                        FilterChip(
-                            selected = categoryId == c.id,
-                            onClick = { categoryId = c.id; categoryError = false },
-                            label = { Text(c.name) },
-                            leadingIcon = { ColorDot(Format.color(c.colorHex)) },
-                            colors = FilterChipDefaults.filterChipColors(),
+                val symbol = remember(currency) { java.util.Currency.getInstance(currency).getSymbol(java.util.Locale.getDefault()) }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        symbol,
+                        style = MaterialTheme.typography.displayMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(end = 8.dp),
+                    )
+                    BasicTextField(
+                        value = amount,
+                        onValueChange = { v -> if (v.length <= 12 && v.all { it.isDigit() || it == ',' || it == '.' }) { amount = v; amountError = false } },
+                        textStyle = MaterialTheme.typography.displayMedium.merge(Tabular).copy(
+                            color = if (type == TxType.INCOME) LocalMoneyColors.current.income else MaterialTheme.colorScheme.onSurface,
+                        ),
+                        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        modifier = Modifier.weight(1f).focusRequester(focus),
+                        decorationBox = { inner ->
+                            Box {
+                                if (amount.isEmpty()) Text(
+                                    "0", style = MaterialTheme.typography.displayMedium,
+                                    color = MaterialTheme.colorScheme.outline,
+                                )
+                                inner()
+                            }
+                        },
+                    )
+                }
+                HorizontalDivider(color = if (amountError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline)
+                if (amountError) Text(stringResource(R.string.error_amount), color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
+            }
+
+            // A field that opens a searchable list: stays usable with 5 or 50 categories.
+            val chosen = categories.firstOrNull { it.id == categoryId }
+            Column {
+                Row(
+                    Modifier.fillMaxWidth().clip(MaterialTheme.shapes.small)
+                        .border(
+                            1.dp,
+                            if (categoryError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
+                            MaterialTheme.shapes.small,
+                        )
+                        .clickable { pickCategory = true }
+                        .padding(horizontal = 14.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (chosen != null) {
+                        CategoryBadge(chosen.icon, Format.color(chosen.colorHex), 32.dp)
+                        Spacer(Modifier.width(12.dp))
+                        Text(chosen.name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                    } else {
+                        Text(
+                            stringResource(R.string.choose_category), style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f).padding(vertical = 4.dp),
                         )
                     }
+                    Icon(Icons.Default.ArrowDropDown, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 if (categoryError) Text(stringResource(R.string.error_category), color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall)
+                    style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp, start = 4.dp))
             }
 
             OutlinedTextField(
                 value = description,
                 onValueChange = { if (it.length <= 500) description = it },
                 label = { Text(stringResource(R.string.description)) },
-                minLines = 2,
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            OutlinedButton(onClick = { pickDate = true }, modifier = Modifier.fillMaxWidth()) {
-                Icon(Icons.Default.CalendarToday, null)
-                Text(Format.date(date), Modifier.padding(start = 8.dp))
-            }
-
-            Button(onClick = ::save, modifier = Modifier.fillMaxWidth()) {
-                Text(stringResource(if (isNew) R.string.save else R.string.update))
-            }
+            AssistChip(
+                onClick = { pickDate = true },
+                label = {
+                    val d = Format.localDate(date)
+                    Text(
+                        when (d) {
+                            java.time.LocalDate.now() -> stringResource(R.string.today)
+                            java.time.LocalDate.now().minusDays(1) -> stringResource(R.string.yesterday)
+                            else -> Format.date(date)
+                        },
+                    )
+                },
+                leadingIcon = { Icon(Icons.Default.CalendarToday, null, Modifier.size(18.dp)) },
+                trailingIcon = { Icon(Icons.Default.ArrowDropDown, null) },
+            )
+            Spacer(Modifier.height(8.dp))
         }
     }
 
@@ -204,16 +282,58 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
     }
 
     if (confirmDelete) {
-        AlertDialog(
-            onDismissRequest = { confirmDelete = false },
-            title = { Text(stringResource(R.string.delete_transaction_title)) },
-            text = { Text(stringResource(R.string.delete_transaction_text)) },
-            confirmButton = {
-                TextButton(onClick = { scope.launch { dao.delete(id); onDone() } }) {
-                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
-                }
-            },
-            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
+        ConfirmDialog(
+            title = stringResource(R.string.delete_transaction_title),
+            text = stringResource(R.string.delete_transaction_text),
+            confirmLabel = stringResource(R.string.delete),
+            dismissLabel = stringResource(R.string.cancel),
+            onConfirm = { scope.launch { dao.delete(id); onDone() } },
+            onDismiss = { confirmDelete = false },
         )
+    }
+
+    if (pickCategory) {
+        CategoryPickerSheet(
+            categories = categories.filter { it.type == type },
+            selectedId = categoryId,
+            onDismiss = { pickCategory = false },
+        ) { categoryId = it.id; categoryError = false }
+    }
+}
+
+/** Searchable category list; the search field appears once the list gets long. */
+@Composable
+fun CategoryPickerSheet(
+    categories: List<CategoryEntity>,
+    selectedId: Long?,
+    onDismiss: () -> Unit,
+    onPick: (CategoryEntity) -> Unit,
+) {
+    var query by remember { mutableStateOf("") }
+    AppSheet(stringResource(R.string.choose_category), onDismiss) { close ->
+        if (categories.size > 8) {
+            OutlinedTextField(
+                value = query, onValueChange = { query = it },
+                placeholder = { Text(stringResource(R.string.search)) },
+                leadingIcon = { Icon(Icons.Default.Search, null) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+            )
+        }
+        val shown = categories.filter { it.name.contains(query.trim(), ignoreCase = true) }
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            shown.forEach { c ->
+                OptionRow(
+                    title = c.name,
+                    selected = c.id == selectedId,
+                    leading = { CategoryBadge(c.icon, Format.color(c.colorHex), 36.dp) },
+                    onClick = { onPick(c); close() },
+                )
+            }
+            if (shown.isEmpty()) Text(
+                stringResource(R.string.no_results), color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(vertical = 16.dp),
+            )
+        }
     }
 }
