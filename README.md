@@ -213,12 +213,12 @@ PUT  /api/profile/change-password # Change password
 ## 📝 License
 
 - This project is licensed under the GPL3 License. See the [LICENSE](LICENSE) file for details.
-- **Privacy Policy**: [monedsa.vu4ll.com.tr/privacy-policy](https://monedsa.vu4ll.com.tr/privacy-policy)
+- **Privacy Policy**: [monedsa.vu4ll.nl/privacy-policy](https://monedsa.vu4ll.nl/privacy-policy)
 
 ## 📞 Contact
 
-- **Website:** [vu4ll.com.tr](https://vu4ll.com.tr)
-- **E-mail:** [contact@vu4ll.com.tr](mailto:contact@vu4ll.com.tr)
+- **Website:** [vu4ll.nl](https://vu4ll.nl)
+- **E-mail:** [contact@vu4ll.nl](mailto:contact@vu4ll.nl)
 
 ---
 

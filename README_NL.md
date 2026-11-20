@@ -213,12 +213,12 @@ PUT  /api/profile/change-password # Wachtwoord wijzigen
 ## 📝 Licentie
 
 - Dit project is gelicentieerd onder de GPL3 Licentie. Zie het [LICENSE](LICENSE) bestand voor details.
-- **Privacybeleid**: [monedsa.vu4ll.com.tr/privacy-policy](https://monedsa.vu4ll.com.tr/privacy-policy/nl)
+- **Privacybeleid**: [monedsa.vu4ll.nl/privacy-policy](https://monedsa.vu4ll.nl/privacy-policy/nl)
 
 ## 📞 Contact
 
-- **Website:** [vu4ll.com.tr](https://vu4ll.com.tr)
-- **E-mail:** [contact@vu4ll.com.tr](mailto:contact@vu4ll.com.tr)
+- **Website:** [vu4ll.nl](https://vu4ll.nl)
+- **E-mail:** [contact@vu4ll.nl](mailto:contact@vu4ll.nl)
 
 ---
 

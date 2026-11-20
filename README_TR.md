@@ -213,12 +213,12 @@ PUT  /api/profile/change-password # Şifre değiştirme
 ## 📝 Lisans
 
 - Bu proje GPL3 lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasını inceleyin.
-- **Gizlilik politikası**: [monedsa.vu4ll.com.tr/privacy-policy](https://monedsa.vu4ll.com.tr/privacy-policy/tr)
+- **Gizlilik politikası**: [monedsa.vu4ll.nl/privacy-policy](https://monedsa.vu4ll.nl/privacy-policy/tr)
 
 ## 📞 İletişim
 
-- **Web sitesi:** [vu4ll.com.tr](https://vu4ll.com.tr)
-- **E-posta:** [contact@vu4ll.com.tr](mailto:contact@vu4ll.com.tr)
+- **Web sitesi:** [vu4ll.nl](https://vu4ll.nl)
+- **E-posta:** [contact@vu4ll.nl](mailto:contact@vu4ll.nl)
 
 ---
 
