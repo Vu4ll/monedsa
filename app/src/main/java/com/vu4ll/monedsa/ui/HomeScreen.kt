@@ -97,6 +97,10 @@ class HomeViewModel(c: AppContainer) : ViewModel() {
 
     val categories = c.db.categories().observeAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val usage = c.db.categories().observeUsage()
+        .map { list -> list.associate { it.categoryId to it.count } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyMap())
 }
 
 private sealed interface ListRow {
@@ -112,6 +116,7 @@ fun HomeScreen(container: AppContainer, currency: String, onOpen: (Long) -> Unit
     val selected by vm.month.collectAsStateWithLifecycle()
     val first by vm.firstMonth.collectAsStateWithLifecycle()
     val categories by vm.categories.collectAsStateWithLifecycle()
+    val usage by vm.usage.collectAsStateWithLifecycle()
     var showSort by remember { mutableStateOf(false) }
     var showFilter by remember { mutableStateOf(false) }
     val customRange = filter.from != null || filter.until != null
@@ -150,7 +155,7 @@ fun HomeScreen(container: AppContainer, currency: String, onOpen: (Long) -> Unit
                 customRange = customRange,
                 canGoBack = pager.currentPage > 0,
                 canGoForward = pager.currentPage < count - 1,
-                filtersActive = otherFilters,
+                filtersActive = filter.isActive,
                 onPrev = { scope.launch { pager.animateScrollToPage(pager.currentPage - 1) } },
                 onNext = { scope.launch { pager.animateScrollToPage(pager.currentPage + 1) } },
                 onClearRange = { vm.filter.value = filter.copy(from = null, until = null) },
@@ -169,7 +174,7 @@ fun HomeScreen(container: AppContainer, currency: String, onOpen: (Long) -> Unit
     }
 
     if (showSort) SortSheet(filter, onDismiss = { showSort = false }) { vm.filter.value = it }
-    if (showFilter) FilterSheet(filter, categories, currency, onDismiss = { showFilter = false }) { vm.filter.value = it }
+    if (showFilter) FilterSheet(filter, categories, usage, currency, onDismiss = { showFilter = false }) { vm.filter.value = it }
 }
 
 /** Summary + transactions for one period. Each page observes its own slice of the database. */
@@ -231,7 +236,7 @@ private fun PeriodPage(
 
 @Composable
 private fun rangeLabel(f: TxFilter): String =
-    "${f.from?.let(Format::date) ?: "…"} – ${f.until?.let { Format.date(it - 1) } ?: "…"}"
+    "${f.from?.let { Format.shortDate(it) } ?: "…"} – ${f.until?.let { Format.shortDate(it - 1) } ?: "…"}"
 
 @Composable
 private fun PeriodBar(

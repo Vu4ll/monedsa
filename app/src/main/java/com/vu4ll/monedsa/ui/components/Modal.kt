@@ -60,6 +60,8 @@ fun AppSheet(
     title: String,
     onDismiss: () -> Unit,
     subtitle: String? = null,
+    /** Optional icon action shown at the right of the title (e.g. "clear"). Gets `close` too. */
+    titleAction: (@Composable (close: () -> Unit) -> Unit)? = null,
     content: @Composable ColumnScope.(close: () -> Unit) -> Unit,
 ) {
     val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -74,7 +76,10 @@ fun AppSheet(
         Column(
             Modifier.verticalScroll(rememberScrollState()).padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
         ) {
-            Text(title, style = MaterialTheme.typography.headlineSmall)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
+                titleAction?.invoke(close)
+            }
             if (subtitle != null) Text(
                 subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 4.dp),

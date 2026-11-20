@@ -125,4 +125,6 @@
     <string name="most_used">En çok kullanılanlar</string>
     <string name="all_categories">Tüm kategoriler</string>
     <string name="pick_date">Tarih seç</string>
+    <string name="amount">Tutar</string>
+    <string name="clear_filters">Filtreleri temizle</string>
 </resources>

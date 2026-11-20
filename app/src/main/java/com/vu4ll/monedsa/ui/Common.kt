@@ -1,6 +1,16 @@
 package com.vu4ll.monedsa.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -57,4 +67,51 @@ fun <T> EvenGrid(
 fun List<com.vu4ll.monedsa.data.CategoryEntity>.sortedForDisplay(): List<com.vu4ll.monedsa.data.CategoryEntity> {
     val collator = java.text.Collator.getInstance(java.util.Locale.getDefault()).apply { strength = java.text.Collator.SECONDARY }
     return sortedWith { a, b -> collator.compare(a.name.trim(), b.name.trim()) }
+}
+
+/**
+ * Looks like a text field, opens a picker. Used for category and date choices so
+ * every "tap to choose" control in the app looks the same.
+ */
+@Composable
+fun SelectField(
+    text: String?,
+    placeholder: String,
+    onClick: () -> Unit,
+    leading: (@Composable () -> Unit)? = null,
+    isError: Boolean = false,
+    onClear: (() -> Unit)? = null,
+) {
+    val scheme = androidx.compose.material3.MaterialTheme.colorScheme
+    androidx.compose.foundation.layout.Row(
+        Modifier.fillMaxWidth().clip(androidx.compose.material3.MaterialTheme.shapes.small)
+            .border(1.dp, if (isError) scheme.error else scheme.outline, androidx.compose.material3.MaterialTheme.shapes.small)
+            .clickable(onClick = onClick)
+            .padding(start = 14.dp, end = 6.dp, top = 6.dp, bottom = 6.dp)
+            .height(44.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (leading != null) {
+            leading()
+            Spacer(Modifier.width(12.dp))
+        }
+        androidx.compose.material3.Text(
+            text ?: placeholder,
+            style = androidx.compose.material3.MaterialTheme.typography.bodyLarge,
+            color = if (text == null) scheme.onSurfaceVariant else scheme.onSurface,
+            maxLines = 1,
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
+        )
+        if (onClear != null && text != null) {
+            androidx.compose.material3.IconButton(onClick = onClear) {
+                Icon(androidx.compose.material.icons.Icons.Default.Close, null, tint = scheme.onSurfaceVariant)
+            }
+        } else {
+            Icon(
+                androidx.compose.material.icons.Icons.Default.ArrowDropDown, null,
+                tint = scheme.onSurfaceVariant, modifier = Modifier.padding(end = 8.dp),
+            )
+        }
+    }
 }

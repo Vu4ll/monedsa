@@ -125,4 +125,6 @@
     <string name="most_used">Meest gebruikt</string>
     <string name="all_categories">Alle categorieën</string>
     <string name="pick_date">Kies datum</string>
+    <string name="amount">Bedrag</string>
+    <string name="clear_filters">Filters wissen</string>
 </resources>

@@ -5,6 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Apps
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import com.vu4ll.monedsa.data.CategoryEntity
 import com.vu4ll.monedsa.ui.components.AppSheet
@@ -205,29 +208,13 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
             // A field that opens a searchable list: stays usable with 5 or 50 categories.
             val chosen = categories.firstOrNull { it.id == categoryId }
             Column {
-                Row(
-                    Modifier.fillMaxWidth().clip(MaterialTheme.shapes.small)
-                        .border(
-                            1.dp,
-                            if (categoryError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
-                            MaterialTheme.shapes.small,
-                        )
-                        .clickable { pickCategory = true }
-                        .padding(horizontal = 14.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    if (chosen != null) {
-                        CategoryBadge(chosen.icon, Format.color(chosen.colorHex), 32.dp)
-                        Spacer(Modifier.width(12.dp))
-                        Text(chosen.name, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                    } else {
-                        Text(
-                            stringResource(R.string.choose_category), style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f).padding(vertical = 4.dp),
-                        )
-                    }
-                    Icon(Icons.Default.ArrowDropDown, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
+                SelectField(
+                    text = chosen?.name,
+                    placeholder = stringResource(R.string.choose_category),
+                    onClick = { pickCategory = true },
+                    leading = chosen?.let { { CategoryBadge(it.icon, Format.color(it.colorHex), 32.dp) } },
+                    isError = categoryError,
+                )
                 if (categoryError) Text(stringResource(R.string.error_category), color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp, start = 4.dp))
             }
@@ -348,6 +335,8 @@ fun CategoryPickerSheet(
     usage: Map<Long, Int>,
     selectedId: Long?,
     onDismiss: () -> Unit,
+    allLabel: String? = null,
+    onPickAll: () -> Unit = {},
     onPick: (CategoryEntity) -> Unit,
 ) {
     var query by remember { mutableStateOf("") }
@@ -375,13 +364,36 @@ fun CategoryPickerSheet(
         )
         val searching = query.isNotBlank()
         val shown = sorted.filter { it.name.contains(query.trim(), ignoreCase = true) }
+        val mixed = shown.map { it.type }.distinct().size > 1
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            if (!searching && frequent.isNotEmpty()) {
-                PickerLabel(R.string.most_used)
-                frequent.forEach { rowFor(it) }
-                PickerLabel(R.string.all_categories)
+            if (allLabel != null && !searching) OptionRow(
+                title = allLabel,
+                selected = selectedId == null,
+                leading = {
+                    Box(
+                        Modifier.size(36.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surfaceContainerHighest),
+                        contentAlignment = Alignment.Center,
+                    ) { Icon(Icons.Default.Apps, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(20.dp)) }
+                },
+                onClick = { onPickAll(); close() },
+            )
+            if (mixed) {
+                // Both types: one section each, so "Bonus" and "Bill" don't blur together.
+                listOf(TxType.EXPENSE to R.string.expense, TxType.INCOME to R.string.income).forEach { (t, label) ->
+                    val group = shown.filter { it.type == t }
+                    if (group.isNotEmpty()) {
+                        PickerLabel(label)
+                        group.forEach { rowFor(it) }
+                    }
+                }
+            } else {
+                if (!searching && frequent.isNotEmpty()) {
+                    PickerLabel(R.string.most_used)
+                    frequent.forEach { rowFor(it) }
+                    PickerLabel(R.string.all_categories)
+                }
+                shown.forEach { rowFor(it) }
             }
-            shown.forEach { rowFor(it) }
             if (shown.isEmpty()) Text(
                 stringResource(R.string.no_results), color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(vertical = 16.dp),
