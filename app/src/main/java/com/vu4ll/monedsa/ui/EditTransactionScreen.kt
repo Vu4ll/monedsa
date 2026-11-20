@@ -171,7 +171,7 @@ fun EditTransactionScreen(container: AppContainer, id: Long, currency: String, o
 
             // The amount is the point of this screen: big, first, keyboard already open.
             Column {
-                val symbol = remember(currency) { java.util.Currency.getInstance(currency).getSymbol(java.util.Locale.getDefault()) }
+                val symbol = remember(currency) { Format.symbol(currency) }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         symbol,

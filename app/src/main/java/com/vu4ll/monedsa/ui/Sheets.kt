@@ -130,7 +130,7 @@ fun FilterSheet(
     var pickCategory by remember { mutableStateOf(false) }
     val money = LocalMoneyColors.current
     val scheme = MaterialTheme.colorScheme
-    val symbol = remember(currency) { java.util.Currency.getInstance(currency).getSymbol(java.util.Locale.getDefault()) }
+    val symbol = remember(currency) { Format.symbol(currency) }
     val chosen = categories.firstOrNull { it.id == categoryId }
 
     val anySet = type != null || categoryId != null || min.isNotBlank() || max.isNotBlank() || from != null || until != null

@@ -24,6 +24,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import com.vu4ll.monedsa.ui.components.OptionText
+import com.vu4ll.monedsa.ui.components.OptionIcon
+import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material.icons.outlined.CalendarViewWeek
 import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material.icons.outlined.SyncDisabled
@@ -249,7 +252,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
             val themeLabel = stringResource(themeLabel(s.theme))
             Row(Icons.Default.Palette, R.string.theme, themeLabel) { dialog = "theme" }
             Row(Icons.Default.Language, R.string.language, currentLanguageName()) { dialog = "language" }
-            Row(Icons.Default.Payments, R.string.currency, s.currency) { dialog = "currency" }
+            Row(Icons.Default.Payments, R.string.currency, currencyName(s.currency)) { dialog = "currency" }
 
             HorizontalDivider(Modifier.padding(vertical = 8.dp))
             Section(R.string.section_backup)
@@ -303,12 +306,19 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
         "theme" -> ChoiceDialog(R.string.theme, ThemeMode.entries, s.theme, { stringResource(themeLabel(it)) }, { dialog = null }, icon = ::themeIcon) {
             scope.launch { c.prefs.setTheme(it) }
         }
-        "currency" -> ChoiceDialog(R.string.currency, Prefs.CURRENCIES, s.currency, { currencyLabel(it) }, { dialog = null }, { currencyName(it) }) {
+        "currency" -> ChoiceDialog(R.string.currency, Prefs.CURRENCIES, s.currency, { it }, { dialog = null }, { currencyName(it) },
+            // Badge shows just the sign: "US$" (Dutch/English locales) is too wide for it.
+            leading = { code, sel -> OptionText(Format.symbol(code).takeLast(1), sel) }) {
             scope.launch { c.prefs.setCurrency(it) }
         }
         "language" -> {
             val current = AppCompatDelegate.getApplicationLocales().get(0)?.language ?: ""
-            ChoiceDialog(R.string.language, listOf("", "en", "tr", "nl"), current, { languageName(it) }, { dialog = null }) {
+            ChoiceDialog(
+                R.string.language, listOf("", "en", "tr", "nl"), current, { languageName(it) }, { dialog = null },
+                leading = { tag, sel ->
+                    if (tag.isEmpty()) OptionIcon(Icons.Outlined.Smartphone, sel) else OptionText(tag.uppercase(), sel)
+                },
+            ) {
                 AppCompatDelegate.setApplicationLocales(
                     if (it.isEmpty()) LocaleListCompat.getEmptyLocaleList() else LocaleListCompat.forLanguageTags(it),
                 )
@@ -403,8 +413,9 @@ private fun <T> ChoiceDialog(
     onDismiss: () -> Unit,
     subtitle: @Composable (T) -> String? = { null },
     icon: ((T) -> ImageVector)? = null,
+    leading: (@Composable (T, Boolean) -> Unit)? = icon?.let { f -> { o, sel -> OptionIcon(f(o), sel) } },
     onPick: (T) -> Unit,
-) = ChoiceSheet(stringResource(title), options, selected, label, onDismiss, subtitle, icon, onPick)
+) = ChoiceSheet(stringResource(title), options, selected, label, onDismiss, subtitle, leading, onPick)
 
 private fun themeIcon(t: ThemeMode) = when (t) {
     ThemeMode.SYSTEM -> Icons.Outlined.BrightnessAuto
@@ -430,8 +441,6 @@ private fun autoLabel(a: AutoBackup) = when (a) {
     AutoBackup.WEEKLY -> R.string.auto_weekly
 }
 
-private fun currencyLabel(code: String): String =
-    "$code (${java.util.Currency.getInstance(code).getSymbol(Locale.getDefault())})"
 
 private fun currencyName(code: String): String =
     java.util.Currency.getInstance(code).getDisplayName(Locale.getDefault()).replaceFirstChar { it.titlecase(Locale.getDefault()) }

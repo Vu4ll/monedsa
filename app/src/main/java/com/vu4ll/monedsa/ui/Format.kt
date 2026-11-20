@@ -17,7 +17,14 @@ object Format {
     fun money(minor: Long, currency: String, locale: Locale = Locale.getDefault()): String =
         NumberFormat.getCurrencyInstance(locale).apply {
             this.currency = Currency.getInstance(currency)
+            if (this is java.text.DecimalFormat) decimalFormatSymbols = decimalFormatSymbols.apply {
+                currencySymbol = symbol(currency, locale)
+            }
         }.format(BigDecimal.valueOf(minor, 2))
+
+    /** Currency sign; outside Turkish locales Java gives "TRY" for the lira, so that one is fixed to ₺. */
+    fun symbol(currency: String, locale: Locale = Locale.getDefault()): String =
+        if (currency == "TRY") "\u20BA" else Currency.getInstance(currency).getSymbol(locale)
 
     /** "+€ 12,50" / "−€ 12,50" with a real minus sign; the locale's own minus placement is avoided. */
     fun signed(minor: Long, currency: String, positive: Boolean, locale: Locale = Locale.getDefault()): String =

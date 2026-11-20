@@ -144,6 +144,22 @@ fun OptionIcon(icon: ImageVector, selected: Boolean) {
     }
 }
 
+/** Like [OptionIcon] but with a short text, e.g. a currency sign or language code. */
+@Composable
+fun OptionText(text: String, selected: Boolean) {
+    val scheme = MaterialTheme.colorScheme
+    Box(
+        Modifier.size(36.dp).clip(CircleShape)
+            .background(if (selected) scheme.primary else scheme.surfaceContainerHighest),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text, style = MaterialTheme.typography.labelLarge, maxLines = 1,
+            color = if (selected) scheme.onPrimary else scheme.onSurfaceVariant,
+        )
+    }
+}
+
 /** Single-choice list in a sheet; picking closes it. */
 @Composable
 fun <T> ChoiceSheet(
@@ -153,7 +169,8 @@ fun <T> ChoiceSheet(
     label: @Composable (T) -> String,
     onDismiss: () -> Unit,
     subtitle: @Composable (T) -> String? = { null },
-    icon: ((T) -> ImageVector)? = null,
+    /** Badge at the start of each row; gets whether that row is the selected one. */
+    leading: (@Composable (T, Boolean) -> Unit)? = null,
     onPick: (T) -> Unit,
 ) {
     AppSheet(title, onDismiss) { close ->
@@ -162,7 +179,7 @@ fun <T> ChoiceSheet(
                 val isSelected = o == selected
                 OptionRow(
                     label(o), selected = isSelected, subtitle = subtitle(o),
-                    leading = icon?.let { { OptionIcon(it(o), isSelected) } },
+                    leading = leading?.let { { it(o, isSelected) } },
                     onClick = { onPick(o); close() },
                 )
             }
