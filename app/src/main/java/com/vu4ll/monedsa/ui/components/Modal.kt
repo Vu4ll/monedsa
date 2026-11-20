@@ -72,6 +72,15 @@ fun AppSheet(
         sheetState = state,
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 0.dp,
+        // M3's default handle pads 22dp above and below, which leaves a big gap over the title.
+        dragHandle = {
+            Box(Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 16.dp), contentAlignment = Alignment.Center) {
+                Box(
+                    Modifier.size(width = 32.dp, height = 4.dp).clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)),
+                )
+            }
+        },
     ) {
         Column(
             Modifier.verticalScroll(rememberScrollState()).padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
