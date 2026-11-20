@@ -128,4 +128,8 @@
     <string name="pick_date">Pick a date</string>
     <string name="amount">Amount</string>
     <string name="clear_filters">Clear filters</string>
+    <string name="progress_connect">Connecting Google Drive…</string>
+    <string name="progress_backup">Backing up your data…</string>
+    <string name="progress_download">Downloading backup…</string>
+    <string name="progress_restore">Restoring your data…</string>
 </resources>

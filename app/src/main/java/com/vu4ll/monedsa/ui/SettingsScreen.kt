@@ -8,12 +8,25 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CalendarViewWeek
+import androidx.compose.material.icons.outlined.Today
+import androidx.compose.material.icons.outlined.SyncDisabled
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.BrightnessAuto
@@ -99,7 +112,8 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
     var dialog by remember { mutableStateOf<String?>(null) }
-    var busy by remember { mutableStateOf(false) }
+    // Text of the running Drive/restore step, shown as a small progress pill; null when idle.
+    var busy by remember { mutableStateOf<Int?>(null) }
     var pendingAction by remember { mutableStateOf<DriveAction?>(null) }
     var pendingRestore by remember { mutableStateOf<BackupFile?>(null) }
     val allTime by c.db.transactions().observeStats().collectAsStateWithLifecycle(null)
@@ -142,7 +156,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
             return@rememberLauncherForActivityResult
         }
         scope.launch {
-            busy = true
+            busy = action.progress
             try {
                 when (val auth = c.drive.handleConsentResult(res.data)) {
                     is DriveAuth.Token -> runWithToken(action, auth.value)
@@ -151,13 +165,13 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
             } catch (e: Exception) {
                 errorMsg(e)
             } finally {
-                busy = false
+                busy = null
             }
         }
     }
 
-    fun drive(action: DriveAction) = scope.launch {
-        busy = true
+    suspend fun driveNow(action: DriveAction) {
+        busy = action.progress
         try {
             when (val auth = c.drive.authorize()) {
                 is DriveAuth.Token -> runWithToken(action, auth.value)
@@ -169,8 +183,13 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
         } catch (e: Exception) {
             errorMsg(e)
         } finally {
-            busy = false
+            busy = null
         }
+    }
+
+    fun drive(action: DriveAction) {
+        if (busy != null) return
+        scope.launch { driveNow(action) }
     }
 
     val importFile = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -193,7 +212,17 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
     Scaffold(
         contentWindowInsets = androidx.compose.foundation.layout.WindowInsets(0, 0, 0, 0),
         topBar = { TopAppBar(title = { Text(stringResource(R.string.nav_settings)) }) },
-        snackbarHost = { SnackbarHost(snackbar, modifier = Modifier.padding(bottom = space)) },
+        snackbarHost = {
+            Column(Modifier.padding(bottom = space), horizontalAlignment = Alignment.CenterHorizontally) {
+                AnimatedVisibility(busy != null, enter = fadeIn() + slideInVertically { it / 2 }, exit = fadeOut()) {
+                    // Keep the last text while fading out instead of flashing empty.
+                    var last by remember { mutableStateOf(R.string.progress_backup) }
+                    busy?.let { last = it }
+                    ProgressPill(stringResource(last))
+                }
+                SnackbarHost(snackbar)
+            }
+        },
     ) { pad ->
         Column(Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState())) {
             allTime?.let { st ->
@@ -269,7 +298,6 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
         }
     }
 
-    if (busy) AlertDialog(onDismissRequest = {}, confirmButton = {}, text = { CircularProgressIndicator() })
 
     when (dialog) {
         "theme" -> ChoiceDialog(R.string.theme, ThemeMode.entries, s.theme, { stringResource(themeLabel(it)) }, { dialog = null }, icon = ::themeIcon) {
@@ -286,7 +314,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
                 )
             }
         }
-        "auto" -> ChoiceDialog(R.string.auto_backup, AutoBackup.entries, s.autoBackup, { stringResource(autoLabel(it)) }, { dialog = null }) {
+        "auto" -> ChoiceDialog(R.string.auto_backup, AutoBackup.entries, s.autoBackup, { stringResource(autoLabel(it)) }, { dialog = null }, icon = ::autoIcon) {
             scope.launch {
                 c.prefs.setAutoBackup(it)
                 BackupWorker.schedule(ctx, it)
@@ -304,16 +332,45 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
             onConfirm = {
                 pendingRestore = null
                 scope.launch {
+                    busy = R.string.progress_restore
                     try {
                         c.backup.restore(file)
                         msg(R.string.restore_done)
                     } catch (e: Exception) {
                         errorMsg(if (e is BackupException) e else BackupException(ctx.getString(R.string.error_import)))
+                    } finally {
+                        busy = null
                     }
                 }
             },
         )
     }
+}
+
+/** Small floating "working on it" note above the bottom bar, in place of a blocking dialog. */
+@Composable
+private fun ProgressPill(text: String) {
+    Surface(
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.inverseSurface,
+        contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+        shadowElevation = 6.dp,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+    ) {
+        androidx.compose.foundation.layout.Row(Modifier.padding(start = 16.dp, end = 20.dp, top = 12.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            CircularProgressIndicator(
+                Modifier.size(18.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.inversePrimary,
+            )
+            Spacer(Modifier.width(12.dp))
+            Text(text, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
+private val DriveAction.progress get() = when (this) {
+    DriveAction.CONNECT -> R.string.progress_connect
+    DriveAction.BACKUP -> R.string.progress_backup
+    DriveAction.RESTORE -> R.string.progress_download
 }
 
 @Composable
@@ -359,6 +416,12 @@ private fun themeLabel(t: ThemeMode) = when (t) {
     ThemeMode.SYSTEM -> R.string.theme_system
     ThemeMode.LIGHT -> R.string.theme_light
     ThemeMode.DARK -> R.string.theme_dark
+}
+
+private fun autoIcon(a: AutoBackup) = when (a) {
+    AutoBackup.OFF -> Icons.Outlined.SyncDisabled
+    AutoBackup.DAILY -> Icons.Outlined.Today
+    AutoBackup.WEEKLY -> Icons.Outlined.CalendarViewWeek
 }
 
 private fun autoLabel(a: AutoBackup) = when (a) {

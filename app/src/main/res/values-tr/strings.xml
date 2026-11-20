@@ -127,4 +127,8 @@
     <string name="pick_date">Tarih seç</string>
     <string name="amount">Tutar</string>
     <string name="clear_filters">Filtreleri temizle</string>
+    <string name="progress_connect">Google Drive bağlanıyor…</string>
+    <string name="progress_backup">Verileriniz yedekleniyor…</string>
+    <string name="progress_download">Yedek indiriliyor…</string>
+    <string name="progress_restore">Verileriniz geri yükleniyor…</string>
 </resources>

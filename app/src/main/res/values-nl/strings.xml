@@ -127,4 +127,8 @@
     <string name="pick_date">Kies datum</string>
     <string name="amount">Bedrag</string>
     <string name="clear_filters">Filters wissen</string>
+    <string name="progress_connect">Google Drive koppelen…</string>
+    <string name="progress_backup">Je gegevens worden geback-upt…</string>
+    <string name="progress_download">Back-up downloaden…</string>
+    <string name="progress_restore">Je gegevens worden hersteld…</string>
 </resources>
