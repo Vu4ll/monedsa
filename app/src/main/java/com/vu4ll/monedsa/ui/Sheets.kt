@@ -45,6 +45,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import com.vu4ll.monedsa.ui.components.OptionIcon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -106,19 +107,8 @@ fun SortSheet(current: TxFilter, onDismiss: () -> Unit, onApply: (TxFilter) -> U
 }
 
 @Composable
-private fun ArrowBadge(up: Boolean, selected: Boolean) {
-    val scheme = MaterialTheme.colorScheme
-    Box(
-        Modifier.size(36.dp).clip(CircleShape)
-            .background(if (selected) scheme.primary else scheme.surfaceContainerHighest),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            if (up) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward, null,
-            tint = if (selected) scheme.onPrimary else scheme.onSurfaceVariant, modifier = Modifier.size(20.dp),
-        )
-    }
-}
+private fun ArrowBadge(up: Boolean, selected: Boolean) =
+    OptionIcon(if (up) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward, selected)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

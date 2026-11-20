@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.LightMode
+import androidx.compose.material.icons.outlined.BrightnessAuto
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Payments
@@ -269,7 +272,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
     if (busy) AlertDialog(onDismissRequest = {}, confirmButton = {}, text = { CircularProgressIndicator() })
 
     when (dialog) {
-        "theme" -> ChoiceDialog(R.string.theme, ThemeMode.entries, s.theme, { stringResource(themeLabel(it)) }, { dialog = null }) {
+        "theme" -> ChoiceDialog(R.string.theme, ThemeMode.entries, s.theme, { stringResource(themeLabel(it)) }, { dialog = null }, icon = ::themeIcon) {
             scope.launch { c.prefs.setTheme(it) }
         }
         "currency" -> ChoiceDialog(R.string.currency, Prefs.CURRENCIES, s.currency, { currencyLabel(it) }, { dialog = null }, { currencyName(it) }) {
@@ -342,8 +345,15 @@ private fun <T> ChoiceDialog(
     label: @Composable (T) -> String,
     onDismiss: () -> Unit,
     subtitle: @Composable (T) -> String? = { null },
+    icon: ((T) -> ImageVector)? = null,
     onPick: (T) -> Unit,
-) = ChoiceSheet(stringResource(title), options, selected, label, onDismiss, subtitle, onPick)
+) = ChoiceSheet(stringResource(title), options, selected, label, onDismiss, subtitle, icon, onPick)
+
+private fun themeIcon(t: ThemeMode) = when (t) {
+    ThemeMode.SYSTEM -> Icons.Outlined.BrightnessAuto
+    ThemeMode.LIGHT -> Icons.Outlined.LightMode
+    ThemeMode.DARK -> Icons.Outlined.DarkMode
+}
 
 private fun themeLabel(t: ThemeMode) = when (t) {
     ThemeMode.SYSTEM -> R.string.theme_system

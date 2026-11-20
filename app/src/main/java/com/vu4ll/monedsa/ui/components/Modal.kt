@@ -74,7 +74,7 @@ fun AppSheet(
         tonalElevation = 0.dp,
         // M3's default handle pads 22dp above and below, which leaves a big gap over the title.
         dragHandle = {
-            Box(Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 16.dp), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 6.dp), contentAlignment = Alignment.Center) {
                 Box(
                     Modifier.size(width = 32.dp, height = 4.dp).clip(CircleShape)
                         .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)),
@@ -93,7 +93,7 @@ fun AppSheet(
                 subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 4.dp),
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
             content(close)
         }
     }
@@ -131,6 +131,19 @@ fun OptionRow(
     }
 }
 
+/** Round icon badge at the start of an [OptionRow]; filled with brass when selected. */
+@Composable
+fun OptionIcon(icon: ImageVector, selected: Boolean) {
+    val scheme = MaterialTheme.colorScheme
+    Box(
+        Modifier.size(36.dp).clip(CircleShape)
+            .background(if (selected) scheme.primary else scheme.surfaceContainerHighest),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(icon, null, tint = if (selected) scheme.onPrimary else scheme.onSurfaceVariant, modifier = Modifier.size(20.dp))
+    }
+}
+
 /** Single-choice list in a sheet; picking closes it. */
 @Composable
 fun <T> ChoiceSheet(
@@ -140,12 +153,18 @@ fun <T> ChoiceSheet(
     label: @Composable (T) -> String,
     onDismiss: () -> Unit,
     subtitle: @Composable (T) -> String? = { null },
+    icon: ((T) -> ImageVector)? = null,
     onPick: (T) -> Unit,
 ) {
     AppSheet(title, onDismiss) { close ->
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             options.forEach { o ->
-                OptionRow(label(o), selected = o == selected, subtitle = subtitle(o), onClick = { onPick(o); close() })
+                val isSelected = o == selected
+                OptionRow(
+                    label(o), selected = isSelected, subtitle = subtitle(o),
+                    leading = icon?.let { { OptionIcon(it(o), isSelected) } },
+                    onClick = { onPick(o); close() },
+                )
             }
         }
     }
