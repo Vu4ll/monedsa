@@ -72,7 +72,7 @@ module.exports = {
         },
         downloadLinks: {
             playStore: "https://play.google.com/store/apps/details?id=com.vu4ll.monedsa",
-            apk: "https://github.com/Vu4ll/monedsa/releases/download/v1.5/monedsa-1.5.apk",
+            apk: "https://github.com/Vu4ll/monedsa/releases/download/v1.6/monedsa-1.6.apk",
         },
         githubUrl: "https://github.com/Vu4ll/monedsa",
         version
