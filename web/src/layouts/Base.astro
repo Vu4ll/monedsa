@@ -30,7 +30,9 @@ const site = Astro.site!;
     <meta property="og:image" content={new URL("/icon.png", site)} />
     <meta name="theme-color" content="#EEF0EE" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1E2A28" media="(prefers-color-scheme: dark)" />
-    <link rel="icon" href="/icon.png" type="image/png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {
       lang === "en" && (
         <script is:inline>
