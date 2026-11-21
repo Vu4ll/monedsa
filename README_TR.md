@@ -5,9 +5,9 @@
 >
 > **Sunucu kapanmadan önce verilerinizi dışa aktarın:** Monedsa 1.6'da *Ayarlar → Verilerimi dışa aktar* ile `.json` dosyasını kaydedin. 2.0'a güncelledikten sonra *Ayarlar → Dosyadan içe aktar* ile geri yükleyin. 20 Aralık'tan sonra sunucudaki veriler dışa aktarılamaz.
 
-![Version](https://img.shields.io/badge/version-1.6-blue.svg)
-![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
-![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
+![Version](https://img.shields.io/badge/version-2.0-blue.svg)
+![Kotlin](https://img.shields.io/badge/Kotlin-Jetpack%20Compose-7f52ff.svg)
+![Android](https://img.shields.io/badge/Android-7.0+-3ddc84.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
 Türkçe | [İngilizce](README.md) | [Felemenkçe](README_NL.md)
@@ -15,179 +15,75 @@ Türkçe | [İngilizce](README.md) | [Felemenkçe](README_NL.md)
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
 alt="Download from Google Play" height="80">](https://play.google.com/store/apps/details?id=com.vu4ll.monedsa)
 
-**Monedsa**, Android cihazlarınızda kolayca gelir ve giderlerinizi takip edebileceğiniz modern ve kullanıcı dostu bir mobil uygulamadır. Basit, hızlı ve güvenli yapısıyla finansal durumunuzu kontrol altında tutmanıza yardımcı olur.
+**Monedsa**, Android için bir gelir gider takip uygulamasıdır. Hesap ya da sunucu olmadan çalışır: girdiğiniz her şey telefonunuzda kalır, yedek isterseniz kendi Google Drive'ınıza gider.
+
+Web sitesi: [monedsa.vu4ll.nl](https://monedsa.vu4ll.nl/tr/)
 
 ## 📱 Özellikler
 
-### 💰 Gelir ve Gider Yönetimi
-- Gelir ve giderlerinizi kolayca ekleyin, düzenleyin ve silin
-- Detaylı açıklamalar ve kategoriler ile işlemlerinizi organize edin
-- Gerçek zamanlı bakiye hesaplama
+- **Gelir ve giderler:** tutar, kategori, tarih ve isteğe bağlı açıklamayla işlem ekleyin, düzenleyin ve silin
+- **Aylık görünüm:** her ayın geliri, gideri ve bakiyesi, harcamaların kategorilere göre dağılımıyla
+- **Kategoriler:** her biri simge ve renkli kendi gelir ve gider kategorileriniz
+- **Sıralama, filtre ve arama:** tutara, tarihe, kategoriye ya da açıklamaya göre
+- **Para birimi:** hesap tuttuğunuz para birimini seçin (Türk lirası, euro, dolar, sterlin ve diğerleri)
+- **Açık ve koyu tema:** telefonunuzu izler ya da kendiniz seçersiniz
+- **Diller:** Türkçe, İngilizce ve Felemenkçe
+- **Google Drive yedeklemesi (isteğe bağlı):** hemen ya da günlük veya haftalık otomatik olarak, yalnızca Monedsa'nın açabildiği gizli bir uygulama klasörüne
+- **Dosyadan içe aktarma:** bir yedek dosyasını geri yükleyin ya da verilerinizi Monedsa 1.6'dan taşıyın
 
-### 📊 Kategori Sistemi
-- Özel kategoriler oluşturun
-- Renk kodlama sistemi ile kategorilerinizi ayırt edin
-- Gelir ve gider için ayrı kategori yönetimi
+## 🔒 Gizlilik
 
-### 🌐 Çoklu Dil ve Para Birimi Desteği
-- Çoklu dil arayüzü (İngilizce, Türkçe, Hollandaca)
-- Desteklenen diller arasında kolayca geçiş yapın
-- İşlemler için çoklu para birimi desteği
-- Bakiye ve raporlar için tercih ettiğiniz para birimini ayarlayın
+Monedsa'da sunucu, hesap, reklam ya da analiz yoktur. Verileriniz cihazınızda, uygulamanın içinde saklanır. Google Drive yedeklemesi `drive.appdata` iznini kullanır; bu izin diğer dosyalarınıza değil, yalnızca Drive'ınızdaki gizli bir uygulama klasörüne erişim verir. Ayrıntılar için [gizlilik politikasına](https://monedsa.vu4ll.nl/tr/privacy-policy/) bakın.
 
-### 📈 Finansal Analiz
-- Toplam gelir, gider ve bakiye görünümü
-- İşlem geçmişi ve detaylı raporlama
-- Filtreleme ve sıralama özellikleri
-
-### 🔒 Güvenlik
-- Kullanıcı hesabı sistemi ile güvenli veri saklama
-- JWT token tabanlı kimlik doğrulama
-- Şifreli veri iletimi
-
-### 🎨 Modern Arayüz
-- Karanlık ve aydınlık tema desteği
-- Responsive tasarım
-- Sezgisel kullanıcı deneyimi
-
-## 🚀 Hızlı Başlangıç
+## 🚀 Kaynaktan derleme
 
 ### Gereksinimler
 
-- **Node.js** 18 veya üzeri
-- **React Native CLI** kurulu olmalı
-- **Android 7 (API 24)** ve üzeri cihaz
-- **Android Studio** (Android geliştirme için)
-- **MongoDB** veritabanı
+- **Android Studio** (güncel kararlı sürüm) ve JDK 17
+- **Android SDK 36**
+- Android 7.0 (API 24) veya üstü bir cihaz ya da emülatör
 
-### Kurulum
+### Derleme ve çalıştırma
 
-1. **Projeyi klonlayın:**
 ```bash
 git clone https://github.com/Vu4ll/monedsa.git
 cd monedsa
+./gradlew installDebug
 ```
 
-2. **Backend kurulumu:**
-```bash
-cd server
-npm install
-```
+Ya da projeyi Android Studio'da açıp `app` yapılandırmasını çalıştırın. Debug derlemeleri Play Store sürümünün yanına `com.vu4ll.monedsa.debug` olarak kurulur.
 
-3. **Backend yapılandırması:**
-```bash
-# server dizininde .env dosyası oluşturun
-cp .env.example .env
-# Gerekli ortam değişkenlerini düzenleyin
-```
+Release imzalama bilgileri proje kökündeki `signing.properties` dosyasından okunur (repoda yoktur). Bu dosya yoksa `assembleRelease` imzasız bir APK üretir.
 
-4. **Frontend kurulumu:**
-```bash
-# Ana dizine dönün
-cd ..
-npm install
-```
-
-5. **Android bağımlılıklarını yükleyin:**
-```bash
-cd android
-./gradlew clean
-cd ..
-```
-
-### Çalıştırma
-
-1. **Backend sunucusunu başlatın:**
-```bash
-cd server
-npm start
-# veya geliştirme modu için
-npm run dev
-```
-
-2. **React Native Metro sunucusunu başlatın:**
-```bash
-# Ana dizinde
-npm start
-```
-
-3. **Android uygulamasını çalıştırın:**
-```bash
-npm run android
-```
+Google Drive yedeklemesinin çalışması için paket adının ve imza anahtarının SHA-1 değerinin, Drive API'si açık bir Google Cloud projesinde Android OAuth istemcisi olarak kayıtlı olması gerekir.
 
 ## 🏗️ Proje Yapısı
 
 ```
 monedsa/
-├── 📱 src/                    # React Native kaynak kodları
-│   ├── components/            # Yeniden kullanılabilir bileşenler
-│   ├── screens/              # Uygulama ekranları
-│   ├── services/             # API servis katmanı
-│   ├── hooks/                # Özel React hooks
-│   ├── contexts/             # React context'leri
-│   ├── utils/                # Yardımcı fonksiyonlar
-│   └── constants/            # Sabitler ve yapılandırmalar
-├── 🖥️ server/                 # Node.js backend
-│   ├── routes/               # API rotaları
-│   ├── models/               # MongoDB modelleri
-│   ├── middlewares/          # Express middlewares
-│   ├── utils/                # Backend yardımcı fonksiyonları
-│   ├── locales/              # Çok dil desteği
-│   └── public/               # Statik dosyalar
-└── 📂 android/               # Android native kodları
+├── app/                       # Android uygulaması (Kotlin, Jetpack Compose)
+│   └── src/main/java/com/vu4ll/monedsa/
+│       ├── data/              # Room veritabanı, DAO'lar, tercihler
+│       ├── backup/            # Yedek dosya biçimi, Google Drive, WorkManager
+│       └── ui/                # Ekranlar, bileşenler ve tema
+└── web/                       # Web sitesi (Astro, statik)
 ```
+
+`web/` klasörü [monedsa.vu4ll.nl](https://monedsa.vu4ll.nl/tr/) için tanıtım sayfasını ve gizlilik politikasını içerir. Bkz. [web/README.md](web/README.md).
 
 ## 🔧 Teknolojiler
 
-### Frontend (Mobile)
-- **React Native** 0.80.1
-- **React Navigation** - Navigasyon sistemi
-- **Axios** - HTTP istemcisi
-- **AsyncStorage** - Yerel veri saklama
-- **Vector Icons** - İkon kütüphanesi
+- **Kotlin** ve **Jetpack Compose** (Material 3)
+- **Room** - yerel veritabanı
+- **DataStore** - ayarlar
+- **WorkManager** - otomatik yedekleme
+- **Google Play services auth** ve **Google Drive REST API** - yedekleme
+- **kotlinx.serialization** - yedek ve içe aktarma dosyaları
+- **Astro** - web sitesi
 
-### Backend
-- **Node.js** & **Express** - Web sunucusu
-- **MongoDB** & **Mongoose** - Veritabanı
-- **JWT** - Kimlik doğrulama
-- **Argon2** - Şifre hashleme
-- **CORS** - Cross-origin kaynak paylaşımı
+## 🐛 Sorunlar
 
-## 📊 API Endpoints
-
-### Kimlik Doğrulama
-```
-POST /api/auth/login          # Kullanıcı girişi
-POST /api/auth/register       # Kullanıcı kaydı
-POST /api/auth/refresh        # Token yenileme
-```
-
-### İşlemler
-```
-GET    /api/transaction/list     # İşlem listesi
-POST   /api/transaction/add      # Yeni işlem ekleme
-PUT    /api/transaction/edit/:id # İşlem güncelleme
-DELETE /api/transaction/delete/:id # İşlem silme
-GET    /api/transaction/expenses # Sadece giderler
-GET    /api/transaction/incomes  # Sadece gelirler
-```
-
-### Kategoriler
-```
-GET    /api/category/list        # Kategori listesi
-POST   /api/category/add         # Yeni kategori
-PUT    /api/category/edit/:id    # Kategori güncelleme
-DELETE /api/category/delete/:id  # Kategori silme
-```
-
-### Profil
-```
-GET  /api/profile/me             # Kullanıcı bilgileri
-GET  /api/profile/stats          # İstatistikler
-PUT  /api/profile/update         # Profil güncelleme
-PUT  /api/profile/change-password # Şifre değiştirme
-```
+Bir hata mı buldunuz ya da bir fikriniz mi var? [Bir issue açın](https://github.com/Vu4ll/monedsa/issues/new). Uygulamada *Ayarlar → Sorun bildirin* üzerinden de ulaşabilirsiniz.
 
 ## 🤝 Katkıda Bulunma
 
@@ -200,7 +96,7 @@ PUT  /api/profile/change-password # Şifre değiştirme
 ## 📝 Lisans
 
 - Bu proje GPL3 lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasını inceleyin.
-- **Gizlilik politikası**: [monedsa.vu4ll.nl/privacy-policy](https://monedsa.vu4ll.nl/privacy-policy/tr)
+- **Gizlilik politikası**: [monedsa.vu4ll.nl/tr/privacy-policy](https://monedsa.vu4ll.nl/tr/privacy-policy/)
 
 ## 📞 İletişim
 

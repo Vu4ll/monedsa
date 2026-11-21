@@ -5,9 +5,9 @@
 >
 > **Export your data before the shutdown:** in Monedsa 1.6, go to *Settings → Export my data* and keep the `.json` file. After updating to 2.0, use *Settings → Import from file* to bring it back. After 20 December, data on the server can no longer be exported.
 
-![Version](https://img.shields.io/badge/version-1.6-blue.svg)
-![React Native](https://img.shields.io/badge/React%20Native-0.80.1-61dafb.svg)
-![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)
+![Version](https://img.shields.io/badge/version-2.0-blue.svg)
+![Kotlin](https://img.shields.io/badge/Kotlin-Jetpack%20Compose-7f52ff.svg)
+![Android](https://img.shields.io/badge/Android-7.0+-3ddc84.svg)
 ![License](https://img.shields.io/badge/license-GPL3-yellow.svg)
 
 [Turkish](README_TR.md) | English | [Dutch](README_NL.md)
@@ -15,179 +15,75 @@
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
 alt="Download from Google Play" height="80">](https://play.google.com/store/apps/details?id=com.vu4ll.monedsa)
 
-**Monedsa** is a modern and user-friendly mobile application that allows you to easily track your income and expenses on Android devices. With its simple, fast, and secure structure, it helps you keep your financial situation under control.
+**Monedsa** is an income and expense tracker for Android. It works without an account or a server: everything you enter stays on your phone, and backups go to your own Google Drive if you want them.
+
+Website: [monedsa.vu4ll.nl](https://monedsa.vu4ll.nl)
 
 ## 📱 Features
 
-### 💰 Income & Expense Management
-- Easily add, edit, and delete your income and expenses
-- Organize your transactions with detailed descriptions and categories
-- Real-time balance calculation
+- **Income and expenses:** add, edit and delete transactions with an amount, category, date and optional description
+- **Monthly overview:** income, expenses and balance per month, with spending broken down by category
+- **Categories:** your own income and expense categories, each with an icon and colour
+- **Sort, filter and search:** by amount, date, category or description
+- **Currency:** pick the currency you count in (Turkish lira, euro, dollar, pound and more)
+- **Light and dark theme:** follows your phone, or choose one yourself
+- **Languages:** English, Turkish and Dutch
+- **Google Drive backup (optional):** back up now, or automatically every day or week, to a private app folder only Monedsa can open
+- **Import from file:** restore a backup file, or bring over your data from Monedsa 1.6
 
-### 📊 Category System
-- Create custom categories
-- Distinguish your categories with color coding system
-- Separate category management for income and expenses
+## 🔒 Privacy
 
-### 🌐 Multi-language & Currency Support
-- Multi-language interface (English, Turkish, Dutch)
-- Easily switch between supported languages
-- Multiple currency support for transactions
-- Set your preferred currency for balance and reports
+Monedsa has no server, no account, no ads and no analytics. Your data is stored in the app on your device. Google Drive backup uses the `drive.appdata` permission, which only gives access to a hidden app folder in your Drive, not to your other files. See the [privacy policy](https://monedsa.vu4ll.nl/privacy-policy/).
 
-### 📈 Financial Analysis
-- Total income, expense, and balance overview
-- Transaction history and detailed reporting
-- Filtering and sorting features
-
-### 🔒 Security
-- Secure data storage with user account system
-- JWT token-based authentication
-- Encrypted data transmission
-
-### 🎨 Modern Interface
-- Dark and light theme support
-- Responsive design
-- Intuitive user experience
-
-## 🚀 Quick Start
+## 🚀 Building from source
 
 ### Requirements
 
-- **Node.js** 18 or higher
-- **React Native CLI** installed
-- **Android 7 (API 24)** or higher device
-- **Android Studio** (for Android development)
-- **MongoDB** database
+- **Android Studio** (recent stable) with JDK 17
+- **Android SDK 36**
+- An Android 7.0 (API 24) or newer device or emulator
 
-### Installation
+### Build and run
 
-1. **Clone the project:**
 ```bash
 git clone https://github.com/Vu4ll/monedsa.git
 cd monedsa
+./gradlew installDebug
 ```
 
-2. **Backend setup:**
-```bash
-cd server
-npm install
-```
+Or open the project in Android Studio and run the `app` configuration. Debug builds install as `com.vu4ll.monedsa.debug`, next to the Play Store version.
 
-3. **Backend configuration:**
-```bash
-# Create .env file in server directory
-cp .env.example .env
-# Edit the required environment variables
-```
+Release signing reads its values from a `signing.properties` file in the project root (not committed). Without it, `assembleRelease` builds an unsigned APK.
 
-4. **Frontend setup:**
-```bash
-# Return to main directory
-cd ..
-npm install
-```
-
-5. **Install Android dependencies:**
-```bash
-cd android
-./gradlew clean
-cd ..
-```
-
-### Running
-
-1. **Start the backend server:**
-```bash
-cd server
-npm start
-# or for development mode
-npm run dev
-```
-
-2. **Start React Native Metro server:**
-```bash
-# In main directory
-npm start
-```
-
-3. **Run Android application:**
-```bash
-npm run android
-```
+Google Drive backup only works when the package name and the signing key's SHA-1 are registered as an Android OAuth client in a Google Cloud project with the Drive API enabled.
 
 ## 🏗️ Project Structure
 
 ```
 monedsa/
-├── 📱 src/                    # React Native source code
-│   ├── components/            # Reusable components
-│   ├── screens/              # Application screens
-│   ├── services/             # API service layer
-│   ├── hooks/                # Custom React hooks
-│   ├── contexts/             # React contexts
-│   ├── utils/                # Utility functions
-│   └── constants/            # Constants and configurations
-├── 🖥️ server/                 # Node.js backend
-│   ├── routes/               # API routes
-│   ├── models/               # MongoDB models
-│   ├── middlewares/          # Express middlewares
-│   ├── utils/                # Backend utility functions
-│   ├── locales/              # Multi-language support
-│   └── public/               # Static files
-└── 📂 android/               # Android native code
+├── app/                       # Android app (Kotlin, Jetpack Compose)
+│   └── src/main/java/com/vu4ll/monedsa/
+│       ├── data/              # Room database, DAOs, preferences
+│       ├── backup/            # Backup file format, Google Drive, WorkManager
+│       └── ui/                # Screens, components and theme
+└── web/                       # Website (Astro, static)
 ```
+
+`web/` holds the landing page and privacy policy for [monedsa.vu4ll.nl](https://monedsa.vu4ll.nl). See [web/README.md](web/README.md).
 
 ## 🔧 Technologies
 
-### Frontend (Mobile)
-- **React Native** 0.80.1
-- **React Navigation** - Navigation system
-- **Axios** - HTTP client
-- **AsyncStorage** - Local data storage
-- **Vector Icons** - Icon library
+- **Kotlin** and **Jetpack Compose** (Material 3)
+- **Room** - local database
+- **DataStore** - settings
+- **WorkManager** - automatic backups
+- **Google Play services auth** and the **Google Drive REST API** - backups
+- **kotlinx.serialization** - backup and import files
+- **Astro** - website
 
-### Backend
-- **Node.js** & **Express** - Web server
-- **MongoDB** & **Mongoose** - Database
-- **JWT** - Authentication
-- **Argon2** - Password hashing
-- **CORS** - Cross-origin resource sharing
+## 🐛 Issues
 
-## 📊 API Endpoints
-
-### Authentication
-```
-POST /api/auth/login          # User login
-POST /api/auth/register       # User registration
-POST /api/auth/refresh        # Token refresh
-```
-
-### Transactions
-```
-GET    /api/transaction/list     # Transaction list
-POST   /api/transaction/add      # Add new transaction
-PUT    /api/transaction/edit/:id # Update transaction
-DELETE /api/transaction/delete/:id # Delete transaction
-GET    /api/transaction/expenses # Expenses only
-GET    /api/transaction/incomes  # Incomes only
-```
-
-### Categories
-```
-GET    /api/category/list        # Category list
-POST   /api/category/add         # New category
-PUT    /api/category/edit/:id    # Update category
-DELETE /api/category/delete/:id  # Delete category
-```
-
-### Profile
-```
-GET  /api/profile/me             # User information
-GET  /api/profile/stats          # Statistics
-PUT  /api/profile/update         # Update profile
-PUT  /api/profile/change-password # Change password
-```
+Found a bug or have an idea? [Open an issue](https://github.com/Vu4ll/monedsa/issues/new). You can also get there from *Settings → Report an issue* in the app.
 
 ## 🤝 Contributing
 
@@ -200,7 +96,7 @@ PUT  /api/profile/change-password # Change password
 ## 📝 License
 
 - This project is licensed under the GPL3 License. See the [LICENSE](LICENSE) file for details.
-- **Privacy Policy**: [monedsa.vu4ll.nl/privacy-policy](https://monedsa.vu4ll.nl/privacy-policy)
+- **Privacy Policy**: [monedsa.vu4ll.nl/privacy-policy](https://monedsa.vu4ll.nl/privacy-policy/)
 
 ## 📞 Contact
 
