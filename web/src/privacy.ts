@@ -20,7 +20,7 @@ const userDataPolicy = "https://developers.google.com/terms/api-services-user-da
 
 const en: Policy = {
   title: "Privacy policy",
-  updated: "Last updated 21 November 2026. Applies to Monedsa 2.0 and later.",
+  updated: "Last updated 21 November 2026. Applies to Monedsa 2.0 and later. For version 1.6 and earlier, see the section about those versions below.",
   summary: [
     "Monedsa stores your data on your phone. It has no account, no server, no ads and no analytics.",
     "If you turn on Google Drive backup, your backups are stored in your own Google account. We can't see them.",
@@ -85,9 +85,17 @@ const en: Policy = {
       ],
     },
     {
-      title: "Monedsa 1.6 and the old server",
+      title: "Monedsa 1.6 and earlier (until 20 December 2026)",
       body: [
-        "Monedsa 1.6 and earlier used an account and stored your username, email address, password hash, transactions and categories on our server. That server shuts down on 20 December 2026. Until then you can export your data from the 1.6 app. After the shutdown, the server and all account data on it are deleted.",
+        "Monedsa 1.6 and earlier work differently: they need an account and store your data on our server. Until that server shuts down on 20 December 2026, the following applies to those versions.",
+        "When you sign in with Google, Google confirms your identity through Firebase Authentication and we receive your name and email address. If you send a message from the in-app support form, it reaches us by email so we can reply.",
+        "We use this data only to run your account and show your data in the app. We don't sell it, use it for advertising or share it with anyone.",
+        `You can export your data from the 1.6 app at any time before the shutdown and import it into Monedsa 2.0. To delete your account and data before then, email ${mail}. On 20 December 2026 the server is shut down and all account data on it is permanently deleted.`,
+      ],
+      list: [
+        "account: name, username, email address and, if you didn't sign in with Google, a hash of your password (never the password itself)",
+        "transactions: amount, type, category, date and the optional description",
+        "categories: name, colour and type",
       ],
     },
     {
@@ -107,7 +115,7 @@ const en: Policy = {
 
 const tr: Policy = {
   title: "Gizlilik politikası",
-  updated: "Son güncelleme 21 Kasım 2026. Monedsa 2.0 ve sonraki sürümler için geçerlidir.",
+  updated: "Son güncelleme 21 Kasım 2026. Monedsa 2.0 ve sonraki sürümler için geçerlidir. 1.6 ve önceki sürümler için aşağıdaki ilgili bölüme bakın.",
   summary: [
     "Monedsa verilerinizi telefonunuzda saklar. Hesap, sunucu, reklam ya da analiz yoktur.",
     "Google Drive yedeklemesini açarsanız yedekleriniz kendi Google hesabınızda saklanır. Biz onları göremeyiz.",
@@ -172,9 +180,17 @@ const tr: Policy = {
       ],
     },
     {
-      title: "Monedsa 1.6 ve eski sunucu",
+      title: "Monedsa 1.6 ve öncesi (20 Aralık 2026'ya kadar)",
       body: [
-        "Monedsa 1.6 ve önceki sürümler bir hesap kullanıyor; kullanıcı adınızı, e-posta adresinizi, parola özetinizi, işlemlerinizi ve kategorilerinizi sunucumuzda saklıyordu. Bu sunucu 20 Aralık 2026'da kapanıyor. O zamana kadar verilerinizi 1.6 uygulamasından dışa aktarabilirsiniz. Kapanıştan sonra sunucu ve üzerindeki tüm hesap verileri silinir.",
+        "Monedsa 1.6 ve önceki sürümler farklı çalışır: bir hesap gerektirir ve verilerinizi sunucumuzda saklar. Bu sunucu 20 Aralık 2026'da kapanana kadar bu sürümler için aşağıdakiler geçerlidir.",
+        "Google ile giriş yaptığınızda Google kimliğinizi Firebase Authentication aracılığıyla doğrular ve biz adınızı ve e-posta adresinizi alırız. Uygulamadaki destek formundan bir mesaj gönderirseniz, size yanıt verebilmemiz için bize e-postayla ulaşır.",
+        "Bu verileri yalnızca hesabınızı çalıştırmak ve verilerinizi uygulamada göstermek için kullanırız. Satmayız, reklam için kullanmayız ve kimseyle paylaşmayız.",
+        `Kapanıştan önce istediğiniz zaman verilerinizi 1.6 uygulamasından dışa aktarıp Monedsa 2.0'a içe aktarabilirsiniz. Hesabınızın ve verilerinizin daha önce silinmesini istiyorsanız ${mail} adresine yazın. 20 Aralık 2026'da sunucu kapatılır ve üzerindeki tüm hesap verileri kalıcı olarak silinir.`,
+      ],
+      list: [
+        "hesap: ad, kullanıcı adı, e-posta adresi ve Google ile giriş yapmadıysanız parolanızın özeti (parolanın kendisi asla saklanmaz)",
+        "işlemler: tutar, tür, kategori, tarih ve isteğe bağlı açıklama",
+        "kategoriler: ad, renk ve tür",
       ],
     },
     {
@@ -192,7 +208,7 @@ const tr: Policy = {
 
 const nl: Policy = {
   title: "Privacybeleid",
-  updated: "Laatst bijgewerkt op 21 november 2026. Geldt voor Monedsa 2.0 en later.",
+  updated: "Laatst bijgewerkt op 21 november 2026. Geldt voor Monedsa 2.0 en later. Voor versie 1.6 en eerder, zie het gedeelte over die versies hieronder.",
   summary: [
     "Monedsa bewaart je gegevens op je telefoon. Er is geen account, geen server, geen advertenties en geen analytics.",
     "Als je back-up naar Google Drive aanzet, worden je back-ups in je eigen Google-account bewaard. Wij kunnen ze niet zien.",
@@ -257,9 +273,17 @@ const nl: Policy = {
       ],
     },
     {
-      title: "Monedsa 1.6 en de oude server",
+      title: "Monedsa 1.6 en eerder (tot 20 december 2026)",
       body: [
-        "Monedsa 1.6 en eerder gebruikten een account en bewaarden je gebruikersnaam, e-mailadres, wachtwoordhash, transacties en categorieën op onze server. Die server gaat op 20 december 2026 uit. Tot die tijd kun je je gegevens exporteren vanuit de 1.6-app. Na de uitschakeling worden de server en alle accountgegevens erop verwijderd.",
+        "Monedsa 1.6 en eerder werken anders: ze hebben een account nodig en bewaren je gegevens op onze server. Totdat die server op 20 december 2026 uitgaat, geldt voor die versies het volgende.",
+        "Als je inlogt met Google, bevestigt Google je identiteit via Firebase Authentication en ontvangen wij je naam en e-mailadres. Als je een bericht stuurt via het supportformulier in de app, komt het per e-mail bij ons binnen zodat we kunnen antwoorden.",
+        "We gebruiken deze gegevens alleen om je account te laten werken en je gegevens in de app te tonen. We verkopen ze niet, gebruiken ze niet voor advertenties en delen ze met niemand.",
+        `Je kunt je gegevens vóór de uitschakeling op elk moment exporteren vanuit de 1.6-app en importeren in Monedsa 2.0. Wil je je account en gegevens eerder laten verwijderen, mail dan naar ${mail}. Op 20 december 2026 gaat de server uit en worden alle accountgegevens erop definitief verwijderd.`,
+      ],
+      list: [
+        "account: naam, gebruikersnaam, e-mailadres en, als je niet met Google inlogde, een hash van je wachtwoord (nooit het wachtwoord zelf)",
+        "transacties: bedrag, type, categorie, datum en de optionele omschrijving",
+        "categorieën: naam, kleur en type",
       ],
     },
     {
