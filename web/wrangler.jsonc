@@ -2,6 +2,7 @@
 {
   "name": "monedsa",
   "compatibility_date": "2026-11-01",
+  "routes": [{ "pattern": "monedsa.vu4ll.nl", "custom_domain": true }],
   "assets": {
     "directory": "./dist",
     "html_handling": "auto-trailing-slash",
