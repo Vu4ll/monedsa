@@ -56,6 +56,13 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.findByName("release")
         }
+        // Public pre-release: installs next to 1.6 so testers can export there and import here.
+        create("beta") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".beta"
+            versionNameSuffix = "-beta.1"
+            matchingFallbacks += "release"
+        }
     }
 
     compileOptions {
