@@ -1,0 +1,168 @@
+---
+import { ui, type Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = ui[lang].demo;
+
+const fmt = new Intl.NumberFormat(d.locale, { style: "currency", currency: d.currency });
+const byId = Object.fromEntries(d.categories.map((c) => [c.id, c]));
+const rows = [...d.seed].reverse().map((s) => ({ ...s, cat: byId[s.category] }));
+const income = d.seed.filter((s) => byId[s.category].type === "income").reduce((a, s) => a + s.amount, 0);
+const expense = d.seed.filter((s) => byId[s.category].type === "expense").reduce((a, s) => a + s.amount, 0);
+const config = JSON.stringify({
+  locale: d.locale,
+  currency: d.currency,
+  categories: d.categories,
+  seed: d.seed,
+  empty: d.empty,
+  error: d.error,
+});
+---
+
+<section class="demo" aria-label={d.label} data-demo={config}>
+  <p class="demo-label">{d.label}</p>
+
+  <div class="demo-balance">
+    <span>{d.balance}</span>
+    <output data-balance aria-live="polite">{fmt.format(income - expense)}</output>
+  </div>
+  <dl class="demo-totals">
+    <div><dt>{d.income}</dt><dd class="pos" data-income>{fmt.format(income)}</dd></div>
+    <div><dt>{d.expense}</dt><dd data-expense>{fmt.format(expense)}</dd></div>
+  </dl>
+
+  <ul class="demo-list" data-list role="list">
+    {
+      rows.map((r) => (
+        <li>
+          <span class="dot" style={`--c:${r.cat.color}`} />
+          <span class="demo-cat">{r.cat.name}</span>
+          <span class={r.cat.type === "income" ? "amt pos" : "amt"}>
+            {(r.cat.type === "income" ? "+" : "−") + fmt.format(r.amount)}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <form class="demo-form" data-form hidden novalidate>
+    <fieldset class="seg">
+      <legend class="sr-only">{d.income} / {d.expense}</legend>
+      <label><input type="radio" name="type" value="income" /><span>{d.income}</span></label>
+      <label><input type="radio" name="type" value="expense" checked /><span>{d.expense}</span></label>
+    </fieldset>
+    <div class="demo-fields">
+      <label class="field">
+        <span>{d.amount}</span>
+        <input name="amount" inputmode="decimal" autocomplete="off" placeholder="0" aria-describedby="demo-error" />
+      </label>
+      <label class="field">
+        <span>{d.category}</span>
+        <select name="category"></select>
+      </label>
+    </div>
+    <p class="demo-error" id="demo-error" data-error aria-live="polite"></p>
+    <div class="demo-buttons">
+      <button class="btn btn-primary" type="submit">{d.add}</button>
+      <button class="btn-text" type="button" data-reset>{d.reset}</button>
+    </div>
+  </form>
+
+  <p class="demo-note">{d.note}</p>
+</section>
+
+<script>
+  type Cat = { id: string; name: string; color: string; type: "income" | "expense" };
+  type Row = { category: string; amount: number };
+
+  const root = document.querySelector<HTMLElement>("[data-demo]");
+  if (root) {
+    const cfg = JSON.parse(root.dataset.demo!) as {
+      locale: string; currency: string; categories: Cat[]; seed: Row[]; empty: string; error: string;
+    };
+    const fmt = new Intl.NumberFormat(cfg.locale, { style: "currency", currency: cfg.currency });
+    const cats = new Map(cfg.categories.map((c) => [c.id, c]));
+    const form = root.querySelector<HTMLFormElement>("[data-form]")!;
+    const list = root.querySelector<HTMLUListElement>("[data-list]")!;
+    const select = form.elements.namedItem("category") as HTMLSelectElement;
+    const amount = form.elements.namedItem("amount") as HTMLInputElement;
+    const error = root.querySelector<HTMLElement>("[data-error]")!;
+    let rows: Row[] = [...cfg.seed];
+
+    const parse = (raw: string) => {
+      let v = raw.replace(/[\s ]/g, "");
+      const dec = v.lastIndexOf(",") > v.lastIndexOf(".") ? "," : ".";
+      v = v.split(dec === "," ? "." : ",").join("").replace(dec, ".");
+      return /^\d+(\.\d{1,2})?$/.test(v) ? Number(v) : NaN;
+    };
+
+    const fillCategories = () => {
+      const type = (form.elements.namedItem("type") as RadioNodeList).value;
+      select.replaceChildren(
+        ...cfg.categories.filter((c) => c.type === type).map((c) => new Option(c.name, c.id)),
+      );
+    };
+
+    const render = (fresh = false) => {
+      let inc = 0, exp = 0;
+      for (const r of rows) cats.get(r.category)!.type === "income" ? (inc += r.amount) : (exp += r.amount);
+      root.querySelector("[data-balance]")!.textContent = fmt.format(inc - exp);
+      root.querySelector("[data-income]")!.textContent = fmt.format(inc);
+      root.querySelector("[data-expense]")!.textContent = fmt.format(exp);
+
+      const items = rows.slice(-5).reverse().map((r, i) => {
+        const c = cats.get(r.category)!;
+        const li = document.createElement("li");
+        if (fresh && i === 0) li.className = "fresh";
+        const dot = document.createElement("span");
+        dot.className = "dot";
+        dot.style.setProperty("--c", c.color);
+        const name = document.createElement("span");
+        name.className = "demo-cat";
+        name.textContent = c.name;
+        const amt = document.createElement("span");
+        amt.className = c.type === "income" ? "amt pos" : "amt";
+        amt.textContent = (c.type === "income" ? "+" : "−") + fmt.format(r.amount);
+        li.append(dot, name, amt);
+        return li;
+      });
+      if (!items.length) {
+        const li = document.createElement("li");
+        li.className = "demo-empty";
+        li.textContent = cfg.empty;
+        items.push(li);
+      }
+      list.replaceChildren(...items);
+    };
+
+    form.addEventListener("change", (e) => {
+      if ((e.target as HTMLInputElement).name === "type") fillCategories();
+    });
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const value = parse(amount.value);
+      if (!(value > 0) || value >= 1e9) {
+        error.textContent = cfg.error;
+        amount.setAttribute("aria-invalid", "true");
+        amount.focus();
+        return;
+      }
+      error.textContent = "";
+      amount.removeAttribute("aria-invalid");
+      rows.push({ category: select.value, amount: value });
+      amount.value = "";
+      render(true);
+    });
+    root.querySelector("[data-reset]")!.addEventListener("click", () => {
+      rows = [];
+      error.textContent = "";
+      amount.removeAttribute("aria-invalid");
+      render();
+      amount.focus();
+    });
+
+    fillCategories();
+    form.hidden = false;
+  }
+</script>

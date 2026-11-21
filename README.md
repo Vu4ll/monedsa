@@ -15,8 +15,6 @@
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
 alt="Download from Google Play" height="80">](https://play.google.com/store/apps/details?id=com.vu4ll.monedsa)
 
-![Banner](/server/public/images/en/banner.png)
-
 **Monedsa** is a modern and user-friendly mobile application that allows you to easily track your income and expenses on Android devices. With its simple, fast, and secure structure, it helps you keep your financial situation under control.
 
 ## 📱 Features
@@ -190,17 +188,6 @@ GET  /api/profile/stats          # Statistics
 PUT  /api/profile/update         # Update profile
 PUT  /api/profile/change-password # Change password
 ```
-
-## 🌟 Screenshots
-
-| Home Screen | Home Screen (White Theme) | Add Transaction (White Theme) | Categories | Profile |
-|-----------|-----------|-----------|-----------|-----------|
-| <img src="server/public/images/en/home-page.png" width="200"/> | <img src="server/public/images/en/home-page-white.png" width="200"/> | <img src="server/public/images/en/add-transaction.png" width="200"/> | <img src="server/public/images/en/categories.png" width="200"/> | <img src="server/public/images/en/profile.png" width="200"/> |
-
-- Home Screen: Balance summary and recent transactions
-- Add Transaction: New income/expense entry form
-- Categories: Category management and color selection
-- Profile: User information and statistics
 
 ## 🤝 Contributing
 

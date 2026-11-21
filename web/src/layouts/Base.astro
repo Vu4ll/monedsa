@@ -1,0 +1,106 @@
+---
+import "@fontsource-variable/bricolage-grotesque/opsz.css";
+import "../styles/global.css";
+import { langs, links, pathFor, ui, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+  page?: "" | "privacy-policy";
+  title: string;
+  description: string;
+}
+
+const { lang, page = "", title, description } = Astro.props;
+const t = ui[lang];
+const site = Astro.site!;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(pathFor(lang, page), site)} />
+    {langs.map((l) => <link rel="alternate" hreflang={l} href={new URL(pathFor(l, page), site)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(pathFor("en", page), site)} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL("/icon.png", site)} />
+    <meta name="theme-color" content="#EEF0EE" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1E2A28" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/icon.png" type="image/png" />
+    {
+      lang === "en" && (
+        <script is:inline>
+          // Send first-time visitors on the English pages to their own language.
+          try {
+            if (!localStorage.getItem("lang")) {
+              var pick = (navigator.languages || [navigator.language])
+                .map(function (l) { return String(l).slice(0, 2).toLowerCase(); })
+                .find(function (l) { return l === "tr" || l === "nl" || l === "en"; });
+              if (pick && pick !== "en") location.replace("/" + pick + location.pathname);
+            }
+          } catch (e) {}
+        </script>
+      )
+    }
+  </head>
+  <body>
+    <a class="skip" href="#main">{lang === "tr" ? "İçeriğe geç" : lang === "nl" ? "Naar inhoud" : "Skip to content"}</a>
+    <header class="top wrap">
+      <a class="brand" href={pathFor(lang)}>
+        <img src="/icon.png" alt="" width="32" height="32" />
+        <span>Monedsa</span>
+      </a>
+      <nav class="top-nav">
+        <ul class="langs" aria-label={t.nav.languages}>
+          {
+            langs.map((l) => (
+              <li>
+                <a
+                  href={pathFor(l, page)}
+                  hreflang={l}
+                  lang={l}
+                  title={ui[l].langName}
+                  aria-current={l === lang ? "true" : undefined}
+                  data-lang={l}
+                >
+                  {l.toUpperCase()}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a class="top-source" href={links.source}>{t.nav.source}</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="foot wrap">
+      <div class="foot-brand">
+        <img src="/icon.png" alt="" width="24" height="24" />
+        <span>Monedsa</span>
+      </div>
+      <ul class="foot-links">
+        <li><a href={pathFor(lang, "privacy-policy")}>{t.footer.privacy}</a></li>
+        <li><a href={links.source}>{t.footer.source}</a></li>
+        <li><a href={links.issues}>{t.footer.issue}</a></li>
+        <li><a href={`mailto:${links.email}`}>{t.footer.contact}</a></li>
+      </ul>
+      <p class="foot-copy">© {new Date().getFullYear()} Vu4ll. GPL‑3.0</p>
+    </footer>
+
+    <script is:inline>
+      document.querySelectorAll("[data-lang]").forEach(function (a) {
+        a.addEventListener("click", function () {
+          try { localStorage.setItem("lang", a.dataset.lang); } catch (e) {}
+        });
+      });
+    </script>
+  </body>
+</html>

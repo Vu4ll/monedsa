@@ -91,3 +91,5 @@ yarn-error.log
 
 .env
 google-services.json
+
+.claude/

@@ -1,0 +1,34 @@
+---
+import Base from "../layouts/Base.astro";
+import { type Lang } from "../i18n";
+import { policies } from "../privacy";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const p = policies[lang];
+---
+
+<Base lang={lang} page="privacy-policy" title={`${p.title}, Monedsa`} description={p.summary[0]}>
+  <article class="policy wrap">
+    <header class="policy-head">
+      <h1>{p.title}</h1>
+      <p class="fine">{p.updated}</p>
+    </header>
+    <div class="policy-summary">
+      {p.summary.map((s) => <p>{s}</p>)}
+    </div>
+    {
+      p.sections.map((s) => (
+        <section>
+          <h2>{s.title}</h2>
+          {s.body.map((b) => <p set:html={b} />)}
+          {s.list && (
+            <ul>
+              {s.list.map((li) => <li set:html={li} />)}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+  </article>
+</Base>

@@ -1,0 +1,98 @@
+---
+import Base from "../layouts/Base.astro";
+import Demo from "./Demo.astro";
+import { links, ui, type Lang } from "../i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+---
+
+<Base lang={lang} title={t.meta.title} description={t.meta.description}>
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <h1>{t.hero.title}</h1>
+      <p class="lede">{t.hero.lede}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href={links.play}>{t.hero.play}</a>
+        <a class="btn btn-quiet" href={links.apk}>{t.hero.apk}</a>
+      </div>
+      <p class="fine">{t.hero.requires}</p>
+    </div>
+    <Demo lang={lang} />
+  </section>
+
+  <section class="where wrap" aria-labelledby="where-title">
+    <div class="section-head">
+      <h2 id="where-title">{t.where.title}</h2>
+      <p>{t.where.lede}</p>
+    </div>
+    <ol class="places" role="list">
+      <li class="place place-phone">
+        <svg class="place-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5" /><path d="M10.5 18.5h3" /></svg>
+        <h3>{t.where.phone}</h3>
+        <p>{t.where.phoneBody}</p>
+      </li>
+      <li class="place place-drive">
+        <svg class="place-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19h10.5a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.6 9.6 4.75 4.75 0 0 0 7 19Z" /></svg>
+        <h3>{t.where.drive}</h3>
+        <p>{t.where.driveBody}</p>
+      </li>
+      <li class="place place-none">
+        <svg class="place-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="1.5" /><rect x="4" y="13" width="16" height="7" rx="1.5" /><path d="M3 21 21 3" /></svg>
+        <h3>{t.where.server}</h3>
+        <p>{t.where.serverBody}</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="features wrap" aria-labelledby="features-title">
+    <h2 id="features-title">{t.features.title}</h2>
+    <dl class="feature-list">
+      {
+        t.features.list.map((f) => (
+          <div>
+            <dt>{f.title}</dt>
+            <dd>{f.body}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="shots" aria-labelledby="shots-title">
+    <h2 id="shots-title" class="wrap">{t.shots.title}</h2>
+    <ul class="shot-strip" role="list">
+      {
+        t.shots.items.map((name) => (
+          <li class="shot">
+            <div class="shot-frame" role="img" aria-label={`${name}: ${t.shots.placeholder}`}>
+              <span>{t.shots.placeholder}</span>
+            </div>
+            <p>{name}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="move wrap" aria-labelledby="move-title">
+    <div class="move-panel">
+      <h2 id="move-title">{t.move.title}</h2>
+      <p>{t.move.lede}</p>
+      <ol class="steps">
+        {t.move.steps.map((s) => <li>{s}</li>)}
+      </ol>
+      <p class="fine">{t.move.after}</p>
+    </div>
+  </section>
+
+  <section class="get wrap" aria-labelledby="get-title">
+    <h2 id="get-title">{t.download.title}</h2>
+    <p>{t.download.lede}</p>
+    <div class="actions">
+      <a class="btn btn-primary" href={links.play}>{t.hero.play}</a>
+      <a class="btn btn-quiet" href={links.apk}>{t.hero.apk}</a>
+    </div>
+  </section>
+</Base>

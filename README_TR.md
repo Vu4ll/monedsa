@@ -15,8 +15,6 @@ Türkçe | [İngilizce](README.md) | [Felemenkçe](README_NL.md)
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" 
 alt="Download from Google Play" height="80">](https://play.google.com/store/apps/details?id=com.vu4ll.monedsa)
 
-![Banner](/server/public/images/tr/banner.png)
-
 **Monedsa**, Android cihazlarınızda kolayca gelir ve giderlerinizi takip edebileceğiniz modern ve kullanıcı dostu bir mobil uygulamadır. Basit, hızlı ve güvenli yapısıyla finansal durumunuzu kontrol altında tutmanıza yardımcı olur.
 
 ## 📱 Özellikler
@@ -190,17 +188,6 @@ GET  /api/profile/stats          # İstatistikler
 PUT  /api/profile/update         # Profil güncelleme
 PUT  /api/profile/change-password # Şifre değiştirme
 ```
-
-## 🌟 Ekran Görüntüleri
-
-| Ana Sayfa | Ana Sayfa (Beyaz Tema) | İşlem Ekleme (Beyaz Tema) | Kategoriler | Profil |
-|-----------|-----------|-----------|-----------|-----------|
-| <img src="server/public/images/tr/home-page.png" width="200"/> | <img src="server/public/images/tr/home-page-white.png" width="200"/> | <img src="server/public/images/tr/add-transaction.png" width="200"/> | <img src="server/public/images/tr/categories.png" width="200"/> | <img src="server/public/images/tr/profile.png" width="200"/> |
-
-- Ana Sayfa: Bakiye özeti ve son işlemler
-- İşlem Ekleme: Yeni gelir/gider ekleme formu
-- Kategoriler: Kategori yönetimi ve renk seçimi
-- Profil: Kullanıcı bilgileri ve istatistikler
 
 ## 🤝 Katkıda Bulunma
 
