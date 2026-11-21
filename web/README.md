@@ -10,7 +10,7 @@ npm run build    # static files in dist/
 
 ## Hosting
 
-`dist/` is plain HTML, CSS and a few lines of JS, so any static file server works. Behind a Cloudflare Tunnel, point the tunnel at a local server for `dist/`, for example `npx serve dist -l 4321` or Caddy/nginx.
+The site runs on Cloudflare Workers static assets (worker `monedsa`, config in `wrangler.jsonc`) with `monedsa.vu4ll.nl` as a custom domain. Workers Builds deploys it on every push to the production branch (root path `web`). To deploy by hand: `npm run build && npx wrangler deploy`.
 
 The app links to `/privacy-policy`, so keep that path.
 
