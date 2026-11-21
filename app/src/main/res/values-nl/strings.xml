@@ -81,6 +81,7 @@
     <string name="error_drive_auth">Google Drive-autorisatie mislukt: %1$s</string>
     <string name="error_import">Dit bestand kan niet worden gelezen</string>
     <string name="version">Versie</string>
+    <string name="website">Website</string>
     <string name="source_code">Broncode (GitHub)</string>
     <string name="privacy_policy">Privacybeleid</string>
     <string name="report_issue">Meld een probleem</string>

@@ -45,6 +45,7 @@ import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Policy
 import androidx.compose.material.icons.filled.Schedule
@@ -100,6 +101,7 @@ import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
 
+private const val WEBSITE_URL = "https://monedsa.vu4ll.nl"
 private const val PRIVACY_URL = "https://monedsa.vu4ll.nl/privacy-policy"
 private const val SOURCE_URL = "https://github.com/Vu4ll/monedsa"
 private const val ISSUES_URL = "https://github.com/Vu4ll/monedsa/issues/new"
@@ -293,6 +295,7 @@ fun SettingsScreen(c: AppContainer, s: Settings) {
             HorizontalDivider(Modifier.padding(vertical = 8.dp))
             Section(R.string.section_about)
             Row(Icons.Default.Info, R.string.version, BuildConfig.VERSION_NAME) {}
+            Row(Icons.Default.Language, R.string.website, "monedsa.vu4ll.nl", trailingLink = true) { open(WEBSITE_URL) }
             Row(Icons.Default.Code, R.string.source_code, null, trailingLink = true) { open(SOURCE_URL) }
             Row(Icons.Default.Policy, R.string.privacy_policy, null, trailingLink = true) { open(PRIVACY_URL) }
             Row(Icons.Default.BugReport, R.string.report_issue, null, trailingLink = true) { open(ISSUES_URL) }

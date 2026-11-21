@@ -81,6 +81,7 @@
     <string name="error_drive_auth">Google Drive yetkilendirmesi başarısız: %1$s</string>
     <string name="error_import">Bu dosya okunamadı</string>
     <string name="version">Versiyon</string>
+    <string name="website">Web sitesi</string>
     <string name="source_code">Kaynak kod (GitHub)</string>
     <string name="privacy_policy">Gizlilik politikası</string>
     <string name="report_issue">Sorun bildirin</string>

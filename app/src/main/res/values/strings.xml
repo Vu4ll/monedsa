@@ -82,6 +82,7 @@
     <string name="error_drive_auth">Google Drive authorization failed: %1$s</string>
     <string name="error_import">This file couldn\'t be read</string>
     <string name="version">Version</string>
+    <string name="website">Website</string>
     <string name="source_code">Source code (GitHub)</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="report_issue">Report an issue</string>
